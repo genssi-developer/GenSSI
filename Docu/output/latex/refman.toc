@@ -1,0 +1,71 @@
+\contentsline {section}{\numberline {1}GenSSI 2.0 General Documentation}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Introduction}{2}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Availability}{2}{subsection.1.2}
+\contentsline {subsubsection}{\numberline {1.2.1}Obtaining GenSSI via the Git versioning system}{2}{subsubsection.1.2.1}
+\contentsline {subsubsection}{\numberline {1.2.2}License Conditions}{3}{subsubsection.1.2.2}
+\contentsline {subsection}{\numberline {1.3}Installation}{3}{subsection.1.3}
+\contentsline {section}{\numberline {2}Model Definition \& Simulation}{4}{section.2}
+\contentsline {subsection}{\numberline {2.1}Model Definition}{4}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}Header}{4}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}Name}{4}{subsubsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.3}Derivatives}{4}{subsubsection.2.1.3}
+\contentsline {subsubsection}{\numberline {2.1.4}States}{4}{subsubsection.2.1.4}
+\contentsline {subsubsection}{\numberline {2.1.5}Parameters}{5}{subsubsection.2.1.5}
+\contentsline {subsubsection}{\numberline {2.1.6}Equations}{5}{subsubsection.2.1.6}
+\contentsline {subsubsection}{\numberline {2.1.7}Controls}{5}{subsubsection.2.1.7}
+\contentsline {subsubsection}{\numberline {2.1.8}Observables}{5}{subsubsection.2.1.8}
+\contentsline {subsubsection}{\numberline {2.1.9}Initial Conditions}{6}{subsubsection.2.1.9}
+\contentsline {subsection}{\numberline {2.2}Model Analysis}{6}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Conversion Utilities}{6}{subsection.2.3}
+\contentsline {section}{\numberline {3}Code Organization}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}Directory Structure}{7}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Document Creation}{7}{subsection.3.2}
+\contentsline {section}{\numberline {4}File Documentation}{8}{section.4}
+\contentsline {subsection}{\numberline {4.1}genssiComputeLieDerivatives.m File Reference}{8}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}Function Documentation}{8}{subsubsection.4.1.1}
+\contentsline {paragraph}{\numberline {4.1.1.1}genssiComputeLieDerivatives(matlabtypesubstitute model, matlabtypesubstitute options)}{8}{paragraph.4.1.1.1}
+\contentsline {subsection}{\numberline {4.2}genssiComputeReducedTableau.m File Reference}{9}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Function Documentation}{9}{subsubsection.4.2.1}
+\contentsline {paragraph}{\numberline {4.2.1.1}genssiComputeReducedTableau(matlabtypesubstitute model, matlabtypesubstitute results, matlabtypesubstitute VectorLieDerivatives, matlabtypesubstitute JacParam, matlabtypesubstitute options)}{9}{paragraph.4.2.1.1}
+\contentsline {subsection}{\numberline {4.3}genssiComputeTableau.m File Reference}{10}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.3.1}Function Documentation}{10}{subsubsection.4.3.1}
+\contentsline {paragraph}{\numberline {4.3.1.1}genssiComputeTableau(matlabtypesubstitute model, matlabtypesubstitute VectorLieDerivatives, matlabtypesubstitute options)}{10}{paragraph.4.3.1.1}
+\contentsline {subsection}{\numberline {4.4}genssiFromAmici.m File Reference}{11}{subsection.4.4}
+\contentsline {subsubsection}{\numberline {4.4.1}Function Documentation}{11}{subsubsection.4.4.1}
+\contentsline {paragraph}{\numberline {4.4.1.1}genssiFromAmici(matlabtypesubstitute modelNameIn, matlabtypesubstitute modelNameOut)}{11}{paragraph.4.4.1.1}
+\contentsline {subsection}{\numberline {4.5}genssiJacobian2D.m File Reference}{12}{subsection.4.5}
+\contentsline {subsection}{\numberline {4.6}genssiMain.m File Reference}{12}{subsection.4.6}
+\contentsline {subsubsection}{\numberline {4.6.1}Function Documentation}{12}{subsubsection.4.6.1}
+\contentsline {paragraph}{\numberline {4.6.1.1}genssiMain(matlabtypesubstitute varargin)}{12}{paragraph.4.6.1.1}
+\contentsline {subsection}{\numberline {4.7}genssiOrderTableau.m File Reference}{13}{subsection.4.7}
+\contentsline {subsubsection}{\numberline {4.7.1}Function Documentation}{14}{subsubsection.4.7.1}
+\contentsline {paragraph}{\numberline {4.7.1.1}genssiOrderTableau(matlabtypesubstitute model, matlabtypesubstitute results, matlabtypesubstitute RJacParam01, matlabtypesubstitute ECC, matlabtypesubstitute rParam, matlabtypesubstitute options)}{14}{paragraph.4.7.1.1}
+\contentsline {subsection}{\numberline {4.8}genssiRemoveZeroColumns.m File Reference}{15}{subsection.4.8}
+\contentsline {subsubsection}{\numberline {4.8.1}Function Documentation}{15}{subsubsection.4.8.1}
+\contentsline {paragraph}{\numberline {4.8.1.1}genssiRemoveZeroColumns(matlabtypesubstitute matrixIn)}{15}{paragraph.4.8.1.1}
+\contentsline {subsection}{\numberline {4.9}genssiRemoveZeroElementsC.m File Reference}{16}{subsection.4.9}
+\contentsline {subsubsection}{\numberline {4.9.1}Function Documentation}{16}{subsubsection.4.9.1}
+\contentsline {paragraph}{\numberline {4.9.1.1}genssiRemoveZeroElementsC(matlabtypesubstitute vectorIn)}{16}{paragraph.4.9.1.1}
+\contentsline {subsection}{\numberline {4.10}genssiRemoveZeroElementsR.m File Reference}{17}{subsection.4.10}
+\contentsline {subsubsection}{\numberline {4.10.1}Function Documentation}{17}{subsubsection.4.10.1}
+\contentsline {paragraph}{\numberline {4.10.1.1}genssiRemoveZeroElementsR(matlabtypesubstitute vectorIn)}{17}{paragraph.4.10.1.1}
+\contentsline {subsection}{\numberline {4.11}genssiRemoveZeroRows.m File Reference}{18}{subsection.4.11}
+\contentsline {subsubsection}{\numberline {4.11.1}Function Documentation}{18}{subsubsection.4.11.1}
+\contentsline {paragraph}{\numberline {4.11.1.1}genssiRemoveZeroRows(matlabtypesubstitute matrixIn)}{18}{paragraph.4.11.1.1}
+\contentsline {subsection}{\numberline {4.12}genssiReportInputs.m File Reference}{19}{subsection.4.12}
+\contentsline {subsubsection}{\numberline {4.12.1}Function Documentation}{19}{subsubsection.4.12.1}
+\contentsline {paragraph}{\numberline {4.12.1.1}genssiReportInputs(matlabtypesubstitute model, matlabtypesubstitute options)}{19}{paragraph.4.12.1.1}
+\contentsline {subsection}{\numberline {4.13}genssiReportResults.m File Reference}{20}{subsection.4.13}
+\contentsline {subsubsection}{\numberline {4.13.1}Function Documentation}{20}{subsubsection.4.13.1}
+\contentsline {paragraph}{\numberline {4.13.1.1}genssiReportResults(matlabtypesubstitute model, matlabtypesubstitute results, matlabtypesubstitute options)}{20}{paragraph.4.13.1.1}
+\contentsline {subsection}{\numberline {4.14}genssiStartup.m File Reference}{21}{subsection.4.14}
+\contentsline {subsection}{\numberline {4.15}genSsiStructToSource.m File Reference}{21}{subsection.4.15}
+\contentsline {subsubsection}{\numberline {4.15.1}Function Documentation}{21}{subsubsection.4.15.1}
+\contentsline {paragraph}{\numberline {4.15.1.1}genSsiStructToSource(matlabtypesubstitute model)}{21}{paragraph.4.15.1.1}
+\contentsline {subsection}{\numberline {4.16}genssiToAmici.m File Reference}{22}{subsection.4.16}
+\contentsline {subsubsection}{\numberline {4.16.1}Function Documentation}{22}{subsubsection.4.16.1}
+\contentsline {paragraph}{\numberline {4.16.1.1}genssiToAmici(matlabtypesubstitute modelNameIn, matlabtypesubstitute modelNameOut)}{22}{paragraph.4.16.1.1}
+\contentsline {subsection}{\numberline {4.17}genssiToPolynomial.m File Reference}{22}{subsection.4.17}
+\contentsline {subsubsection}{\numberline {4.17.1}Function Documentation}{22}{subsubsection.4.17.1}
+\contentsline {paragraph}{\numberline {4.17.1.1}genssiToPolynomial(matlabtypesubstitute modelNameIn, matlabtypesubstitute modelNameOut)}{22}{paragraph.4.17.1.1}
+\contentsline {section}{Index}{25}{section*.37}

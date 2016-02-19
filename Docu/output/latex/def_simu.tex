@@ -1,0 +1,170 @@
+In the following we will give a detailed overview how to specify models in Gen\+S\+SI and how to call the code for analyzing the model. We use the Goodwin oscillator as an example.\hypertarget{def_simu_definition}{}\subsection{Model Definition}\label{def_simu_definition}
+This manual will guide the user to specify models in Matlab. For example implementations, see the models in the example directory.\hypertarget{def_simu_header}{}\subsubsection{Header}\label{def_simu_header}
+The model definition needs to be defined as a function which returns a struct with all symbolic definitions and options.
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{function} [model] = Goodwin() 
+\end{DoxyCode}
+\hypertarget{def_simu_name}{}\subsubsection{Name}\label{def_simu_name}
+Give the model a name.
+
+
+\begin{DoxyCode}
+model.Name = \textcolor{stringliteral}{'Goodwin'}; 
+\end{DoxyCode}
+\hypertarget{def_simu_derivatives}{}\subsubsection{Derivatives}\label{def_simu_derivatives}
+Set the number of derivatives to be calculated.
+
+
+\begin{DoxyCode}
+model.Nder = 8; 
+\end{DoxyCode}
+\hypertarget{def_simu_states}{}\subsubsection{States}\label{def_simu_states}
+Create the respective symbolic variables. The name of the symbolic variable can be chosen arbitrarily.
+
+
+\begin{DoxyCode}
+syms x1 x2 x3 
+\end{DoxyCode}
+
+
+Create the state vector containing all states\+:
+
+
+\begin{DoxyCode}
+model.X = [x1 x2 x3]; 
+\end{DoxyCode}
+
+
+Define the number of states.
+
+
+\begin{DoxyCode}
+model.Neq = 3; 
+\end{DoxyCode}
+\hypertarget{def_simu_parameters}{}\subsubsection{Parameters}\label{def_simu_parameters}
+Create the respective symbolic variables. The name of the symbolic variable can be chosen arbitrarily.
+
+
+\begin{DoxyCode}
+syms p1 p2 p3 p4 p5 p6 p7 p8 
+\end{DoxyCode}
+
+
+Create the parameters vector of parameters to be considered for identifiability.
+
+
+\begin{DoxyCode}
+model.Par = [p1 p2 p3 p4 p5 p6 p7 p8]; 
+\end{DoxyCode}
+
+
+Specify the number of parameters to be considered for identifiability.
+
+
+\begin{DoxyCode}
+model.Npar = 8; 
+\end{DoxyCode}
+\hypertarget{def_simu_equtions}{}\subsubsection{Equations}\label{def_simu_equtions}
+Define the equations of the model.
+
+
+\begin{DoxyCode}
+A1 = -p4*x1+p1/(p2+x3^p3);
+A2 = p5*x1-p6*x2;
+A3 = p7*x2-p8*x3;
+model.F=[A1 A2 A3];
+\end{DoxyCode}
+\hypertarget{def_simu_controls}{}\subsubsection{Controls}\label{def_simu_controls}
+Define the controls.
+
+
+\begin{DoxyCode}
+g1=0;
+g2=0;
+g3=0;
+model.G=[g1 g2 Ag3];
+\end{DoxyCode}
+
+
+Define the number of controls.
+
+
+\begin{DoxyCode}
+model.Noc = 0; 
+\end{DoxyCode}
+
+
+Note that the length of the control vector should match the number of states, even if there are fewer controls.\hypertarget{def_simu_obserables}{}\subsubsection{Observables}\label{def_simu_obserables}
+Define the observables.
+
+
+\begin{DoxyCode}
+h1 = x1;
+h2 = x2;
+h3 = x3;
+model.H = [h1 h2 h3];
+\end{DoxyCode}
+
+
+Define the number of obserables.
+
+
+\begin{DoxyCode}
+model.Nobs = 1; 
+\end{DoxyCode}
+\hypertarget{def_simu_ic}{}\subsubsection{Initial Conditions}\label{def_simu_ic}
+Define the initial conditions.
+
+
+\begin{DoxyCode}
+model.IC = [0.3 0.9 1.3];
+\end{DoxyCode}
+\hypertarget{def_simu_analysis}{}\subsection{Model Analysis}\label{def_simu_analysis}
+The model can then be analyzed by calling genssi\+Main. The first parameter is the name of the model, and the second parameter is the format. If the format is absent, the model is assumed to be a function, as described above. If it is equal to \textquotesingle{}mat\textquotesingle{}, the model is assumed to be a Matlab file with name Modelname.\+mat (e.\+g. Goodwin.\+mat) and containing the model struct.
+
+
+\begin{DoxyCode}
+\hyperlink{genssi_main_8m_aac78e2620e69e2ecf610a2526a32c7fb}{genssiMain}(\textcolor{stringliteral}{'Goodwin'})
+\end{DoxyCode}
+
+
+The function genssi\+Main will call the model function or load the .mat file, which puts the model struct in memory. After that, it will call all other Gen\+S\+SI functions required to annalyze the model.\hypertarget{def_simu_conversion}{}\subsection{Conversion Utilities}\label{def_simu_conversion}
+The Gen\+S\+SI package also includes some functions for converting models from one format to another.
+
+
+\begin{DoxyCode}
+\hyperlink{genssi_to_polynomial_8m_acef0ff085917e1375d0fc2b6feed0722}{genssiToPolynomial} 
+\end{DoxyCode}
+
+
+genssi\+To\+Polynomial converts a model, expressed in terms of rational expressions, to pure polynomial format. This increases the number of state variables, but can sometimes significantly reduce the computational overhead for analyzing the model.
+
+
+\begin{DoxyCode}
+genssiToAMICI 
+\end{DoxyCode}
+
+
+genssi\+To\+A\+M\+I\+CI converts a Gen\+S\+SI model to A\+M\+I\+CI format. The A\+M\+I\+CI package uses Sundials Cvodes to efficiently solve O\+D\+Es from within Matlab. It is available at \href{https://github.com/AMICI-developer/AMICI}{\tt https\+://github.\+com/\+A\+M\+I\+C\+I-\/developer/\+A\+M\+I\+CI}.
+
+Note\+: There are limitations to this conversion. The Gen\+S\+SI model contains a list of parameters to be considered for analysis, but A\+M\+I\+CI needs a \char`\"{}sym\char`\"{} statement containing a list of all parameters used by the model. It may be necessary to manually edit the A\+M\+I\+CI model after conversion.
+
+
+\begin{DoxyCode}
+genssiFromAMICI 
+\end{DoxyCode}
+
+
+genssi\+From\+A\+M\+I\+CI converts an A\+M\+I\+CI model to Gen\+S\+SI format.
+
+Note\+: There are limitations to this conversion. The A\+M\+I\+CI model contains a list of all parameters used by the model, but Gen\+S\+SI needs a list of parameters to be considered for analysis. In addition, the Gen\+S\+SI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the Gen\+S\+SI model after conversion.
+
+
+\begin{DoxyCode}
+genssiStructToSource and amiciStructToSource 
+\end{DoxyCode}
+
+
+genssi\+Struct\+To\+Source reads the Gen\+S\+SI model struct and converts it to source format (Matlab function definition), and amici\+Struct\+To\+Source does the same for A\+M\+I\+CI models. In general, the source format is more convenient for smaller models, since it is easier to modify, but the struct format, typically saved in a Matlab file (e.\+g. Goodwin.\+mat) is more convenient for large models, since it does not require editing of long lines of code. 
