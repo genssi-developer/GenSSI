@@ -1,0 +1,39 @@
+/**
+ @page code Code Organization
+ 
+ In the following we will briefly outline how the GenSSI code is organized. For a more detailed description we refer the reader to the documentation of the individual functions.
+
+ @section directory Directory Structure
+
+ The main, or root, directory, which we refer to as GenSSI, contains most of the GenSSI functions. In addition, the following subdirectories are used:
+
+ - GenSSI/Auxiliary contains some auxiliary functions, such as genssiRemoveZeroRows.
+ - GenSSI/Examples contains model definitions.
+ - GenSSI/Results contains the results of analysis.
+ - GenSSI/Docu contains tools for creating the GenSSI documentation, as well as input and output of that process.
+ - GenSSI/Docu/config contains configuration files for the documentation tools.
+ - GenSSI/Docu/input contains input for document creation, including .dox files.
+ - GenSSI/Docu/output contains
+
+ @section document Document Creation
+
+ New versions of the documentation are created with the help of:
+
+ - MatlabDocMaker.m (in GenSSI/Docu)
+ - mtoc++ (needs to be installed and available via the path variable)
+ - Doxygen (needs to be installed and available via the path variable)
+ - LaTex (needs to be installed and available via the path variable)
+ - Graphviz (needs to be installed and available via the path variable)
+ - Gostscript (needs to be installed and available via the path variable)
+
+ The documentation configuration is changed by editing the files in the GenSSI/Docu/config directory and by running
+
+ @code MatlabDocMaker.setup @endcode
+
+ A new version of the documentation is created by calling
+
+ @code MatlabDocMaker.create('latex',true) @endcode
+
+ This results in an html version of the guide (index.html and many other files in GenSSI/Docu/output), and a pdf version (refman.pdf in GenSSI/Docu/output/latex).
+
+ */

@@ -1,0 +1,139 @@
+/**
+ @page def_simu Model Definition & Simulation
+ 
+ In the following we will give a detailed overview how to specify models in GenSSI and how to call the code for analyzing the model. We use the Goodwin oscillator as an example.
+ 
+ @section definition Model Definition
+ 
+ This manual will guide the user to specify models in Matlab. For example implementations, see the models in the example directory.
+ 
+ @subsection header Header
+ 
+ The model definition needs to be defined as a function which returns a struct with all symbolic definitions and options.
+ 
+ @code function [model] = Goodwin() @endcode
+
+ @subsection name Name
+
+ Give the model a name.
+
+ @code model.Name = 'Goodwin'; @endcode
+ 
+ @subsection derivatives Derivatives
+ 
+ Set the number of derivatives to be calculated.
+
+ @code model.Nder = 8; @endcode
+ 
+ @subsection states States
+ 
+ Create the respective symbolic variables. The name of the symbolic variable can be chosen arbitrarily.
+ 
+ @code syms x1 x2 x3 @endcode
+ 
+ Create the state vector containing all states:
+ 
+ @code model.X = [x1 x2 x3]; @endcode
+
+ Define the number of states.
+
+ @code model.Neq = 3; @endcode
+ 
+ @subsection parameters Parameters
+ 
+ Create the respective symbolic variables. The name of the symbolic variable can be chosen arbitrarily.
+ 
+ @code syms p1 p2 p3 p4 p5 p6 p7 p8 @endcode
+ 
+ Create the parameters vector of parameters to be considered for identifiability.
+ 
+ @code model.Par = [p1 p2 p3 p4 p5 p6 p7 p8]; @endcode
+
+ Specify the number of parameters to be considered for identifiability.
+
+ @code model.Npar = 8; @endcode
+
+ @subsection equtions Equations
+
+ Define the equations of the model.
+
+ @code
+ A1 = -p4*x1+p1/(p2+x3^p3);
+ A2 = p5*x1-p6*x2;
+ A3 = p7*x2-p8*x3;
+ model.F=[A1 A2 A3];
+ @endcode
+
+ @subsection controls Controls
+
+ Define the controls.
+
+ @code
+ g1=0;
+ g2=0;
+ g3=0;
+ model.G=[g1 g2 Ag3];
+ @endcode
+
+ Define the number of controls.
+
+ @code model.Noc = 0; @endcode
+
+ Note that the length of the control vector should match the number of states, even if there are fewer controls.
+
+ @subsection obserables Observables
+
+ Define the observables.
+
+ @code
+ h1 = x1;
+ h2 = x2;
+ h3 = x3;
+ model.H = [h1 h2 h3];
+ @endcode
+
+ Define the number of obserables.
+
+ @code model.Nobs = 1; @endcode
+
+ @subsection ic Initial Conditions
+
+ Define the initial conditions.
+
+ @code model.IC = [0.3 0.9 1.3];@endcode
+  
+ @section analysis Model Analysis
+ 
+ The model can then be analyzed by calling genssiMain. The first parameter is the name of the model, and the second parameter is the format. If the format is absent, the model is assumed to be a function, as described above. If it is equal to 'mat', the model is assumed to be a Matlab file with name Modelname.mat (e.g. Goodwin.mat) and containing the model struct.
+ 
+ @code
+ genssiMain('Goodwin')
+ @endcode
+ 
+ The function genssiMain will call the model function or load the .mat file, which puts the model struct in memory. After that, it will call all other GenSSI functions required to annalyze the model. 
+
+ @section conversion Conversion Utilities
+
+ The GenSSI package also includes some functions for converting models from one format to another.
+
+ @code genssiToPolynomial @endcode
+
+ genssiToPolynomial converts a model, expressed in terms of rational expressions, to pure polynomial format. This increases the number of state variables, but can sometimes significantly reduce the computational overhead for analyzing the model.
+
+ @code genssiToAMICI @endcode
+
+ genssiToAMICI converts a GenSSI model to AMICI format. The AMICI package uses Sundials Cvodes to efficiently solve ODEs from within Matlab. It is available at https://github.com/AMICI-developer/AMICI.
+
+ Note: There are limitations to this conversion. The GenSSI model contains a list of parameters to be considered for analysis, but AMICI needs a "sym" statement containing a list of all parameters used by the model. It may be necessary to manually edit the AMICI model after conversion.
+
+ @code genssiFromAMICI @endcode
+
+ genssiFromAMICI converts an AMICI model to GenSSI format.
+
+ Note: There are limitations to this conversion. The AMICI model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
+
+ @code genssiStructToSource and amiciStructToSource @endcode
+
+ genssiStructToSource reads the GenSSI model struct and converts it to source format (Matlab function definition), and amiciStructToSource does the same for AMICI models. In general, the source format is more convenient for smaller models, since it is easier to modify, but the struct format, typically saved in a Matlab file (e.g. Goodwin.mat) is more convenient for large models, since it does not require editing of long lines of code.
+
+ */

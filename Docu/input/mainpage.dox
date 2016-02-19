@@ -1,0 +1,62 @@
+﻿/**
+ @mainpage GenSSI 2.0 General Documentation
+ @section intro Introduction
+ 
+ GenSSI is a Matlab implementation of generating series for structural identifiability as defined in
+
+ - Chiş, O.-T., Banga, J.R. and Balsa-Canto, E. (2011) Structural Identifiability of Systems Biology Models: A Critical Comparison of Methods, PLoS ONE, 6, e27755.
+
+ - Chiş, O., Banga, J.R. and Balsa-Canto, E. (2011) GenSSI: a software toolbox for structural identifiability analysis of biological models, Bioinformatics, 27, 2610-2611.
+
+ With GenSSI, the user can specify differential equation models in terms of symbolic variables in Matlab and then analyze the models to determine which parameters are globally or locally identifiable. In addition, there are some utilities for converting models to polynomial form, or to or from AMICI format.
+  
+ @section download Availability
+ 
+ The sources for GenSSI are accessible as
+ - Source  <a href="https://github.com/thomassligon/GenSSI/tarball/master" target="_blank">tarball</a>
+ - Source  <a href="https://github.com/thomassligon/GenSSI/zipball/master" target="_blank">zipball</a>
+ - Git repository on  <a href="https://github.com/thomassligon/GenSSI" target="_blank">github</a>
+ 
+ Once you've obtained your copy check out the @ref install
+ 
+ @subsection git Obtaining GenSSI via the Git versioning system
+ In order to always stay up to date with the latest GenSSI versions, simply pull it from our Git repository and
+ recompile it when a new release is available. For more information about Git checkout their <a href="http://git-scm.com/" target="_blank">website</a>
+ 
+ The Git repository can currently be found at https://github.com/thomassligon/GenSSI and a direct clone is possible via
+ @code git clone https://github.com/thomassligon/GenSSI.git GenSSI @endcode
+ 
+ @subsection GenSSI License Conditions
+ This software is available under the <a href="http://www.opensource.org/licenses/bsd-license.php" target="_blank">BSD license</a>
+ 
+ Copyright (c) 2016, Oana-Teodora Chiş, Julio R. Banga, Eva Balsa-Canto, Thomas S. Ligon, Fabian Fröhlich and Jan Hasenauer.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ @section install Installation
+ 
+ If GenSSI was downloaded as a zip, it needs to be unpacked in a convenient directory. If GenSSI was obtained via cloning of the git repository, no further unpacking is necessary.
+
+ Models are generally stored in
+ @code GenSSI/Examples @endcode
+ but GenSSI should be able to find them in any directory that is is the Matlab path.
+
+ When a model is analyzed GenSSI stores the results in
+ @code GenSSI/Results @endcode
+ 
+ To use GenSSI, start Matlab and add the GenSSI direcory to the Matlab path. To add all toolbox directories to the Matlab path, execute the Matlab script
+ @code genssiStartup.m @endcode
+ To store the installation for further Matlab session, the path can be saved via
+ @code savepath @endcode
+  
+ */
