@@ -1,10 +1,15 @@
-function GenSsiTableauImage(figNum,tabMat,paramDisplay,options)
-    % 
+function genssiTableauImage(figNum,tabMat,paramDisplay,options)
+    % genssiTableauImage displays an identifiability tableau
     %
     % Parameters:
+    %  figNum: figure number
+    %  tabMat: matrix containing tableau
+    %  paramDisplay: parameter vector
+    %  options: options
     %
     % Return values:
-    %  
+    %  void
+    %
     fh=figure(figNum);
     [tabX,tabY]=size(tabMat);
     if tabX~=1
@@ -21,7 +26,7 @@ function GenSsiTableauImage(figNum,tabMat,paramDisplay,options)
     for iParam=2:size(paramDisplay,2)
         ticklabels= char(ticklabels, char(paramDisplay(iParam)));
     end
-    % The next 1 line is for Matla 20015b.
+    % The next 1 line is for Matlab 20015b.
 %     ticklabels=arrayfun(@char,paramDisplay,'UniformOutput',false);
     numIter=figNum-1;
     set(gca,'XTick',1:1:size(paramDisplay,2),'XTickLabel',ticklabels);
