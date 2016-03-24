@@ -46,9 +46,9 @@ function model = pharmacokinetics2()
     model.Noc=0;
 
     %%% Observables %%%
-    h1=x1;h2=x2;
+    h1=x1;h2=x2;h3=x3;
 
-    model.H=[h1 h2];
+    model.H=[h1];
 
     %%% Number of observables %%%
     model.Nobs=length(model.H);
