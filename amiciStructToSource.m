@@ -22,6 +22,7 @@ function amiciStructToSource(model)
         strSyms = [strSyms ' ' char(model.sym.p(iStr))];
     end
     fprintf(fileID,['\t' strSyms '\n']);
+    
     strMat = '\tmodel.sym.x = [';
     if ~isempty(model.sym.x)
         strMat = [strMat char(model.sym.x(1))];
@@ -33,6 +34,7 @@ function amiciStructToSource(model)
     end
     strMat = [strMat '];\n'];
     fprintf(fileID,strMat);
+    
     strMat = '\tmodel.sym.y = [';
     if ~isempty(model.sym.y)
         strMat = [strMat char(model.sym.y(1))];
@@ -44,8 +46,7 @@ function amiciStructToSource(model)
     end
     strMat = [strMat '];\n'];
     fprintf(fileID,strMat);
-    strMat = ['\tmodel.sym.u = [' num2str(model.sym.u) '];\n'];
-    fprintf(fileID,strMat);
+        
     strMat = '\tmodel.sym.p = [';
     if ~isempty(model.sym.p)
         strMat = [strMat char(model.sym.p(1))];
@@ -57,6 +58,7 @@ function amiciStructToSource(model)
     end
     strMat = [strMat '];\n'];
     fprintf(fileID,strMat);
+    
     strMat = '\tmodel.sym.x0 = [';
     if ~isempty(model.sym.x0)
         strMat = [strMat char(model.sym.x0(1))];
@@ -68,6 +70,7 @@ function amiciStructToSource(model)
     end
     strMat = [strMat '];\n'];
     fprintf(fileID,strMat);
+    
     strMat = '\tmodel.sym.u = [';
     if ~isempty(model.sym.u)
         strMat = [strMat char(model.sym.u(1))];
@@ -79,6 +82,7 @@ function amiciStructToSource(model)
     end
     strMat = [strMat '];\n'];
     fprintf(fileID,strMat);
+    
     strMat = '\tmodel.sym.xdot = [';
     if ~isempty(model.sym.xdot)
         strMat = [strMat char(model.sym.xdot(1))];
@@ -90,6 +94,7 @@ function amiciStructToSource(model)
     end
     strMat = [strMat '];\n'];
     fprintf(fileID,strMat);
+    
     fprintf(fileID,'end');
     fclose(fileID);
 end

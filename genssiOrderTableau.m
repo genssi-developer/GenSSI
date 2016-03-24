@@ -85,7 +85,7 @@ function [options,results]=genssiOrderTableau(model,results,...
             for jl=1:length(local_ident_par_index_j)
                 solution_ident_local_par=solve(ECC(local_ident_par_index_i(il),:),rParam(local_ident_par_index_j(jl)));
                 disp(['----->The parameter', ' ', char(rParam(local_ident_par_index_j(jl))),' ','is structurally locally identifiable. It has the solution:' ])
-                disp([' ', ' ', sym(solution_ident_local_par)])
+                disp([' ', ' ', solution_ident_local_par])
             end
         end
     end
@@ -121,9 +121,9 @@ function [options,results]=genssiOrderTableau(model,results,...
         fprintf(1,'->THE REMAINING PARAMETERS (APART FROM IDENTIFIABLE OR NON-IDENTIFIABLE), AND THE CORRESPONDING RELATIONS  \n');
         fprintf(1,'************************************************************************************************************\n\n');
         fprintf(1,'-----> Parameters: \n');
-        disp(sym(Param));
+        disp(Param);
         fprintf(1,'-----> Relations: \n');
-        disp(sym(ECC));
+        disp(ECC);
         % the second order tableau is RJacParam01_nonzero_rows from above
 		tableau_for_second_reduced_tableau=RJacParam01_nonzero_rows;
         % vector of remaining parameters from above
@@ -283,7 +283,7 @@ function [Param_local,Param_remaining,global_ident_par,...
             end
             fprintf(1,']\n\n\n');
             fprintf(1,'-> Relations: \n');
-            disp(sym(ECC_new));
+            disp(ECC_new);
             if length(reduced_param)==length(ECC_new)      % compute the solution for each pair of parameters   
                 [Param_local,global_ident_par]=...
                     solveRemPar...
@@ -431,7 +431,7 @@ function [Param_local,global_ident_par]=...
     fprintf(1,']\n\n\n');
     [ECC_remaining,tilde,tilde] = genssiRemoveZeroElementsC(ECC_remaining);
     fprintf(1,'-> Relations: \n');
-    disp(sym(ECC_remaining)) 
+    disp(ECC_remaining);
     genssiTableauImage(03,tableau_for_second_reduced_tableau,...
         parameters_for_second_reduced_tableau,options);
     %%%%%%%%%%%%%%%%%%  SECOND REDUCED TABLEAUS
@@ -516,7 +516,7 @@ function [Param_local,global_ident_par]=...
                     end
                     fprintf(1,']\n\n\n');
                     fprintf(1,'-> Relations: \n');
-                    disp(sym(ECC_new));
+                    disp(ECC_new);
                     if length(reduced_param)==length(ECC_new)           %   compute the solution for each pair of parameters       
                         [Param_local,global_ident_par]=...
                             solveRemPar...
@@ -651,7 +651,7 @@ function [Param_local,global_ident_par]=...
             end
         end
         fprintf(1,'-> Relations: \n');
-        disp(sym(ECC_remaining));
+        disp(ECC_remaining);
         [Param_local,global_ident_par]=...
             solveRemPar...
             (ECC_remaining,Param_remaining,Param_local,global_ident_par);
@@ -684,7 +684,7 @@ function [Param_local,global_ident_par]=...
         [solx,tilde]=size(sol);
         if solx<=1 % because there are no fieldnames in this case
             disp(['-----> The parameter', ' ', char(Param_local_r),' ','has the solution/solutions:', ' ' ])
-            disp([' ', ' ', sym(Solution)])
+            disp([' ', ' ', char(Solution)])
             length_sol=[length_sol length(Solution)];
             if length_sol==1
                global_ident_par_sol_1=[global_ident_par_sol_1 Param_local_r];
@@ -694,7 +694,7 @@ function [Param_local,global_ident_par]=...
         else
             for i=1:solx
                disp(['-----> The parameter', ' ', char(Param_local_r(i)),' ','has the solution/solutions:', ' ' ]);
-               disp([' ', ' ', sym(Solution.(sol{i}))]);
+               disp([' ', ' ', char(Solution.(sol{i}))]);
                length_sol=[length_sol length(Solution.(sol{i}))];
                if length_sol==1
                    global_ident_par_sol_1=[global_ident_par_sol_1 Param_local_r(i)];
@@ -790,13 +790,22 @@ function [ECC_index_row,Mat_index]=...
     end
     [uux,tilde]=size(uu);
     Mat_index=[];
-    k_index=[];
+    keepIndex=[];
+    rankOld=0;
     for i=1:uux
-        rank_o=double(rank(Mat_index));
-        rank_n=double(rank([Mat_index; uu(i,:)]));
-        if rank_n> rank_o
+        if verLessThan('matlab','7.7')
+            rankNew=double(rank([Mat_index; uu(i,:)]));
+        else
+            rankNew=double(feval(symengine,'linalg::rank',[Mat_index; uu(i,:)]));
+        end
+        if rankNew > rankOld
             Mat_index=[Mat_index; uu(i,:)];
-            k_index=[k_index i];
+            if verLessThan('matlab','7.7')
+                rankOld=double(rank(Mat_index));
+            else
+                rankOld=double(feval(symengine,'linalg::rank',Mat_index));
+            end
+            keepIndex=[keepIndex i];
         end   
     end %%%%%%%%% line 330 %%%%%%%%%%%
 end

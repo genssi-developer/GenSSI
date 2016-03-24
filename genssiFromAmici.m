@@ -17,6 +17,9 @@ function genssiFromAmici (modelNameIn,modelNameOut)
     AModel=runModel();
     model.Nder=4;                                % Number of derivatives  
     model.X=AModel.sym.x;
+    if iscolumn(model.X)
+        model.X = transpose(model.X);
+    end
     model.Neq=length(model.X);
     model.G=zeros(1,model.Neq); % required even if Noc=0
     if isfield(AModel.sym,'u')
@@ -27,15 +30,30 @@ function genssiFromAmici (modelNameIn,modelNameOut)
     else
         model.Noc=0;
     end
+    if iscolumn(model.G)
+        model.G = transpose(model.G);
+    end
     model.Par=AModel.sym.p;
+    if iscolumn(model.Par)
+        model.Par = transpose(model.Par);
+    end
     model.Npar=length(model.Par);
-    model.IC=AModel.sym.x0';
+    model.IC=AModel.sym.x0;
+    if iscolumn(model.IC)
+        model.IC = transpose(model.IC);
+    end
     model.H=AModel.sym.y;
+    if iscolumn(model.H)
+        model.H = transpose(model.H);
+    end
     model.Nobs=length(model.H);
     model.F=AModel.sym.xdot;
+    if iscolumn(model.F)
+        model.F = transpose(model.F);
+    end
     options.verbose=true;
     save(fullfile(GenSSIDir,'Examples',[model.Name '.mat']),'model');
     if isSaveGenSSIModel
-        genSsiStructToSource(model);
+        genssiStructToSource(model);
     end
 end

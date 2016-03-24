@@ -24,19 +24,27 @@ function [options,results,RJacParam01,ECC,rParam]=genssiComputeReducedTableau...
     rParam=model.Par; % reduced parameter list starts as model parameter list
     [JacParamx,tilde]=size(JacParam);
     RJacParam=[];
-    keep_index=[];
-    rank_old=0;
+    keepIndex=[];
+    rankOld=0;
     for i=1:JacParamx
-        rank_new=double(rank([RJacParam; JacParam(i,:)]));
-        if rank_new> rank_old
+        if verLessThan('matlab','7.7')
+            rankNew=double(rank([RJacParam; JacParam(i,:)]));
+        else
+            rankNew=double(feval(symengine,'linalg::rank',[RJacParam; JacParam(i,:)]));
+        end
+        if rankNew > rankOld
             RJacParam=[RJacParam; JacParam(i,:)];
-            rank_old=double(rank(RJacParam));
-            keep_index=[keep_index i];
+            if verLessThan('matlab','7.7')
+                rankOld=double(rank(RJacParam));
+            else
+                rankOld=double(feval(symengine,'linalg::rank',RJacParam));
+            end
+            keepIndex=[keepIndex i];
         end   
     end
     
     % Lie Derivatives that can be used to compute parameters
-    def_useful_Lie_index=results.useful_Lie_index(keep_index);
+    def_useful_Lie_index=results.useful_Lie_index(keepIndex);
     UI=length(def_useful_Lie_index);
     Equations=sym(zeros(1,UI));
     Equations(:)=VectorLieDerivatives(def_useful_Lie_index(:));

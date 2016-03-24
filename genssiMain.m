@@ -8,7 +8,7 @@ function varargout = genssiMain(varargin)
     %  modelName: the name of the model to be analyzed (a string)
     %  fileFormat: the format of the model file
     %   'model': (default) if the model is a function file (e.g.
-    %    Goodwinn.m)
+    %    Goodwin.m)
     %   'mat': if the model is a Matlab file (e.g. Goodwin.mat)
     %
     % Return values:

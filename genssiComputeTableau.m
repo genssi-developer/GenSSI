@@ -28,10 +28,14 @@ function [options,results,JacParam]=genssiComputeTableau...
     results.useful_Lie_index=useful_Lie_index;
 
     %Compute the reduced Jacobian
-    RankJacParam=rank(JacParam);
+    if verLessThan('matlab','7.7')
+        RankJacParam=double(rank(JacParam));
+    else
+        RankJacParam=double(feval(symengine,'linalg::rank',JacParam));
+    end
     %RD=double(RankE);
-    fprintf(1,'\n ----->The rank of the full Jacobian matrix is %u \n', double(RankJacParam)); 
-    if double(RankJacParam)==size(model.Par,2)
+    fprintf(1,'\n ----->The rank of the full Jacobian matrix is %u \n', RankJacParam); 
+    if RankJacParam==size(model.Par,2)
         fprintf(1,'\n ---->THE RANK OF THE FULL JACOBIAN IS COMPLETE, THUS AT LEAST LOCAL IDENTIFIABILITY IS GUARANTEED.\n');
     else
         fprintf(1,'\n ----->THE FULL JACOBIAN IS RANK DEFICIENT, YOU MAY CONSIDER ADDING NEW DERIVATIVES, %u \n', double(model.Nder+1));
