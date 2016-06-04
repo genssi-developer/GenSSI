@@ -32,6 +32,7 @@ function varargout = genssiMain(varargin)
         model = runModel();
     end
     options.verbose=true;
+    options.noRank=false;
     GenSSIDir=fileparts(mfilename('fullpath'));
     resultsDir=fullfile(GenSSIDir,'Results');
     runNumber=1;
