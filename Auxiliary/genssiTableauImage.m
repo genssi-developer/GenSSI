@@ -10,6 +10,9 @@ function genssiTableauImage(figNum,tabMat,paramDisplay,options)
     % Return values:
     %  void
     %
+    if isempty(tabMat)
+        return;
+    end
     fh=figure(figNum);
     [tabX,tabY]=size(tabMat);
     if tabX~=1
@@ -21,13 +24,16 @@ function genssiTableauImage(figNum,tabMat,paramDisplay,options)
     else
         colormap(gray(2));
     end
-    % The next 4 lines are for Matlab R2008a.
-    ticklabels=char(paramDisplay(1));
-    for iParam=2:size(paramDisplay,2)
-        ticklabels= char(ticklabels, char(paramDisplay(iParam)));
+    if verLessThan('matlab','8.6')
+        % The next 4 lines are for Matlab R2008a.
+        ticklabels=char(paramDisplay(1));
+        for iParam=2:size(paramDisplay,2)
+            ticklabels= char(ticklabels, char(paramDisplay(iParam)));
+        end
+    else
+        % The next 1 line is for Matlab 20015b.
+        ticklabels=arrayfun(@char,paramDisplay,'UniformOutput',false);
     end
-    % The next 1 line is for Matlab 20015b.
-%     ticklabels=arrayfun(@char,paramDisplay,'UniformOutput',false);
     numIter=figNum-1;
     set(gca,'XTick',1:1:size(paramDisplay,2),'XTickLabel',ticklabels);
     if tabX < 6
