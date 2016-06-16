@@ -24,7 +24,7 @@ model.Name='Arabidopsis';
     %   MODEL RELATED DATA  %
     %%%%%%%%%%%%%%%%%%%%%%%%%
 
-    model.Nder=4;                       %  Number of derivatives
+    model.Nder=5;                       %  Number of derivatives
 
     model.Neq=7;                        % Number of states
     model.X=[x1 x2 x3 x4 x5 x6 x7];
@@ -37,9 +37,9 @@ model.Name='Arabidopsis';
 
     A1 = p1*x6/(p3+x6)-p5*x1/(p12+x1);            % Equations of the model
     A2 = p19*x1-p22*x2+p23*x3-p6*x2/(p13+x2);
-    A3 = p22*x2-p23*x2-p7*x3/(p14+x3);
+    A3 = p22*x2-p23*x3-p7*x3/(p14+x3);
     A4 = p2*p4^2/(p4^2+x3^2)-p8*x4/(p15+x4);
-    A5 = p20*x4-p24*x5+p25*x6-p9*x6/(p16+x5);
+    A5 = p20*x4-p24*x5+p25*x6-p9*x5/(p16+x5);
     A6 = p24*x5-p25*x6-p10*x6/(p17+x6);
     A7 = p21-p11*x7/(p18+x7);
     model.F=[A1 A2 A3 A4 A5 A6 A7];
