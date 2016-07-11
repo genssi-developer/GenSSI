@@ -793,14 +793,14 @@ function [ECC_index_row,Mat_index]=...
     keepIndex=[];
     rankOld=0;
     for i=1:uux
-        if verLessThan('matlab','7.7')
+        if verLessThan('matlab','7.7') || size([Mat_index; uu(i,:)],2)==1
             rankNew=double(rank([Mat_index; uu(i,:)]));
         else
             rankNew=double(feval(symengine,'linalg::rank',[Mat_index; uu(i,:)]));
         end
         if rankNew > rankOld
             Mat_index=[Mat_index; uu(i,:)];
-            if verLessThan('matlab','7.7')
+            if verLessThan('matlab','7.7') || size(Mat_index,2)==1
                 rankOld=double(rank(Mat_index));
             else
                 rankOld=double(feval(symengine,'linalg::rank',Mat_index));

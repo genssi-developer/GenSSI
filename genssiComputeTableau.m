@@ -28,7 +28,8 @@ function [options,results,JacParam]=genssiComputeTableau...
     results.useful_Lie_index=useful_Lie_index;
 
     %Compute the reduced Jacobian
-    if verLessThan('matlab','7.7')
+    sizeJacParam=size(JacParam);
+    if verLessThan('matlab','7.7') || sizeJacParam(2)==1
         RankJacParam=double(rank(JacParam));
     else
         RankJacParam=double(feval(symengine,'linalg::rank',JacParam));
@@ -42,7 +43,12 @@ function [options,results,JacParam]=genssiComputeTableau...
     end
 
     %Construct the 0-1 tableau
-    JacParam01=double(JacParam~=0);
+    JacParam01=zeros(sizeJacParam);
+    if verLessThan('matlab','R2012b') || sizeJacParam(2)==1
+        JacParam01=double(JacParam~=0);
+    else
+        JacParam01(find(JacParam))=1;
+    end
     genssiTableauImage(01,JacParam01,model.Par,options);
 end
 
