@@ -1,6 +1,6 @@
 function genssiStructToSource(model)
     % genSsiStructToSource converts a model definition (struct) to a
-    %  source format (Matlab function file) ans saves the results in the
+    %  source format (Matlab function file) and saves the results in the
     %  examples directory.
     %
     % Parameters:

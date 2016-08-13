@@ -1,9 +1,13 @@
 function amiciStructToSource(model)
-    % 
+    % amiciStructToSource converts a model definition (struct) to a
+    %  source format (Matlab function file) and saves the results in the
+    %  examples directory.
     %
     % Parameters:
+    %  model: model definition (struct)
     %
     % Return values:
+    %  void
     %  
     GenSSIDir = fileparts(mfilename('fullpath'));
     fileName = fullfile(GenSSIDir,'Examples','AMICI',[model.Name,'.m']);
