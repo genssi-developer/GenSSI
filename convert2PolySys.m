@@ -20,10 +20,18 @@ if ~user_defined
     % Determine set of unique denominators
     inv_xi = sym([]);
     for i = 1:length(dx)
-        for j = 1:length(children_dx{i})
-            [tilde,D] = numden(children_dx{i}(j));
-            D = factor(D);
-            inv_xi(end+1:end+length(D),1) = transpose(D);
+        if(length(dx)==1)
+            for j = 1:length(children_dx)
+                [tilde,D] = numden(children_dx(j));
+                D = factor(D);
+                inv_xi(end+1:end+length(D),1) = transpose(D);
+            end
+        else
+            for j = 1:length(children_dx{i})
+                [tilde,D] = numden(children_dx{i}(j));
+                D = factor(D);
+                inv_xi(end+1:end+length(D),1) = transpose(D);
+            end
         end
     end
     inv_xi = unique(inv_xi(~double(floor(inv_xi)-inv_xi == 0)));

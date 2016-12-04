@@ -44,7 +44,7 @@ function [options,results,JacParam]=genssiComputeTableau...
 
     %Construct the 0-1 tableau
     JacParam01=zeros(sizeJacParam);
-    if verLessThan('matlab','R2012b') || sizeJacParam(2)==1
+    if verLessThan('matlab','8') || sizeJacParam(2)==1 %%8 is R2012b
         JacParam01=double(JacParam~=0);
     else
         JacParam01(find(JacParam))=1;

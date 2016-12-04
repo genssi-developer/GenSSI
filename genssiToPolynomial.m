@@ -25,12 +25,17 @@ function genssiToPolynomial (modelNameIn,modelNameOut)
     model.Neq = length(model.X);
     model.G = sym(zeros(1,length(model.X)));
     model.Noc = 0;
-    model.H = model.X;
-    model.Nobs = length(model.H);
+%     model.H = model.X;
+%     model.Nobs = length(model.H);
+    model.H = modelIn.H;
+    model.Nobs = modelIn.Nobs;
+    if isfield(modelIn,'P')
+        model.P = modelIn.P;
+    end
     model.Par = modelIn.Par;
     model.Npar = length(model.Par);
     save(fullfile(GenSSIDir,'Examples',[model.Name '.mat']),'model');
     if isSaveGenSSIModel
-        genSsiStructToSource(model);
+        genssiStructToSource(model);
     end
 end
