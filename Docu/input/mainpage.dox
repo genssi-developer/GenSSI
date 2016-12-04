@@ -8,7 +8,7 @@
 
  - Chiş, O., Banga, J.R. and Balsa-Canto, E. (2011) GenSSI: a software toolbox for structural identifiability analysis of biological models, Bioinformatics, 27, 2610-2611.
 
- With GenSSI, the user can specify differential equation models in terms of symbolic variables in Matlab and then analyze the models to determine which parameters are globally or locally identifiable. In addition, there are some utilities for converting models to polynomial form, or to or from AMICI format.
+ With GenSSI, the user can specify differential equation models in terms of symbolic variables in Matlab and then analyze the models to determine which parameters are globally or locally identifiable. In addition, there are some utilities for converting models to polynomial form, creating multi-experiment models, transforming models to rescale variables and remove redundancies, or convert to/from AMICI format. 
   
  @section download Availability
  
