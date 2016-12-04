@@ -24,7 +24,7 @@ function model = Glycolysis()
     %   MODEL RELATED DATA  %
     %%%%%%%%%%%%%%%%%%%%%%%%%
 
-    model.Nder=4;                                % Number of derivatives
+    model.Nder=2;                                % Number of derivatives
 
     model.Neq=5;                                 % Number of states
     model.X=[x1 x2 x3 x4 x5];
@@ -43,11 +43,11 @@ function model = Glycolysis()
     A5=0;
     model.F=[A1 A2 A3 A4 A5];
 
-    model.G=[-k1*x1/(x1+kM) 0 0 0;                              % The controls
-    k1*x1/(x1+kM) -k2*x2/(x2+kM) 0 0;
-    0 k2*x2/(x2+kM) -k3*x3/(x3+kM) 0;
-    0 k2*x2/(x2+kM) k3*x3/(x3+kM) -k4*x4/(x4+kM);
-    0 0 0 k4*x4/(x4+kM)].';
+    % The controls
+    model.G=[-(k1*x1)/(kM+x1),(k1*x1)/(kM+x1),0,0,0;
+    0,-(k2*x2)/(kM+x2),(k2*x2)/(kM+x2),(k2*x2)/(kM+x2),0;
+    0,0,-(k3*x3)/(kM+x3),(k3*x3)/(kM+x3),0;
+    0,0,0,-(k4*x4)/(kM+x4),(k4*x4)/(kM+x4)];
 
     h1=x1;h2=x2;h3=x3;h4=x4;h5=x5;                          % The observables
     model.H=[h1 h2 h3 h4 h5];

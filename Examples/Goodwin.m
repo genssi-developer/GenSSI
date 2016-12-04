@@ -21,7 +21,7 @@ function model = Goodwin()
     %   MODEL RELATED DATA  %
     %%%%%%%%%%%%%%%%%%%%%%%%%
 
-    model.Nder=8;            % Number of derivatives
+    model.Nder=3;            % Number of derivatives
 
     model.Neq=3;             % Number of states 
     model.X=[x1 x2 x3];
@@ -49,6 +49,7 @@ function model = Goodwin()
     %  PARAMETERS CONSIDERED FOR IDENTIFIABILITY   %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    model.P=[p1 p2 p3 p4 p5 p6 p7 p8];
     model.Par=[p1 p2 p4 p5 p6 p7 p8];
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
