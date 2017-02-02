@@ -23,7 +23,7 @@ function model = Pharmacokinetics()
     %%%%%%%%%%%%%%%%%%%%%%%%%
 
     %%% Number of derivatives %%% 
-    model.Nder=7;
+    model.Nder=3;
     model.X=[x1 x2 x3 x4];
 
     %%% Number of states %%%
