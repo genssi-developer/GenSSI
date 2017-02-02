@@ -33,9 +33,9 @@
   <td id="projectlogo"><img alt="Logo" src="GenSSI-logo.jpg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">GenSSI
-   &#160;<span id="projectnumber">2016-02-19</span>
+   &#160;<span id="projectnumber">2.0</span>
    </div>
-   <div id="projectbrief">GenSSI</div>
+   <div id="projectbrief">GenSSI V 2.0</div>
   </td>
  </tr>
  </tbody>
@@ -122,6 +122,9 @@ Functions</h2></td></tr>
 <tr class="memitem:acf0ab1dc4da7184e89d949c4c30985f2"><td class="memItemLeft" align="right" valign="top">function [  ,   ] =&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="genssi_compute_lie_derivatives_8m.html#acf0ab1dc4da7184e89d949c4c30985f2">genssiComputeLieDerivatives</a> (model, options)</td></tr>
 <tr class="memdesc:acf0ab1dc4da7184e89d949c4c30985f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">genssiComputeLieDerivatives computes Lie derivatives of the output functions (model.H), the state vectors (model.X), and the initial conditions (model.IC) with respect to the equations (model.F) and controls (model.G)  <a href="#acf0ab1dc4da7184e89d949c4c30985f2">More...</a><br /></td></tr>
 <tr class="separator:acf0ab1dc4da7184e89d949c4c30985f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d88609316ec3c26a99d84c7809f23f3"><td class="memItemLeft" align="right" valign="top">function [  ,   ] =&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="genssi_compute_lie_derivatives_8m.html#a7d88609316ec3c26a99d84c7809f23f3">genssiComputeLieDerivatives&gt;jacRank</a> (LDer, rankVector, order, model, options)</td></tr>
+<tr class="memdesc:a7d88609316ec3c26a99d84c7809f23f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">jacRank computes jacobian and rank, producing output text  <a href="#a7d88609316ec3c26a99d84c7809f23f3">More...</a><br /></td></tr>
+<tr class="separator:a7d88609316ec3c26a99d84c7809f23f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="acf0ab1dc4da7184e89d949c4c30985f2"></a>
@@ -186,13 +189,76 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a class="anchor" id="a7d88609316ec3c26a99d84c7809f23f3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function [  ,   ] = genssiComputeLieDerivatives&gt;jacRank </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>LDer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>rankVector</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>order</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>options</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">LDer</td><td>model definition (struct) </td></tr>
+    <tr><td class="paramname">rankVector</td><td>vector of ranks (for results) </td></tr>
+    <tr><td class="paramname">order</td><td>for output text, computing derivatives of order </td></tr>
+    <tr><td class="paramname">model</td><td>model definition </td></tr>
+    <tr><td class="paramname">options</td><td>processing options (struct)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">rankFull</td><td>boolean, true if rank is full </td></tr>
+    <tr><td class="paramname">rankVector</td><td>vector of ranks (for results) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="genssi_compute_lie_derivatives_8m_source.html#l00106">106</a> of file <a class="el" href="genssi_compute_lie_derivatives_8m_source.html">genssiComputeLieDerivatives.m</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="genssi_compute_lie_derivatives_8m.html">genssiComputeLieDerivatives.m</a></li>
-    <li class="footer">Generated on Fri Feb 19 2016 11:12:03 for GenSSI by
+    <li class="footer">Generated on Thu Feb 2 2017 14:41:13 for GenSSI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>
