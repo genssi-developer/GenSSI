@@ -1,8 +1,8 @@
 function genssiToPolynomial (modelNameIn,modelNameOut)
     % genssiToPolynomial converts a GenSSI model to polynomial form.
     % It reads the input model, converts to polynomial form, and creates
-    % an output model as a Matlab function modelNameOut.m and as a
-    % Matlab file modelnameOut.mat, both in the Examples folder.
+    % an output model as a MATLAB function modelNameOut.m and as a
+    % MATLAB file modelnameOut.mat, both in the Examples folder.
     %
     % Parameters:
     %  modelNameIn: the name of the input model (a string)

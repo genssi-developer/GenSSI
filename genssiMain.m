@@ -9,7 +9,7 @@ function varargout = genssiMain(varargin)
     %  fileFormat: the format of the model file
     %   'model': (default) if the model is a function file (e.g.
     %    Goodwin.m)
-    %   'mat': if the model is a Matlab file (e.g. Goodwin.mat)
+    %   'mat': if the model is a MATLAB file (e.g. Goodwin.mat)
     %
     % Return values:
     %  varargout: generic output arguments

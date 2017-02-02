@@ -18,7 +18,7 @@ function options = genssiReportInputs(model,options)
     fprintf(1,'*                                                                                                        \n');
     fprintf(1,'**********************************************************************************\n\n');
     if options.verbose
-        strDisp=['Matlab version=',version];
+        strDisp=['MATLAB version=',version];
         disp(strDisp);
         strDisp=['Computer=',computer];
         disp(strDisp);

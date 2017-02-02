@@ -3,14 +3,15 @@ function varargout = genssiTransformation(varargin)
     % based on a transformation definition.
     %
     % Parameters:
+    %  varargin: generic input arguments    
     %  modelNameIn: the name of the input model (a string)
-    %  fileFormat: either 'function' (default), if the model is a MatLab
+    %  fileFormat: either 'function' (default), if the model is a MATLAB
     %              function, or 'mat', if the model is a .mat file
     %  transDef: the name of a transformation definition file (string)
     %  modelNameOut: the name of the output model (a string)
     %
     % Return values:
-    %  void
+    %  varargout: generic output arguments    
     %  
     if nargin >= 1
         modelNameIn = varargin{1};

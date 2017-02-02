@@ -1,6 +1,6 @@
 function amiciStructToSource(model)
     % amiciStructToSource converts a model definition (struct) to a
-    %  source format (Matlab function file) and saves the results in the
+    %  source format (MATLAB function file) and saves the results in the
     %  examples directory.
     %
     % Parameters:

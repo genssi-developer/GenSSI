@@ -1,4 +1,4 @@
-% genssiStartup adds all paths reqquired for GenSSI.
+% genssiStartup adds all paths required for GenSSI.
 % It should be called at the beginning of a session.
 %
 % Parameters:
