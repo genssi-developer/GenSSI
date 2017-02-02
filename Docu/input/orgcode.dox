@@ -8,7 +8,7 @@
  The main, or root, directory, which we refer to as GenSSI, contains most of the GenSSI functions. In addition, the following subdirectories are used:
 
  - GenSSI/Auxiliary contains some auxiliary functions, such as genssiRemoveZeroRows.
- - GenSSI/Examples contains model definitions.
+ - GenSSI/Examples contains a collection of model definitions.
  - GenSSI/Results contains the results of analysis.
  - GenSSI/Docu contains tools for creating the GenSSI documentation, as well as input and output of that process.
  - GenSSI/Docu/config contains configuration files for the documentation tools.
