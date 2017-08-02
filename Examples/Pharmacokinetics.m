@@ -6,8 +6,8 @@
 %%%                Drug Des Deliv, 1, 333-348.                                 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function model = Pharmacokinetics()
-    model.Name='Pharmacokinetics';
+function model = pharmacokinetics()
+    model.Name='pharmacokinetics';
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %     DECLARE SYMBOLIC VARIABLES:                          %
@@ -16,7 +16,7 @@ function model = Pharmacokinetics()
     %               -initial state, if not known               %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    syms x1 x2 x3 x4 a1 a2 bb1 bb2 ka kc vm c0 g
+    syms x1 x2 x3 x4 a1 a2 b1 b2 ka kc vm c0 g
 
     %%%%%%%%%%%%%%%%%%%%%%%%%
     %   MODEL RELATED DATA  %
@@ -34,7 +34,7 @@ function model = Pharmacokinetics()
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %%% Parameters %%% 
-    model.Par=[a1 a2 bb1 bb2 ka kc vm c0 g];
+    model.Par=[a1 a2 b1 b2 ka kc vm c0 g];
     %%% Number of model parameters %%%
     model.NPar=length(model.Par);
 
@@ -46,7 +46,9 @@ function model = Pharmacokinetics()
     model.Noc=0;
 
     %%% Observables %%%
-    model.H=[x1 x4];
+    h1=x1;
+
+    model.H=[h1];
 
     %%% Number of observables %%%
     model.Nobs=length(model.H);
@@ -55,8 +57,8 @@ function model = Pharmacokinetics()
 
     A1=a1*(x2-x1)-ka*vm*x1/(kc*ka+kc*x3+ka*x1);
     A2=a2*(x1-x2);
-    A3=bb1*(x4-x3)-kc*vm*x3/(kc*ka+kc*x3+ka*x1);
-    A4=bb2*(x3-x4);
+    A3=b1*(x4-x3)-kc*vm*x3/(kc*ka+kc*x3+ka*x1);
+    A4=b2*(x3-x4);
 
     model.F=[A1 A2 A3 A4];
 
