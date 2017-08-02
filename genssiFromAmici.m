@@ -21,10 +21,10 @@ function genssiFromAmici (modelNameIn,modelNameOut)
         model.X = transpose(model.X);
     end
     model.Neq=length(model.X);
-    model.G=zeros(1,model.Neq); % required even if Noc=0
+    model.G=sym(zeros(1,model.Neq)); % required even if Noc=0
     if isfield(AModel.sym,'u')
         for iC = 1:length(AModel.sym.u)
-            model.G(iC) = Amodel.sym.u(iC);
+            model.G(iC) = AModel.sym.u(iC);
         end
         model.Noc=length(AModel.sym.u);
     else
