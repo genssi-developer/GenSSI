@@ -2,13 +2,13 @@
  @mainpage GenSSI 2.0 General Documentation
  @section intro Introduction
  
- GenSSI is a MATLAB implementation of generating series for structural identifiability as described in
+ GenSSI is a Matlab implementation of generating series for structural identifiability as defined in
 
  - Chiş, O.-T., Banga, J.R. and Balsa-Canto, E. (2011) Structural Identifiability of Systems Biology Models: A Critical Comparison of Methods, PLoS ONE, 6, e27755.
 
  - Chiş, O., Banga, J.R. and Balsa-Canto, E. (2011) GenSSI: a software toolbox for structural identifiability analysis of biological models, Bioinformatics, 27, 2610-2611.
 
- With GenSSI, the user can specify differential equation models in terms of symbolic variables in MATLAB and analyze the models to determine which parameters are globally or locally identifiable. In addition, there are some utilities for converting models to polynomial form, creating multi-experiment models, transforming models to rescale variables and remove redundancies, or convert to/from AMICI format. 
+ With GenSSI, the user can specify differential equation models in terms of symbolic variables in Matlab and then analyze the models to determine which parameters are globally or locally identifiable. In addition, there are some utilities for converting models to polynomial form, or to or from AMICI format.
   
  @section download Availability
  
@@ -20,7 +20,7 @@
  Once you've obtained your copy check out the @ref install
  
  @subsection git Obtaining GenSSI via the Git versioning system
- In order to stay up to date with the latest GenSSI versions, simply pull it from our Git repository and
+ In order to always stay up to date with the latest GenSSI versions, simply pull it from our Git repository and
  recompile it when a new release is available. For more information about Git checkout their <a href="http://git-scm.com/" target="_blank">website</a>
  
  The Git repository can currently be found at https://github.com/thomassligon/GenSSI and a direct clone is possible via
@@ -49,14 +49,14 @@
 
  Models are generally stored in
  @code GenSSI/Examples @endcode
- but GenSSI should be able to find them in any directory that is in the MATLAB path.
+ but GenSSI should be able to find them in any directory that is is the Matlab path.
 
  When a model is analyzed GenSSI stores the results in
  @code GenSSI/Results @endcode
  
- To use GenSSI, start MATLAB and add the GenSSI direcory to the MATLAB path. To add all toolbox directories to the MATLAB path, execute the MATLAB script
+ To use GenSSI, start Matlab and add the GenSSI direcory to the Matlab path. To add all toolbox directories to the Matlab path, execute the Matlab script
  @code genssiStartup.m @endcode
- To store the installation for further MATLAB session, the path can be saved via
+ To store the installation for further Matlab session, the path can be saved via
  @code savepath @endcode
   
  */

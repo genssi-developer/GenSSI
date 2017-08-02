@@ -5,7 +5,7 @@
  
  @section definition Model Definition
  
- This manual will guide the user to specify models in MATLAB. For example implementations, see the models in the example directory.
+ This manual will guide the user to specify models in Matlab. For example implementations, see the models in the example directory.
  
  @subsection header Header
  
@@ -18,8 +18,6 @@
  Give the model a name.
 
  @code model.Name = 'Goodwin'; @endcode
-
- The name will be used to create a subdirectory in the Results directory where the results of analysis will be stored.
  
  @subsection derivatives Derivatives
  
@@ -27,7 +25,7 @@
 
  @code model.Nder = 8; @endcode
  
- @subsection variables Variables
+ @subsection states States
  
  Create the respective symbolic variables. The name of the symbolic variable can be chosen arbitrarily.
  
@@ -37,7 +35,7 @@
  
  @code model.X = [x1 x2 x3]; @endcode
 
- Define the number of variables.
+ Define the number of states.
 
  @code model.Neq = 3; @endcode
  
@@ -57,7 +55,7 @@
 
  @subsection equtions Equations
 
- Define the vector field of the model.
+ Define the equations of the model.
 
  @code
  A1 = -p4*x1+p1/(p2+x3^p3);
@@ -74,15 +72,14 @@
  g1=0;
  g2=0;
  g3=0;
- model.G=[g1 g2 g3];
+ model.G=[g1 g2 Ag3];
  @endcode
 
  Define the number of controls.
 
  @code model.Noc = 0; @endcode
 
- The matrix G has as many columns as there are state variables and as many rows as there are inputs.
-
+ Note that the length of the control vector should match the number of states, even if there are fewer controls.
 
  @subsection obserables Observables
 
@@ -101,56 +98,93 @@
 
  @subsection ic Initial Conditions
 
- Define the initial conditions. The initial conditions can be fixed numerical values or a function of model parameters.
-
+ Define the initial conditions.
 
  @code model.IC = [0.3 0.9 1.3];@endcode
   
  @section analysis Model Analysis
  
- The structural identifiability of the model can be analyzed by calling the MATLAB function genssiMain. The first parameter of genssiMain is the name of the model, and the second parameter is the format. If the format is absent, the model is assumed to be a function, as described above. If it is equal to 'mat', the model is assumed to be a MATLAB file with name Modelname.mat (e.g. Goodwin.mat) and containing the model struct.
+ The model can then be analyzed by calling genssiMain. The first parameter is the name of the model, and the second parameter is the format. If the format is absent, the model is assumed to be a function, as described above. If it is equal to 'mat', the model is assumed to be a Matlab file with name Modelname.mat (e.g. Goodwin.mat) and containing the model struct.
  
  @code
  genssiMain('Goodwin')
  @endcode
  
- The function genssiMain will call the model function or load the .mat file, which puts the model struct in memory. After that, it will call all other GenSSI functions required to analyze the model. The results will be put into a directory created using the name of the model and the next available run number, for example GenSSI/Results/Goodwin/run3.
-
- The results include a results file, with the name 'model_information.txt', and all identifiiability tableaus created during analysis, in MATLAB format, for example 'Figure1.fig'. 
-
- It is not necessary to analyze the identifiability tableaus unless you are looking for deeper insight into the structure of the model and its identifiability characteristics. They are described in more detail in:
-
- - Chis, O.-T., J. R. Banga, et al. (2011). "Structural Identifiability of Systems Biology Models: A Critical Comparison of Methods." PLoS ONE 6(11): e27755.
-
- - Balsa-Canto, E., A. Alonso, et al. (2010). "An iterative identification procedure for dynamic modeling of biochemical networks." BMC Syst Biol 4(1): 11.
-
- The identifiability tableaus are binary versions of the Jacobian matrix, and help in determining identifiability of parameters during the analysis process.  Columns consisting solely of zeros indicate that the respective parameter cannot be identified. Rows consisting solely of zeros provide no information and are deleted. Rows consisting of a single one indicate identifiability, and rows consisting or two or more ones indicate that there are relations that might be solved to provide identifiability. 
-
- The results file 'model_information.txt' contains the main output of the identifiability analysis of GenSSI. It begins by documenting the primary features of the model and ends by stating which parameters are locally or globally identifiable. The middle part, which can be skipped during a first reading, documents the steps taken during analysis and which relations were solved to determine identifiability of individual parameters. Here is an example of the final part of this file for the Goodwin model used as an example in this reference manual:
-
- @code
-***************************************************************
-
- -----> THE MODEL IS STRUCTURALLY LOCALLY IDENTIFIABLE 
-
-***************************************************************
-
-        The structurally globally identifiable parameters are: 
-
-         	None
-
-        The structurally locally identifiable parameters are: 
-
-     	[      p1	      p2	      p4	      p5	      p6	      p7	      p8	]
-
-
-Report results elapsed time: 0.04445
-Total elapsed time: 3.4703
- @endcode
+ The function genssiMain will call the model function or load the .mat file, which puts the model struct in memory. After that, it will call all other GenSSI functions required to annalyze the model. 
 
  @section conversion Conversion Utilities
 
  The GenSSI package also includes some functions for converting models from one format to another.
+
+ @subsection fromsbml Convert from SBML Format
+
+ @code genssiFromSBML(modelNameIn,modelNameOut) @endcode
+
+ genssiFromSBML converts an SBML model to GenSSI format.
+
+ modelNameIn: name of the SBML model (string).
+
+ modelNameOut: name of the GenSSI model (string).
+
+ Note: There are limitations to this conversion. The SBML model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
+
+ As an example for this conversion, we have chosen to use an SMBL model from the biomodels database. We begin by accessing the web site  http://www.ebi.ac.uk/biomodels-main/ searching for MAPK and dowloading the file BIOMD0000000010.xml. In order to make this easier to write, we renamed the file, so that our SBML model is now contained in
+
+ @code Kholodenko.xml @endcode
+
+ Now we are ready to call the conversion routine, where we have chosen to use the same name for the GenSSI model.
+
+ @code genssiFromSBML('Kholodenko','Kholodenko'); @endcode
+
+ As mentioned above, we need to make some manual modifications to the GenSSI model. First, we will show the final version of this model, and then explain the changes that were made.
+
+ @code
+ function model = Kholodenko()
+     syms MKKK MKKK_P MKK MKK_P MKK_PP MAPK MAPK_P MAPK_PP
+     syms V1_J0 Ki_J0 n_J0 K1_J0 V2_J1 KK2_J1 k3_J2 KK3_J2 k4_J3 KK4_J3 V5_J4
+     syms KK5_J4 V6_J5 KK6_J5 k7_J6 KK7_J6 k8_J7 KK8_J7 V9_J8 KK9_J8 V10_J9 KK10_J9
+     model.Name = 'Kholodenko';
+     model.Nder = 6;
+     model.X = [MKKK,MKKK_P,MKK,MKK_P,MKK_PP,MAPK,MAPK_P,MAPK_PP];
+     model.Neq = 8;
+     model.G = [0,0,0,0,0,0,0,0];
+     model.Noc = 0;
+     model.P = [V1_J0,Ki_J0,n_J0,K1_J0,V2_J1,KK2_J1,k3_J2,KK3_J2,k4_J3,...
+                KK4_J3,V5_J4,KK5_J4,V6_J5,KK6_J5,k7_J6,KK7_J6,k8_J7,...
+                KK8_J7,V9_J8,KK9_J8,V10_J9,KK10_J9];
+     model.Par = [V1_J0,V2_J1,V5_J4,V6_J5,V9_J8,V10_J9];
+     model.Npar = 6;
+     model.IC = [90,10,280,10,10,280,10,10];
+     model.H = [MAPK,MAPK_P,MAPK_PP];
+     model.Nobs = 3;
+     model.F = [(MKKK_P*V2_J1)/(KK2_J1 + MKKK_P) - (MKKK*V1_J0)/(((MAPK_PP/Ki_J0)^n_J0 + 1)*(K1_J0 + MKKK)),...
+        (MKKK*V1_J0)/(((MAPK_PP/Ki_J0)^n_J0 + 1)*(K1_J0 + MKKK)) - (MKKK_P*V2_J1)/(KK2_J1 + MKKK_P),...
+        (MKK_P*V6_J5)/(KK6_J5 + MKK_P) - (MKK*MKKK_P*k3_J2)/(KK3_J2 + MKK),...
+        (MKK_PP*V5_J4)/(KK5_J4 + MKK_PP) - (MKK_P*V6_J5)/(KK6_J5 + MKK_P)...
+            + (MKK*MKKK_P*k3_J2)/(KK3_J2 + MKK) - (MKK_P*MKKK_P*k4_J3)/(KK4_J3 + MKK_P),...
+        (MKK_P*MKKK_P*k4_J3)/(KK4_J3 + MKK_P) - (MKK_PP*V5_J4)/(KK5_J4 + MKK_PP),...
+        (MAPK_P*V10_J9)/(KK10_J9 + MAPK_P) - (MAPK*MKK_PP*k7_J6)/(KK7_J6 + MAPK),...
+        (MAPK_PP*V9_J8)/(KK9_J8 + MAPK_PP) - (MAPK_P*V10_J9)/(KK10_J9 + MAPK_P)...
+            + (MAPK*MKK_PP*k7_J6)/(KK7_J6 + MAPK) - (MAPK_P*MKK_PP*k8_J7)/(KK8_J7 + MAPK_P),...
+        (MAPK_P*MKK_PP*k8_J7)/(KK8_J7 + MAPK_P) - (MAPK_PP*V9_J8)/(KK9_J8 + MAPK_PP)];
+ end
+ @endcode
+
+ Here are the changes we made:
+
+ First, we split the long lines to make the file more readable (syms, model.P, and model.F). For very large models, some users might prefer to use the .mat version of the model instead of the .m version.
+
+ Next we defined the observables (model.H and model.Nobs). Here, we chose the three downstream species MAPK, MAPK_P, and MAPK_PP.
+
+ Then we moved the full list of parameters from model.Par to model.P. This is not necessary, since model.P is only used in some of the conversion routings, such as conversion to AMICI.
+
+ At this point, we need to make an important change. The full list of 22 parameters is too long for analysis on our 8GB PC, because each Lie derivative increases the size of the Jacobian matrix by a facter of Npar, so 22 means that the memory usage grows very fast and leads to a problem. Here we need to choose a smaller number of parameters. We have chosen the 6 'V' parameters (model.Par and model.Npar). In this context, we also changed the number of derivatives (model.Nder) to 6. These changes were made on the basis of experimentation, by running the analysis multiple times, and searching for a combination where the number of parameters and derivatives were small enough to enable the analysis to run to completion, but with enough parameters to give a meaningful result and enough derivatives to achieve full rank of the Jacobian (equal to the number of parameters).
+
+ Finally, we are ready to analyze the model in GenSSI.
+
+ @code genssiMain('Kholodenko'); @endcode
+
+ The results show that 3 of the parameters are locally identifiable and the other 3 are globally identifiable (assuming the other 16 to be fixed).
 
  @subsection poly Convert to Polynomial Format
 
@@ -162,6 +196,40 @@ Total elapsed time: 3.4703
 
  modelNameOut: name of model to be created (string).
 
+ @subsection toamici Convert to AMICI Format
+
+ @code genssiToAMICI(modelNameIn,modelNameOut) @endcode
+
+ genssiToAMICI converts a GenSSI model to AMICI format. The AMICI package uses Sundials Cvodes to efficiently solve ODEs from within Matlab. It is available at https://github.com/AMICI-developer/AMICI.
+
+ modelNameIn: name of the GenSSI model (string).
+
+ modelNameOut: name of the AMICI model (string).
+
+ Note: There are limitations to this conversion. The GenSSI model contains a list of parameters to be considered for analysis, but AMICI needs a "sym" statement containing a list of all parameters used by the model. It may be necessary to manually edit the AMICI model after conversion. In order to avoid this, the GenSSI model can contain a variable model.P, containing all parameters (model.Par only contains the parameters to be considered for identifiability).
+
+ @subsection fromamici Convert from AMICI Format
+
+ @code genssiFromAMICI(modelNameIn,modelNameOut) @endcode
+
+ genssiFromAMICI converts an AMICI model to GenSSI format.
+
+ modelNameIn: name of the AMICI model (string).
+
+ modelNameOut: name of the GenSSI model (string).
+
+ Note: There are limitations to this conversion. The AMICI model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
+
+ @subsection structtosource Convert from Model Structure to Model Source Format
+
+ @code genssiStructToSource(model) @endcode
+
+ @code amiciStructToSource(model) @endcode
+
+ genssiStructToSource reads the GenSSI model struct and converts it to source format (Matlab function definition), and amiciStructToSource does the same for AMICI models. In general, the source format is more convenient for smaller models, since it is easier to modify, but the struct format, typically saved in a Matlab file (e.g. Goodwin.mat) is more convenient for large models, since it does not require editing of long lines of code.
+
+ model: model definition (struct).
+
  @subsection multiexp Create Multi-Experiment Model
 
  @code genssiMultiExperiment(modelNameIn,fileFormat,mExDef,modelNameOut) @endcode
@@ -170,17 +238,19 @@ Total elapsed time: 3.4703
 
  modelNameIn: the name of the input model (a string).
 
- fileFormat: either 'function' (default), if the model is a MATLAB function, or 'mat', if the model is a .mat file.
+ fileFormat: either 'function' (default), if the model is a MatLab function, or 'mat', if the model is a .mat file.
 
  mExDef: the name of a multi-experiment definition file (string).
 
  modelNameOut: the name of the output model (a string).
 
- GenSSI 2.0 supports structural identifiability analysis for systems with multiple experimental conditions. As the information content of an individual experiment is often limited, in most applications, multiple experiments are performed. These experiments usually differ in the experimental conditions, meaning that different initial conditions, perturbations or control inputs are used. This increases the amount of information and thereby the identifiability of the parameters.
+ In chemistry, it is often possible for the chemist to arbitrarily change certain parameters, such as tempurature, pressure, and the concentration of specific substances.  For example, in a continuous-flow stirred tank reactor (CFSTR), the feed flow provides a constant feed of substances, at a rate that can be chosen as needed.  This situation has led to the concept of "controls", which are also used in identifiability analysis.  From the point of theory, the controls are variables that can be changed at will, so they have a very strong positive influence on the identifiability of a model.
 
- To perform structural identifiability analysis for problems with multiple experimental conditions, GenSSI provides the MATLAB function genssiMulitEpxeriment, which generates a (multi-experiment) GenSSI model for a single experimental condition and a description of the changes in the experimental conditions.
+ In contrast, in biology, certain parameters and feed rates may be varied, but most often not arbitrarily. Often, these parameters can be varied discretely by creating a new experiment with new substances or substance concentrations.  Now, in identifiability, we would like to analyze multiple experiments in one model.  The result is a model for which the identifiability lies somewhere between the models without controls and those with controls.
 
- To illustrate the functionality, we considered a model for mRNA  transfection, accounting for translation and degradation. The model definition is:
+ Now we will explain the parameters used by the multi-experiment model creation on the basis of a specific example.
+
+ We begin with a model for mRNA, including translation and degradation. The model definition is:
 
  @code
  function model = M1_1_U2()
@@ -205,17 +275,17 @@ Total elapsed time: 3.4703
  end
  @endcode
 
- The variables (model.X) are m (the level of mRNA) and G (the level of GFP, green fluorescent protein), of which only G is observed (model.H).  The differential equations (model.F) define degradation of mRNA (-d*m), degradation of GFP (-b*G) and translation of mRNA to GFP (kTL*m).  Note that translation and GFP degradation have been defined as controls (model.G).
+ The states (model.X) are m (mRNA) and G (GFP, green fluorescent protein), of which only GFP is observed (model.H).  The differential equations (model.F) define degradation of mRNA (-d*m), degradation of GFP (-b*G) and translation of mRNA to GFP (kTL*m).  Note that translation and GFP degradation have been defined as controls (model.G).
 
- Based on this model, we define a total of four experimental conditions, in the experiment definition function.  The expriments are defined by modifying the controls and the initial conditions. The expriments are:
+ Based on this model, we define a total of 4 experiments, in the experiment definition function.  The expriments are defined by modifying the controls and the initial conditions. The expriments are:
 
  1) original configuration
 
  2) change in transfection (m0) via IC: The initial concentration of mRNA is changed.
 
- 3) change in translation via control u1 = uInh: The rate of translation is changed, for example by treating the cell with CHX (the antiseptic chlorhexidine).
+ 3) change in translation via control u1 = uInh: The rate of translation is changed, for example by treating the cell with an antibiotic.
 
- 4) change in GFP degradation via control u2 = uDeg: The rate of GFP degradation is changed, for example by using destabilized GFP (d2eGFP) instead of normal GFP (eGFP).
+ 4) change in GFP degradation via control u2 = uDeg: The rate of GFP degradation i changed, for example by using destabilized GFP (d2eGFP) instead of normal GFP (eGFP).
 
 The experiment definition is:
 
@@ -274,7 +344,7 @@ The experiment definition is:
  end
  @endcode
 
- Based on the original 2 state variables and 4 experiments, we now have 2*4=8 state variables (model.X).
+ Based on the original 2 state variables and 4 experiments, we now have 2*4=8 state variables (model.X).  In addition, all parameters now appear directly in the differential equations (model.F), and there are no controls.
  
  @subsection transf Transform Model
 
@@ -284,7 +354,7 @@ The experiment definition is:
 
  modelNameIn: the name of the input model (a string).
 
- fileFormat: either 'function' (default), if the model is a MATLAB function, or 'mat', if the model is a .mat file.
+ fileFormat: either 'function' (default), if the model is a MatLab function, or 'mat', if the model is a .mat file.
 
  transDef: the name of a transformation definition file (string).
 
@@ -319,7 +389,7 @@ The experiment definition is:
  end
  @endcode
 
- The state variables in this model (model.X) are mRNA (m), GFP (G), enzyme (E1), and the mRNA-enzyme complex (mE).  We have used E1 as the name of the enzyme instead of E since there are cases where MATLAB will treat the symbolic variable E as e or exp(1).  The differential equations show mRNA (m) decreasing due to degradation (-d1*m) and decreasing due to complexation (-d2*m*E1).  GFP (G) increases due to translation (kTL*m) and decreases due to complexation (-d2*m*E1). The enzyme (E1) decreases due to complexation (-d2*m*E1) and increases due to decomplexation (d3*mE).  The change in the complex (mE) is exactly the opposite of the change in the enzyme.  As a result of this, we know that E1-E1(0)=-(mE-mE(0)) or, since mE(0)=0, E1-E0+mE=0.  In addition, we know that the concentration of GFP always depends on the product of mRNA(0)*kTL, so we will be able to reduce the number of parameters by rescaling (dividing by m0).
+ The state variables in this model (model.X) are mRNA (m), GFP (G), enzyme (E1), and the mRNA-enzyme complex (mE).  We have used E1 as the name of the enzyme instead of E since there are cases where Matlab will treat the symbolic variable E as e or exp(1).  The differential equations show mRNA (m) decreasing due to degradation (-d1*m) and decreasing due to complexation (-d2*m*E1).  GFP (G) increases due to translation (kTL*m) and decreases due to complexation (-d2*m*E1). The enzyme (E1) decreases due to complexation (-d2*m*E1) and increases due to decomplexation (d3*mE).  The change in the complex (mE) is exactly the opposite of the change in the enzyme.  As a result of this, we know that E1-E1(0)=-(mE-mE(0)) or, since mE(0)=0, E1-E0+mE=0.  In addition, we know that the concentration of GFP always depends on the product of mRNA(0)*kTL, so we will be able to reduce the number of parameters by rescaling (dividing by m0).
 
  With these observations, we can create our transformation definition:
 
@@ -374,42 +444,6 @@ The experiment definition is:
  end
  @endcode
 
- In this transformed model, the new state variables are mnew, Gnew, and E1new, based on the definition transDef.stateSubs.
-
- @subsection toamici Export to AMICI Format
-
- @code genssiToAmici(modelNameIn,modelNameOut) @endcode
-
- genssiToAMICI converts a GenSSI model to AMICI format. The AMICI package uses Sundials CVODES and IDAS to efficiently solve ODEs from within MATLAB. It is available at https://github.com/AMICI-developer/AMICI.
-
- modelNameIn: name of the GenSSI model (string).
-
- modelNameOut: name of the AMICI model (string).
-
- This is an important feature, since AMICI supports SBML import, thereby effectively providing GenSSI with an SBML import.
-
- Note: There are limitations to this conversion. The GenSSI model contains a list of parameters to be considered for analysis, but AMICI needs a "sym" statement containing a list of all parameters used by the model. It may be necessary to manually edit the AMICI model after conversion. In order to avoid this, the GenSSI model can contain a variable model.P, containing all parameters (model.Par only contains the parameters to be considered for identifiability).
-
- @subsection fromamici Import from AMICI Format (and SBML Models)
-
- @code genssiFromAmici(modelNameIn,modelNameOut) @endcode
-
- genssiFromAMICI converts an AMICI model to GenSSI format.
-
- modelNameIn: name of the AMICI model (string).
-
- modelNameOut: name of the GenSSI model (string).
-
- Note: There are limitations to this conversion. The AMICI model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
-
- @subsection structtosource Convert from Model Structure to Model Source Format
-
- @code genssiStructToSource(model) @endcode
-
- @code amiciStructToSource(model) @endcode
-
- genssiStructToSource reads the GenSSI model struct and converts it to source format (MATLAB function definition), and amiciStructToSource does the same for AMICI models. In general, the source format is more convenient for smaller models, since it is easier to modify, but the struct format, typically saved in a MATLAB file (e.g. Goodwin.mat) is more convenient for large models, since it does not require editing of long lines of code.
-
- model: model definition (struct).
+ In this transformed model, the new state variables are mnew, Gnew, and E1new, based on the definition transDef.stateSubs. We could just as well have left the names of mdm0, G, and E1dm0, or used the simpler names of m, G, and E1 for the new state vector. A similar remark is valid for the parameter names. The resulting differential equations (model.F) are less readable than in the original model, but we have eliminated one state variable and one parameter.
 
  */
