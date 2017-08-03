@@ -55,8 +55,13 @@
  @code GenSSI/Results @endcode
  
  To use GenSSI, start Matlab and add the GenSSI direcory to the Matlab path. To add all toolbox directories to the Matlab path, execute the Matlab script
+
  @code genssiStartup.m @endcode
- To store the installation for further Matlab session, the path can be saved via
+
+ To use the SBML import, 
+ libSBML (http://sbml.org/Software/libSBML/Downloading_libSBML#MATLAB)
+ has to be downloaded and the directory has to be included in the MATLAB path. To store the installation for further Matlab session, the path can be saved via
+
  @code savepath @endcode
   
  */

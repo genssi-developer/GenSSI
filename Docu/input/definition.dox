@@ -126,17 +126,21 @@
 
  modelNameOut: name of the GenSSI model (string).
 
+ Reminder: To use the SBML import, 
+ libSBML (http://sbml.org/Software/libSBML/Downloading_libSBML#MATLAB)
+ has to be downloaded and the directory has to be included in the MATLAB path.  
+
  Note: There are limitations to this conversion. The SBML model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
 
  As an example for this conversion, we have chosen to use an SMBL model from the biomodels database. We begin by accessing the web site  http://www.ebi.ac.uk/biomodels-main/ searching for MAPK and dowloading the file BIOMD0000000010.xml. In order to make this easier to write, we renamed the file, so that our SBML model is now contained in
 
  @code Kholodenko.xml @endcode
 
- Now we are ready to call the conversion routine, where we have chosen to use the same name for the GenSSI model.
+ To convert this SBML model to a GenSSI model with the same name, we execute
 
  @code genssiFromSBML('Kholodenko','Kholodenko'); @endcode
 
- As mentioned above, we need to make some manual modifications to the GenSSI model. First, we will show the final version of this model, and then explain the changes that were made.
+ The resulting file includes several default values. Here, we set the full list of parameters model.P to model.Par and reduce the list of parameters model.Par for which identifiability analysis is performed. Using all 22 parameters is in principle possible, but does not work on a desktop computer with 8GB RAM, because the size of the Jacobian grows quickly with number of of parameters. In addition to the parameters, we set the observables (model.H = [MAPK, MAPK_P, and MAPK_PP]), the number of observables (model.Nobs = 3) and the number of Lie derivatives (model.Nder = 6). In addition we split the long lines (syms, model.P, and model.F) to improve the readability of the of the file. This yields a GenSSI model:
 
  @code
  function model = Kholodenko()
@@ -170,21 +174,11 @@
  end
  @endcode
 
- Here are the changes we made:
-
- First, we split the long lines to make the file more readable (syms, model.P, and model.F). For very large models, some users might prefer to use the .mat version of the model instead of the .m version.
-
- Next we defined the observables (model.H and model.Nobs). Here, we chose the three downstream species MAPK, MAPK_P, and MAPK_PP.
-
- Then we moved the full list of parameters from model.Par to model.P. This is not necessary, since model.P is only used in some of the conversion routings, such as conversion to AMICI.
-
- At this point, we need to make an important change. The full list of 22 parameters is too long for analysis on our 8GB PC, because each Lie derivative increases the size of the Jacobian matrix by a facter of Npar, so 22 means that the memory usage grows very fast and leads to a problem. Here we need to choose a smaller number of parameters. We have chosen the 6 'V' parameters (model.Par and model.Npar). In this context, we also changed the number of derivatives (model.Nder) to 6. These changes were made on the basis of experimentation, by running the analysis multiple times, and searching for a combination where the number of parameters and derivatives were small enough to enable the analysis to run to completion, but with enough parameters to give a meaningful result and enough derivatives to achieve full rank of the Jacobian (equal to the number of parameters).
-
- Finally, we are ready to analyze the model in GenSSI.
+ This model can now be analyzed using the fucntionality of GenSSI:
 
  @code genssiMain('Kholodenko'); @endcode
 
- The results show that 3 of the parameters are locally identifiable and the other 3 are globally identifiable (assuming the other 16 to be fixed).
+ The results show that 3 of the 6 parameters are locally identifiable and the other 3 are globally identifiable.
 
  @subsection poly Convert to Polynomial Format
 
