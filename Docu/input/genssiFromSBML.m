@@ -1,6 +1,6 @@
 function genssiFromSBML (modelNameIn,modelNameOut)
-    % GenSsiFromSBML converts an SBML model to a GenSSI model and puts
-    %  the results into the examples directory.
+    % GenSsiFromSBML converts an SBML model in the examples/SBML directory
+    % to a GenSSI model and puts the results into the examples directory.
     %
     % Parameters:
     %  modelNameIn: name of the SBML model (string)

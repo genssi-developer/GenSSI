@@ -48,7 +48,11 @@
  If GenSSI was downloaded as a zip, it needs to be unpacked in a convenient directory. If GenSSI was obtained via cloning of the git repository, no further unpacking is necessary.
 
  Models are generally stored in
- @code GenSSI/Examples @endcode
+ @code
+ GenSSI/Examples
+ GenSSI/Examples/AMICI
+ GenSSI/Examples/SBML
+ @endcode
  but GenSSI should be able to find them in any directory that is is the Matlab path.
 
  When a model is analyzed GenSSI stores the results in

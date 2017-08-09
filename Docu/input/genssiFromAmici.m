@@ -1,6 +1,7 @@
 function genssiFromAmici (modelNameIn,modelNameOut)
-    % GenSsiFromAmici converts an AMICI model to a GenSSI model and puts
-    %  the results into the examples directory.
+    % GenSsiFromAmici converts an AMICI model in the examples/AMICI
+    % directory to a GenSSI model and puts the results into the examples 
+    % directory.
     %
     % Parameters:
     %  modelNameIn: name of the AMICI model (string)

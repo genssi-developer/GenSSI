@@ -128,7 +128,12 @@
 
  Reminder: To use the SBML import, 
  libSBML (http://sbml.org/Software/libSBML/Downloading_libSBML#MATLAB)
- has to be downloaded and the directory has to be included in the MATLAB path.  
+ has to be downloaded and the directory has to be included in the MATLAB path.
+
+ The input SBML model should be stored in the directory
+ @code
+ GenSSI/Examples/SBML
+ @endcode
 
  Note: There are limitations to this conversion. The SBML model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
 
@@ -211,6 +216,11 @@
  modelNameIn: name of the AMICI model (string).
 
  modelNameOut: name of the GenSSI model (string).
+
+ The input AMICI model should be stored in the directory
+ @code
+ GenSSI/Examples/AMICI
+ @endcode
 
  Note: There are limitations to this conversion. The AMICI model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
 
