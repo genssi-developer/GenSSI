@@ -57,6 +57,9 @@ function varargout = genssiMain(varargin)
         tocTotal=0;
         tic;
     end
+    model.Neq = size(model.F,1);
+    model.Noc = size(model.G,1);
+    model.Nobs = size(model.H,1);
     options=genssiReportInputs(model,options);
     if options.verbose
         disp(['Report inputs elapsed time: ' num2str(toc)]);

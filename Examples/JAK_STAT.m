@@ -1,90 +1,71 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                 The JAK-STAT signaling pathway                                          %%
-%%%                                                                                         %%
-%%%  Bibliography: Raue, A., C. Kreutz, et al. (2009). "Structural and practical            %%
-%%%                identifiability analysis of partially observed dynamical models by       %%
-%%%                exploiting the profile likelihood." Bioinformatics 25(15): 1923-1929.    %%
-%%%
-%%% Rename (states):
-%%% STAT x1
-%%% pSTAT x2
-%%% pSTAT_pSTAT x3
-%%% npSTAT_npSTAT x4
-%%% nSTAT1 x5
-%%% nSTAT2 x6
-%%% nSTAT3 x7
-%%% nSTAT4 x8
-%%% nSTAT5 x9
-%%% 
-%%% Rename( parameters):
-%%% p1 p1
-%%% p2 p2
-%%% p3 p3
-%%% p4 p4
-%%% init_STAT p5 
-%%% Omega_cyt p6
-%%% Omega_nuc p7
-%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function model = JAK_STAT()
-model.Name='JAK_STAT';
+    % JAK_STAT provides the model of the GenSSI implementation of the
+    % JAK-STAT signaling pathway described by
+    % 
+    %    Raue et al. (2009). Structural and practical identifiability 
+    %    analysis of partially observed dynamical models by exploiting 
+    %    the profile likelihood. Bioinformatics 25(15): 1923-1929.
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %     DECLARE SYMBOLIC VARIABLES:                          %
-    %               - state variables                          %
-    %               - parameters of the model                  %
-    %               -initial state, if not known               %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Model name
+    model.Name='JAK_STAT';
 
-    syms x1 x2 x3 x4 x5 x6 x7 x8 x9
-    syms p1 p2 p3 p4 p5 p6 p7
+    % Symbolic variables
+    syms STAT pSTAT pSTAT_pSTAT npSTAT_npSTAT nSTAT1 nSTAT2 nSTAT3 nSTAT4 nSTAT5
+    syms p1 p2 p3 p4 init_STAT Omega_cyt Omega_nuc
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%
-    %   MODEL RELATED DATA  %
-    %%%%%%%%%%%%%%%%%%%%%%%%%
+    % State variables
+    model.X = [STAT,...
+               pSTAT,...
+               pSTAT_pSTAT,...
+               npSTAT_npSTAT,...
+               nSTAT1,...
+               nSTAT2,...
+               nSTAT3,...
+               nSTAT4,...
+               nSTAT5];
 
-    model.Nder=7;                       %  Number of derivatives
+    % Right-hand side of differential equation
+    model.F=[(Omega_nuc*p4*nSTAT5)/Omega_cyt,...
+             -2*p2*pSTAT^2,...
+             p2*pSTAT^2-p3*pSTAT_pSTAT,...
+             -(Omega_nuc*p4*npSTAT_npSTAT-Omega_cyt*p3*pSTAT_pSTAT)/Omega_nuc,...
+             -p4*(nSTAT1-2*npSTAT_npSTAT),...
+             p4*(nSTAT1-nSTAT2),...
+             p4*(nSTAT2-nSTAT3),...
+             p4*(nSTAT3-nSTAT4),...
+             p4*(nSTAT4-nSTAT5)];
 
-    model.X=[x1 x2 x3 x4 x5 x6 x7 x8 x9];
-    model.Neq=9;                        % Number of states
-
-%     A1 = 2*p4*x4;
-%     A2 = -p2*x2^2;
-%     A3 = (1/2)*p2*x2^2-p3*x3;
-%     A4 = p3*x3-p4*x4;
-
-    A1 = (p7*p4*x9)/p6;
-    A2 = -2*p2*x2^2;
-    A3 = p2*x2^2-p3*x3;
-    A4 = -(p7*p4*x4-p6*p3*x3)/p7;
-    A5 = -p4*(x5-2*x4);
-    A6 = p4*(x5-x6);
-    A7 = p4*(x6-x7);
-    A8 = p4*(x7-x8);
-    A9 = p4*(x8-x9);
-    model.F=[A1 A2 A3 A4 A5 A6 A7 A8 A9];
+    % Initial conditions
+    model.IC = [init_STAT,...
+                0,...
+                0,...
+                0,...
+                0,...
+                0,...
+                0,...
+                0,...
+                0];
     
-    G1=p1*x1;                                    % Controls
-    %G2=p1*x1;
-%     G3=0; G4=0;
-    model.G=[-G1 G1 0 0 0 0 0 0 0];
-    model.Noc=1;                        % Number of controls
+    % Controls
+    model.G = [-p1*STAT,...
+                p1*STAT,...
+                0,...
+                0,...
+                0,...
+                0,...
+                0,...
+                0,...
+                0];
 
     % Observables
-    h1 = (x2+2*x3)/p5;
-    h2 = (x1+x2+2*x3)/p5;
-    model.H=[h1 h2];
-    model.Nobs=2;                       % Number of observables
-    model.IC=[p5 0 0 0 0 0 0 0 0]; % Initial conditions
+    model.H = [(pSTAT+2*pSTAT_pSTAT)/init_STAT,...
+               (STAT+pSTAT+2*pSTAT_pSTAT)/init_STAT];
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %  PARAMETERS CONSIDERED FOR IDENTIFIABILITY   %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                   
-    model.P = [p1,p2,p3,p4,p5,p6,p7];
-    model.Par = [p1,p2,p3,p4,p5,p6,p7];
-    model.Npar=7; % Number of model parameters
+    % Parameters
+%    model.P   = [p1,p2,p3,p4,init_STAT,Omega_cyt,Omega_nuc];
+    model.Par = [p1,p2,p3,p4,init_STAT,Omega_cyt,Omega_nuc]; % Parameter considered in structural identifiability analysis
+    
+    % Number of Lie derivatives
+    model.Nder = 7;
 end
 
