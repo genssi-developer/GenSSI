@@ -1,5 +1,5 @@
 function genssiFromAmici (modelNameIn,modelNameOut)
-    % GenSsiFromAmici converts an AMICI model in the examples/AMICI
+    % genssiFromAmici converts an AMICI model in the examples/AMICI
     % directory to a GenSSI model and puts the results into the examples 
     % directory.
     %
@@ -11,6 +11,9 @@ function genssiFromAmici (modelNameIn,modelNameOut)
     %  void
     %
     isSaveGenSSIModel=true;
+    if ~exist('ModelNameOut','var')
+        modelNameOut = modelNameIn;
+    end
     model.Name=modelNameOut;
     GenSSIDir=fileparts(mfilename('fullpath'));
     addpath(fullfile(GenSSIDir,'Examples','AMICI'));

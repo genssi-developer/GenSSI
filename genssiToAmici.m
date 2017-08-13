@@ -1,5 +1,5 @@
 function genssiToAmici (modelNameIn,modelNameOut)
-    % GenSsiToAmici converts a GenSSI model to AMICI model format and
+    % genssiToAmici converts a GenSSI model to AMICI model format and
     %  saves the results in the examples/AMICI directory.
     %
     % Parameters:
