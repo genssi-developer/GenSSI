@@ -22,11 +22,28 @@ var NAVTREE =
         [ "Initial Conditions", "def_simu.html#ic", null ]
       ] ],
       [ "Model Analysis", "def_simu.html#analysis", null ],
-      [ "Conversion Utilities", "def_simu.html#conversion", null ]
+      [ "Conversion Utilities", "def_simu.html#conversion", [
+        [ "Convert from SBML Format", "def_simu.html#fromsbml", null ],
+        [ "Convert to Polynomial Format", "def_simu.html#poly", null ],
+        [ "Convert to AMICI Format", "def_simu.html#toamici", null ],
+        [ "Convert from AMICI Format", "def_simu.html#fromamici", null ],
+        [ "Convert from Model Structure to Model Source Format", "def_simu.html#structtosource", null ],
+        [ "Create Multi-Experiment Model", "def_simu.html#multiexp", null ],
+        [ "Transform Model", "def_simu.html#transf", null ]
+      ] ]
     ] ],
     [ "Code Organization", "code.html", [
       [ "Directory Structure", "code.html#directory", null ],
       [ "Document Creation", "code.html#document", null ]
+    ] ],
+    [ "Classes", "annotated.html", [
+      [ "Class List", "annotated.html", "annotated_dup" ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ]
+      ] ]
     ] ],
     [ "Files", null, [
       [ "File List", "files.html", "files" ],
@@ -40,7 +57,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"amici_struct_to_source_8m_source.html"
+"_s_b_m_lode_8m_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -38,7 +38,9 @@ If Gen\+S\+SI was downloaded as a zip, it needs to be unpacked in a convenient d
 
 Models are generally stored in 
 \begin{DoxyCode}
-GenSSI/Examples 
+GenSSI/Examples
+GenSSI/Examples/AMICI
+GenSSI/Examples/SBML
 \end{DoxyCode}
  but Gen\+S\+SI should be able to find them in any directory that is is the Matlab path.
 
@@ -48,11 +50,17 @@ GenSSI/Results
 \end{DoxyCode}
 
 
-To use Gen\+S\+SI, start Matlab and add the Gen\+S\+SI direcory to the Matlab path. To add all toolbox directories to the Matlab path, execute the Matlab script 
+To use Gen\+S\+SI, start Matlab and add the Gen\+S\+SI direcory to the Matlab path. To add all toolbox directories to the Matlab path, execute the Matlab script
+
+
 \begin{DoxyCode}
 \hyperlink{genssi_startup_8m_addcff165cb4278db5bc6df9f60bff280}{genssiStartup}.m 
 \end{DoxyCode}
- To store the installation for further Matlab session, the path can be saved via 
+
+
+To use the S\+B\+ML import, lib\+S\+B\+ML (\href{http://sbml.org/Software/libSBML/Downloading_libSBML#MATLAB}{\tt http\+://sbml.\+org/\+Software/lib\+S\+B\+M\+L/\+Downloading\+\_\+lib\+S\+B\+M\+L\#\+M\+A\+T\+L\+AB}) has to be downloaded and the directory has to be included in the M\+A\+T\+L\+AB path. To store the installation for further Matlab session, the path can be saved via
+
+
 \begin{DoxyCode}
 savepath 
 \end{DoxyCode}

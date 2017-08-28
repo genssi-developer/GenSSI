@@ -1,6 +1,6 @@
 <map id="genssiOrderTableau" name="genssiOrderTableau">
-<area shape="rect" id="node2" href="$genssi_remove_zero_columns_8m.html#af18483f4677ea487d40a6a08b6d61a6e" title="genssiRemoveZeroColumns removes zero columns from a matrix " alt="" coords="197,5,379,32"/>
-<area shape="rect" id="node3" href="$genssi_remove_zero_elements_r_8m.html#ac88c8ec50dab4ae7cc829679aa5048cc" title="genssiRemoveZeroElements removes zero columns from a row vecor " alt="" coords="191,56,385,83"/>
-<area shape="rect" id="node4" href="$genssi_remove_zero_rows_8m.html#a85d5908f175db2cb29782de20ff4e910" title="genssiRemoveZeroRows removes zero rows from a matrix " alt="" coords="207,107,369,133"/>
-<area shape="rect" id="node5" href="$genssi_tableau_image_8m.html#a5b9a2e309f45e73f18e7ab6bfaffdd36" title="genssiTableauImage displays an identifiability tableau " alt="" coords="218,157,358,184"/>
+<area shape="rect" id="node2" href="$genssi_remove_zero_columns_8m.html#af18483f4677ea487d40a6a08b6d61a6e" title="genssiRemoveZeroColumns removes zero columns from a matrix " alt="" coords="200,5,390,33"/>
+<area shape="rect" id="node3" href="$genssi_remove_zero_elements_r_8m.html#ac88c8ec50dab4ae7cc829679aa5048cc" title="genssiRemoveZeroElements removes zero columns from a row vecor " alt="" coords="194,56,396,83"/>
+<area shape="rect" id="node4" href="$genssi_remove_zero_rows_8m.html#a85d5908f175db2cb29782de20ff4e910" title="genssiRemoveZeroRows removes zero rows from a matrix " alt="" coords="210,107,380,134"/>
+<area shape="rect" id="node5" href="$genssi_tableau_image_8m.html#a5b9a2e309f45e73f18e7ab6bfaffdd36" title="genssiTableauImage displays an identifiability tableau " alt="" coords="223,157,367,185"/>
 </map>

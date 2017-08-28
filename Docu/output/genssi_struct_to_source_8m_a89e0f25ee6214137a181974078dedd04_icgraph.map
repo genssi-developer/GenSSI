@@ -1,0 +1,7 @@
+<map id="genssiStructToSource" name="genssiStructToSource">
+<area shape="rect" id="node2" href="$genssi_from_amici_8m.html#aa177acfd2eae54685d2487430b93091e" title="genssiFromAmici converts an AMICI model in the examples/AMICI directory to a GenSSI model and puts th..." alt="" coords="220,5,344,33"/>
+<area shape="rect" id="node4" href="$genssi_multi_experiment_8m.html#a99c14a4d68fa9a17610a21cc6ead7e30" title="genssiMultiExperiment converts a GenSSI model to a new GenSSI model based on a multi&#45;experiment defin..." alt="" coords="204,56,360,83"/>
+<area shape="rect" id="node5" href="$genssi_to_polynomial_8m.html#acef0ff085917e1375d0fc2b6feed0722" title="genssiToPolynomial converts a GenSSI model to polynomial form. It reads the input model..." alt="" coords="213,107,352,134"/>
+<area shape="rect" id="node6" href="$genssi_transformation_8m.html#a00c8981ee764669cf32d736351fbf275" title="genssiTransformation converts a GenSSI model to a new GenSSI model based on a transformation definiti..." alt="" coords="208,157,357,185"/>
+<area shape="rect" id="node3" href="$genssi_from_s_b_m_l_8m.html#ac2706c18c7bc41d86451353085eaf2ff" title="genssiFromSBML converts an SBML model in the examples/SBML directory to a GenSSI model and puts the r..." alt="" coords="408,5,535,33"/>
+</map>

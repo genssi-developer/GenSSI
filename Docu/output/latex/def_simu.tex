@@ -131,40 +131,384 @@ The model can then be analyzed by calling genssi\+Main. The first parameter is t
 
 
 The function genssi\+Main will call the model function or load the .mat file, which puts the model struct in memory. After that, it will call all other Gen\+S\+SI functions required to annalyze the model.\hypertarget{def_simu_conversion}{}\subsection{Conversion Utilities}\label{def_simu_conversion}
-The Gen\+S\+SI package also includes some functions for converting models from one format to another.
+The Gen\+S\+SI package also includes some functions for converting models from one format to another.\hypertarget{def_simu_fromsbml}{}\subsubsection{Convert from S\+B\+M\+L Format}\label{def_simu_fromsbml}
+
+\begin{DoxyCode}
+\hyperlink{genssi_from_s_b_m_l_8m_ac2706c18c7bc41d86451353085eaf2ff}{genssiFromSBML}(modelNameIn,modelNameOut) 
+\end{DoxyCode}
+
+
+genssi\+From\+S\+B\+ML converts an S\+B\+ML model to Gen\+S\+SI format.
+
+model\+Name\+In\+: name of the S\+B\+ML model (string).
+
+model\+Name\+Out\+: name of the Gen\+S\+SI model (string).
+
+Reminder\+: To use the S\+B\+ML import, lib\+S\+B\+ML (\href{http://sbml.org/Software/libSBML/Downloading_libSBML#MATLAB}{\tt http\+://sbml.\+org/\+Software/lib\+S\+B\+M\+L/\+Downloading\+\_\+lib\+S\+B\+M\+L\#\+M\+A\+T\+L\+AB}) has to be downloaded and the directory has to be included in the M\+A\+T\+L\+AB path.
+
+The input S\+B\+ML model should be stored in the directory 
+\begin{DoxyCode}
+GenSSI/Examples/SBML
+\end{DoxyCode}
+
+
+Note\+: There are limitations to this conversion. The S\+B\+ML model contains a list of all parameters used by the model, but Gen\+S\+SI needs a list of parameters to be considered for analysis. In addition, the Gen\+S\+SI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the Gen\+S\+SI model after conversion.
+
+As an example for this conversion, we have chosen to use an S\+M\+BL model from the biomodels database. We begin by accessing the web site \href{http://www.ebi.ac.uk/biomodels-main/}{\tt http\+://www.\+ebi.\+ac.\+uk/biomodels-\/main/} searching for M\+A\+PK and dowloading the file B\+I\+O\+M\+D0000000010.\+xml. In order to make this easier to write, we renamed the file, so that our S\+B\+ML model is now contained in
 
 
 \begin{DoxyCode}
-\hyperlink{genssi_to_polynomial_8m_acef0ff085917e1375d0fc2b6feed0722}{genssiToPolynomial} 
+Kholodenko.xml 
+\end{DoxyCode}
+
+
+To convert this S\+B\+ML model to a Gen\+S\+SI model with the same name, we execute
+
+
+\begin{DoxyCode}
+\hyperlink{genssi_from_s_b_m_l_8m_ac2706c18c7bc41d86451353085eaf2ff}{genssiFromSBML}(\textcolor{stringliteral}{'Kholodenko'},\textcolor{stringliteral}{'Kholodenko'}); 
+\end{DoxyCode}
+
+
+The resulting file includes several default values. Here, we set the full list of parameters model.\+P to model.\+Par and reduce the list of parameters model.\+Par for which identifiability analysis is performed. Using all 22 parameters is in principle possible, but does not work on a desktop computer with 8\+GB R\+AM, because the size of the Jacobian grows quickly with number of of parameters. In addition to the parameters, we set the observables (model.\+H = \mbox{[}M\+A\+PK, M\+A\+P\+K\+\_\+P, and M\+A\+P\+K\+\_\+\+PP\mbox{]}), the number of observables (model.\+Nobs = 3) and the number of Lie derivatives (model.\+Nder = 6). In addition we split the long lines (syms, model.\+P, and model.\+F) to improve the readability of the of the file. This yields a Gen\+S\+SI model\+:
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{function} model = Kholodenko()
+    syms MKKK MKKK\_P MKK MKK\_P MKK\_PP MAPK MAPK\_P MAPK\_PP
+    syms V1\_J0 Ki\_J0 n\_J0 K1\_J0 V2\_J1 KK2\_J1 k3\_J2 KK3\_J2 k4\_J3 KK4\_J3 V5\_J4
+    syms KK5\_J4 V6\_J5 KK6\_J5 k7\_J6 KK7\_J6 k8\_J7 KK8\_J7 V9\_J8 KK9\_J8 V10\_J9 KK10\_J9
+    model.Name = 'Kholodenko';
+    model.Nder = 6;
+    model.X = [MKKK,MKKK\_P,MKK,MKK\_P,MKK\_PP,MAPK,MAPK\_P,MAPK\_PP];
+    model.Neq = 8;
+    model.G = [0,0,0,0,0,0,0,0];
+    model.Noc = 0;
+    model.P = [V1\_J0,Ki\_J0,n\_J0,K1\_J0,V2\_J1,KK2\_J1,k3\_J2,KK3\_J2,k4\_J3,...
+               KK4\_J3,V5\_J4,KK5\_J4,V6\_J5,KK6\_J5,k7\_J6,KK7\_J6,k8\_J7,...
+               KK8\_J7,V9\_J8,KK9\_J8,V10\_J9,KK10\_J9];
+    model.Par = [V1\_J0,V2\_J1,V5\_J4,V6\_J5,V9\_J8,V10\_J9];
+    model.Npar = 6;
+    model.IC = [90,10,280,10,10,280,10,10];
+    model.H = [MAPK,MAPK\_P,MAPK\_PP];
+    model.Nobs = 3;
+    model.F = [(MKKK\_P*V2\_J1)/(KK2\_J1 + MKKK\_P) - (MKKK*V1\_J0)/(((MAPK\_PP/Ki\_J0)^n\_J0 + 1)*(K1\_J0 + MKKK)),
+      ...
+       (MKKK*V1\_J0)/(((MAPK\_PP/Ki\_J0)^n\_J0 + 1)*(K1\_J0 + MKKK)) - (MKKK\_P*V2\_J1)/(KK2\_J1 + MKKK\_P),...
+       (MKK\_P*V6\_J5)/(KK6\_J5 + MKK\_P) - (MKK*MKKK\_P*k3\_J2)/(KK3\_J2 + MKK),...
+       (MKK\_PP*V5\_J4)/(KK5\_J4 + MKK\_PP) - (MKK\_P*V6\_J5)/(KK6\_J5 + MKK\_P)...
+           + (MKK*MKKK\_P*k3\_J2)/(KK3\_J2 + MKK) - (MKK\_P*MKKK\_P*k4\_J3)/(KK4\_J3 + MKK\_P),...
+       (MKK\_P*MKKK\_P*k4\_J3)/(KK4\_J3 + MKK\_P) - (MKK\_PP*V5\_J4)/(KK5\_J4 + MKK\_PP),...
+       (MAPK\_P*V10\_J9)/(KK10\_J9 + MAPK\_P) - (MAPK*MKK\_PP*k7\_J6)/(KK7\_J6 + MAPK),...
+       (MAPK\_PP*V9\_J8)/(KK9\_J8 + MAPK\_PP) - (MAPK\_P*V10\_J9)/(KK10\_J9 + MAPK\_P)...
+           + (MAPK*MKK\_PP*k7\_J6)/(KK7\_J6 + MAPK) - (MAPK\_P*MKK\_PP*k8\_J7)/(KK8\_J7 + MAPK\_P),...
+       (MAPK\_P*MKK\_PP*k8\_J7)/(KK8\_J7 + MAPK\_P) - (MAPK\_PP*V9\_J8)/(KK9\_J8 + MAPK\_PP)];
+end
+\end{DoxyCode}
+
+
+This model can now be analyzed using the fucntionality of Gen\+S\+SI\+:
+
+
+\begin{DoxyCode}
+\hyperlink{genssi_main_8m_aac78e2620e69e2ecf610a2526a32c7fb}{genssiMain}(\textcolor{stringliteral}{'Kholodenko'}); 
+\end{DoxyCode}
+
+
+The results show that 3 of the 6 parameters are locally identifiable and the other 3 are globally identifiable.\hypertarget{def_simu_poly}{}\subsubsection{Convert to Polynomial Format}\label{def_simu_poly}
+
+\begin{DoxyCode}
+\hyperlink{genssi_to_polynomial_8m_acef0ff085917e1375d0fc2b6feed0722}{genssiToPolynomial}(modelNameIn,modelNameOut) 
 \end{DoxyCode}
 
 
 genssi\+To\+Polynomial converts a model, expressed in terms of rational expressions, to pure polynomial format. This increases the number of state variables, but can sometimes significantly reduce the computational overhead for analyzing the model.
 
+mode\+Name\+In\+: name of model to be converted (string).
+
+model\+Name\+Out\+: name of model to be created (string).\hypertarget{def_simu_toamici}{}\subsubsection{Convert to A\+M\+I\+C\+I Format}\label{def_simu_toamici}
 
 \begin{DoxyCode}
-genssiToAMICI 
+genssiToAMICI(modelNameIn,modelNameOut) 
 \end{DoxyCode}
 
 
 genssi\+To\+A\+M\+I\+CI converts a Gen\+S\+SI model to A\+M\+I\+CI format. The A\+M\+I\+CI package uses Sundials Cvodes to efficiently solve O\+D\+Es from within Matlab. It is available at \href{https://github.com/AMICI-developer/AMICI}{\tt https\+://github.\+com/\+A\+M\+I\+C\+I-\/developer/\+A\+M\+I\+CI}.
 
-Note\+: There are limitations to this conversion. The Gen\+S\+SI model contains a list of parameters to be considered for analysis, but A\+M\+I\+CI needs a \char`\"{}sym\char`\"{} statement containing a list of all parameters used by the model. It may be necessary to manually edit the A\+M\+I\+CI model after conversion.
+model\+Name\+In\+: name of the Gen\+S\+SI model (string).
 
+model\+Name\+Out\+: name of the A\+M\+I\+CI model (string).
+
+Note\+: There are limitations to this conversion. The Gen\+S\+SI model contains a list of parameters to be considered for analysis, but A\+M\+I\+CI needs a \char`\"{}sym\char`\"{} statement containing a list of all parameters used by the model. It may be necessary to manually edit the A\+M\+I\+CI model after conversion. In order to avoid this, the Gen\+S\+SI model can contain a variable model.\+P, containing all parameters (model.\+Par only contains the parameters to be considered for identifiability).\hypertarget{def_simu_fromamici}{}\subsubsection{Convert from A\+M\+I\+C\+I Format}\label{def_simu_fromamici}
 
 \begin{DoxyCode}
-genssiFromAMICI 
+genssiFromAMICI(modelNameIn,modelNameOut) 
 \end{DoxyCode}
 
 
 genssi\+From\+A\+M\+I\+CI converts an A\+M\+I\+CI model to Gen\+S\+SI format.
 
-Note\+: There are limitations to this conversion. The A\+M\+I\+CI model contains a list of all parameters used by the model, but Gen\+S\+SI needs a list of parameters to be considered for analysis. In addition, the Gen\+S\+SI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the Gen\+S\+SI model after conversion.
+model\+Name\+In\+: name of the A\+M\+I\+CI model (string).
 
+model\+Name\+Out\+: name of the Gen\+S\+SI model (string).
 
+The input A\+M\+I\+CI model should be stored in the directory 
 \begin{DoxyCode}
-genssiStructToSource and amiciStructToSource 
+GenSSI/Examples/AMICI
 \end{DoxyCode}
 
 
-genssi\+Struct\+To\+Source reads the Gen\+S\+SI model struct and converts it to source format (Matlab function definition), and amici\+Struct\+To\+Source does the same for A\+M\+I\+CI models. In general, the source format is more convenient for smaller models, since it is easier to modify, but the struct format, typically saved in a Matlab file (e.\+g. Goodwin.\+mat) is more convenient for large models, since it does not require editing of long lines of code. 
+Note\+: There are limitations to this conversion. The A\+M\+I\+CI model contains a list of all parameters used by the model, but Gen\+S\+SI needs a list of parameters to be considered for analysis. In addition, the Gen\+S\+SI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the Gen\+S\+SI model after conversion.\hypertarget{def_simu_structtosource}{}\subsubsection{Convert from Model Structure to Model Source Format}\label{def_simu_structtosource}
+
+\begin{DoxyCode}
+\hyperlink{genssi_struct_to_source_8m_a89e0f25ee6214137a181974078dedd04}{genssiStructToSource}(model) 
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+\hyperlink{amici_struct_to_source_8m_a5c714bc9158f2f1899f751a37e0ae827}{amiciStructToSource}(model) 
+\end{DoxyCode}
+
+
+genssi\+Struct\+To\+Source reads the Gen\+S\+SI model struct and converts it to source format (Matlab function definition), and amici\+Struct\+To\+Source does the same for A\+M\+I\+CI models. In general, the source format is more convenient for smaller models, since it is easier to modify, but the struct format, typically saved in a Matlab file (e.\+g. Goodwin.\+mat) is more convenient for large models, since it does not require editing of long lines of code.
+
+model\+: model definition (struct).\hypertarget{def_simu_multiexp}{}\subsubsection{Create Multi-\/\+Experiment Model}\label{def_simu_multiexp}
+
+\begin{DoxyCode}
+\hyperlink{genssi_multi_experiment_8m_a99c14a4d68fa9a17610a21cc6ead7e30}{genssiMultiExperiment}(modelNameIn,fileFormat,mExDef,modelNameOut) 
+\end{DoxyCode}
+
+
+genssi\+Multi\+Experiment converts a Gen\+S\+SI model to a new Gen\+S\+SI model based on a multi-\/experiment definition.
+
+model\+Name\+In\+: the name of the input model (a string).
+
+file\+Format\+: either \textquotesingle{}function\textquotesingle{} (default), if the model is a Mat\+Lab function, or \textquotesingle{}mat\textquotesingle{}, if the model is a .mat file.
+
+m\+Ex\+Def\+: the name of a multi-\/experiment definition file (string).
+
+model\+Name\+Out\+: the name of the output model (a string).
+
+In chemistry, it is often possible for the chemist to arbitrarily change certain parameters, such as tempurature, pressure, and the concentration of specific substances. For example, in a continuous-\/flow stirred tank reactor (C\+F\+S\+TR), the feed flow provides a constant feed of substances, at a rate that can be chosen as needed. This situation has led to the concept of \char`\"{}controls\char`\"{}, which are also used in identifiability analysis. From the point of theory, the controls are variables that can be changed at will, so they have a very strong positive influence on the identifiability of a model.
+
+In contrast, in biology, certain parameters and feed rates may be varied, but most often not arbitrarily. Often, these parameters can be varied discretely by creating a new experiment with new substances or substance concentrations. Now, in identifiability, we would like to analyze multiple experiments in one model. The result is a model for which the identifiability lies somewhere between the models without controls and those with controls.
+
+Now we will explain the parameters used by the multi-\/experiment model creation on the basis of a specific example.
+
+We begin with a model for m\+R\+NA, including translation and degradation. The model definition is\+:
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{function} model = M1\_1\_U2()
+    model.Name='M1\_1\_U1';
+    syms  m G d b kTL m0
+    model.Nder=4;
+    model.X=[m G];
+    model.Neq=2;
+    A1=-d*m;
+    A2=0;
+    model.F=[A1 A2];
+    model.G=[0,kTL*m;...
+             0,-b*G];
+    model.Noc=2;
+    h1=G;
+    model.H=[h1];
+    model.Nobs=1;
+    model.IC=[m0 0];
+    model.P=[d b kTL m0];
+    model.Par=[d b kTL m0];
+    model.Npar=4;
+end
+\end{DoxyCode}
+
+
+The states (model.\+X) are m (m\+R\+NA) and G (G\+FP, green fluorescent protein), of which only G\+FP is observed (model.\+H). The differential equations (model.\+F) define degradation of m\+R\+NA (-\/d$\ast$m), degradation of G\+FP (-\/b$\ast$G) and translation of m\+R\+NA to G\+FP (k\+T\+L$\ast$m). Note that translation and G\+FP degradation have been defined as controls (model.\+G).
+
+Based on this model, we define a total of 4 experiments, in the experiment definition function. The expriments are defined by modifying the controls and the initial conditions. The expriments are\+:
+
+1) original configuration
+
+2) change in transfection (m0) via IC\+: The initial concentration of m\+R\+NA is changed.
+
+3) change in translation via control u1 = u\+Inh\+: The rate of translation is changed, for example by treating the cell with an antibiotic.
+
+4) change in G\+FP degradation via control u2 = u\+Deg\+: The rate of G\+FP degradation i changed, for example by using destabilized G\+FP (d2e\+G\+FP) instead of normal G\+FP (e\+G\+FP).
+
+The experiment definition is\+:
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{function} multiExp = M1\_1\_eDef4()
+    multiExp.Name='M1\_1\_eDef4';
+    syms d b kTL m0Exp1
+    multiExp.Nexp=4;
+    multiExp.U = [1,1;...
+                  1,1;...
+                  .5,1;...
+                  1,.75];
+    multiExp.IC = [m0Exp1,0,...
+                   0.5*m0Exp1,0,...
+                   m0Exp1,0,...
+                   m0Exp1,0];
+    multiExp.P=[d,b,kTL,m0Exp1];
+    multiExp.Par=[d,b,kTL,m0Exp1];
+end
+\end{DoxyCode}
+
+
+The number of expriments is coded in multi\+Exp.\+Nexp=4.
+
+The variable multi\+Exp.\+U defines the changes in the controls and the variable multi\+Exp.\+IC defines the changes in the initial conditions. Both of these variables contain one row for each experiment and one column for each state variable. In the first experiment (original configuration), the controls are 1 and the initial m\+R\+NA concentration is m0\+Exp1. In the second expriment (change in transfection), the initial concentration of m\+R\+NA is changed. In the third experiment (change in translation), the rate of translation is changed by changing the value of the first control. In the fourth experiment (change in G\+FP degradation), the rate of G\+FP degradation is changed by changing the value of the second control.
+
+The original model is converted to the multi-\/experiment model by means of this line of code\+:
+
+
+\begin{DoxyCode}
+\hyperlink{genssi_multi_experiment_8m_a99c14a4d68fa9a17610a21cc6ead7e30}{genssiMultiExperiment}(\textcolor{stringliteral}{'M1\_1\_U2'},\textcolor{stringliteral}{'function'},\textcolor{stringliteral}{'M1\_1\_eDef4'},\textcolor{stringliteral}{'M1\_1\_ME4'}); 
+\end{DoxyCode}
+
+
+The result of the conversion is the following (multi-\/experiment) model\+:
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{function} model = M1\_1\_ME4()
+    syms mExp1 GExp1 mExp2 GExp2 mExp3 GExp3 mExp4 GExp4
+    syms d b kTL m0Exp1
+    model.Name = 'M1\_1\_ME4';
+    model.Nder = 4;
+    model.X = [mExp1,GExp1,mExp2,GExp2,mExp3,GExp3,mExp4,GExp4];
+    model.Neq = 8;
+    model.G = [0,0,0,0,0,0,0,0];
+    model.Noc = 0;
+    model.P = [d,b,kTL,m0Exp1];
+    model.Par = [d,b,kTL,m0Exp1];
+    model.Npar = 4;
+    model.IC = [m0Exp1,0,m0Exp1/2,0,m0Exp1,0,m0Exp1,0];
+    model.H = [GExp1,GExp2,GExp3,GExp4];
+    model.Nobs = 4;
+    model.F = [-d*mExp1,...
+               kTL*mExp1 - GExp1*b,...
+               -d*mExp2,...
+               kTL*mExp2 - GExp2*b,...
+               -d*mExp3,...
+               (kTL*mExp3)/2 - GExp3*b,...
+               -d*mExp4,...
+               kTL*mExp4 - (3*GExp4*b)/4];
+end
+\end{DoxyCode}
+
+
+Based on the original 2 state variables and 4 experiments, we now have 2$\ast$4=8 state variables (model.\+X). In addition, all parameters now appear directly in the differential equations (model.\+F), and there are no controls.\hypertarget{def_simu_transf}{}\subsubsection{Transform Model}\label{def_simu_transf}
+
+\begin{DoxyCode}
+\hyperlink{genssi_transformation_8m_a00c8981ee764669cf32d736351fbf275}{genssiTransformation}(modelNameIn,fileFormat,transDef,modelNameOut) 
+\end{DoxyCode}
+
+
+genssi\+Transformation converts a Gen\+S\+SI model to a new Gen\+S\+SI model based on a transformation definition.
+
+model\+Name\+In\+: the name of the input model (a string).
+
+file\+Format\+: either \textquotesingle{}function\textquotesingle{} (default), if the model is a Mat\+Lab function, or \textquotesingle{}mat\textquotesingle{}, if the model is a .mat file.
+
+trans\+Def\+: the name of a transformation definition file (string).
+
+model\+Name\+Out\+: the name of the output model (a string).
+
+When we analyze equations for the purpose of determining identifiability, it is sometimes useful to make two changes. The first change is removing redundant equations, which can reduce the number of state variables and the number of parameters. The second change is rescaling the variables, which can reduce the number of parameters. Both of these changes are supported by genssi\+Transformation.
+
+We begin with a model for m\+R\+NA, including translation and degradation. In contrast with the simpler model used for the multi-\/experiment conversion (above), this model involves m\+R\+NA degradation via the action of an enzyme. The model definition is\+:
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{function} model = M2\_1\_Y1()
+    model.Name='M2\_1\_Y1';
+    syms m G E1 mE d1 d2 d3 b kTL m0 E0
+    model.Nder=8;
+    model.Neq=4;
+    model.Npar=7;
+    model.Noc=0;
+    model.Nobs=1;
+    model.X=[m G E1 mE];
+    A1=-d1*m-d2*m*E1;
+    A2=+kTL*m-b*G;
+    A3=+d3*mE-d2*m*E1;
+    A4=-d3*mE+d2*m*E1;
+    model.F=[A1 A2 A3 A4];
+    g1=0;g2=0;g3=0;g4=0;
+    model.G=[g1 g2 g3 g4];
+    h1=G;
+    model.H=[h1];
+    model.IC=[m0 0 E0 0];    
+    model.P=[d1 d2 d3 b kTL m0 E0];
+    model.Par=[d1 d2 d3 b kTL m0 E0];
+end
+\end{DoxyCode}
+
+
+The state variables in this model (model.\+X) are m\+R\+NA (m), G\+FP (G), enzyme (E1), and the m\+R\+N\+A-\/enzyme complex (mE). We have used E1 as the name of the enzyme instead of E since there are cases where Matlab will treat the symbolic variable E as e or exp(1). The differential equations show m\+R\+NA (m) decreasing due to degradation (-\/d1$\ast$m) and decreasing due to complexation (-\/d2$\ast$m$\ast$\+E1). G\+FP (G) increases due to translation (k\+T\+L$\ast$m) and decreases due to complexation (-\/d2$\ast$m$\ast$\+E1). The enzyme (E1) decreases due to complexation (-\/d2$\ast$m$\ast$\+E1) and increases due to decomplexation (d3$\ast$mE). The change in the complex (mE) is exactly the opposite of the change in the enzyme. As a result of this, we know that E1-\/\+E1(0)=-\/(m\+E-\/mE(0)) or, since m\+E(0)=0, E1-\/\+E0+mE=0. In addition, we know that the concentration of G\+FP always depends on the product of m\+R\+N\+A(0)$\ast$k\+TL, so we will be able to reduce the number of parameters by rescaling (dividing by m0).
+
+With these observations, we can create our transformation definition\+:
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{function} transDef = M2\_1\_tDef()
+    transDef.Name='M2\_1\_tDef';
+    syms m G E1 mE m0 E0
+    syms mdm0 E1dm0
+    syms d1 d2 d3 b kTL
+    syms d2tm0 kTLtm0 E0dm0
+    transDef.Transformation = [m/m0;G;E1/m0];
+    transDef.Constraint = [E1-E0+mE];
+    transDef.P = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
+    transDef.Par = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
+    syms mnew Gnew E1new
+    transDef.stateSubs = [mdm0,mnew;...
+                          G,Gnew;...
+                          E1dm0,E1new];
+    transDef.parSubs = [d2*m0,d2tm0;...
+                        kTL*m0,kTLtm0;...
+                        E0/m0,E0dm0];
+end
+\end{DoxyCode}
+
+
+The transformation is defined by two variables. The first, trans\+Def.\+Transformation, defines the rescaling. It contains one entry for each element of the final state vector. Since we are converting a model with 4 state variables to 3, this contains 3 elements. The second part of the definition is the constraint, trans\+Def.\+Constraint. This will be equated to zero during the transformation, so it is E1-\/\+E0+mE=0, or, equivalently, E1-\/\+E1(0)=-\/(m\+E-\/mE(0)). The variable trans\+Def.\+Constraint can contain multiple constraints, separated by a semicolon. Finally, there are two optional definitions of substitutions. They contain a variable number of rows, each of which is a substitution, or change of names. During the transformation process, new variables are created for the state vector and the parameters, and the names are changed via the rules \char`\"{}$\ast$\char`\"{}-\/$>$\char`\"{}t\char`\"{} (for \char`\"{}times\char`\"{}) and \char`\"{}/\char`\"{}-\/$>$\char`\"{}d\char`\"{} (for \char`\"{}divided by\char`\"{}). These names can be considered as suggestions for the new names, and the user can override them with the state\+Subs and par\+Subs definitions. For example, mdm0 is replaced by mnew in the state vector, and d2$\ast$m0 is replaced by d2tm0 in the parameters. It is considered good practice to leave these 2 definitions out the first time the transformation is run, and then add them in later in order to gain more control over the naming.
+
+This transformation is started by running the following line of code\+:
+
+
+\begin{DoxyCode}
+\hyperlink{genssi_transformation_8m_a00c8981ee764669cf32d736351fbf275}{genssiTransformation}(\textcolor{stringliteral}{'M2\_1\_Y1'},\textcolor{stringliteral}{'function'},\textcolor{stringliteral}{'M2\_1\_tDef'},\textcolor{stringliteral}{'M2\_2\_test'}); 
+\end{DoxyCode}
+
+
+The result of the transformation is the following new model\+:
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{function} model = M2\_2\_test()
+    syms mnew Gnew E1new
+    syms d1 d2tm0 d3 b kTLtm0 E0dm0
+    model.Name = 'M2\_2\_test';
+    model.Nder = 8;
+    model.X = [mnew,Gnew,E1new];
+    model.Neq = 3;
+    model.G = [0,0,0,0];
+    model.Noc = 0;
+    model.P = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
+    model.Par = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
+    model.Npar = 6;
+    model.IC = [1,0,E0dm0];
+    model.H = [Gnew];
+    model.Nobs = 1;
+    model.F = [- d1*mnew - E1new*d2tm0*mnew,...
+               kTLtm0*mnew - Gnew*b,...
+               (E0*d3)/m0 - E1new*d2tm0*mnew - E1new*d3];
+end
+\end{DoxyCode}
+
+
+In this transformed model, the new state variables are mnew, Gnew, and E1new, based on the definition trans\+Def.\+state\+Subs. We could just as well have left the names of mdm0, G, and E1dm0, or used the simpler names of m, G, and E1 for the new state vector. A similar remark is valid for the parameter names. The resulting differential equations (model.\+F) are less readable than in the original model, but we have eliminated one state variable and one parameter. 
