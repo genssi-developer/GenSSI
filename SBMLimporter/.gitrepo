@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/ICB-DCM/SBMLimporter
 	branch = master
-	commit = c151e47607e96b1b5a15501ba7d441c66e399e96
-	parent = 732de7971778d29dc08a4386c516834266bb76be
+	commit = f66d4557c0307186b61124867965b161de9aa816
+	parent = e212caf485e556c5de2608746bb5bbe6899d0853
 	cmdver = 0.3.1
