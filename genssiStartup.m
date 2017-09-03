@@ -8,5 +8,6 @@
 GenSSIDir = fileparts(mfilename('fullpath'));
 addpath(GenSSIDir);
 addpath(fullfile(GenSSIDir,'Auxiliary'));
+addpath(fullfile(GenSSIDir,'SBMLimporter'));
 addpath(fullfile(GenSSIDir,'Examples'));
 addpath(fullfile(GenSSIDir,'Docu'));

@@ -1,0 +1,1 @@
+genssiMain('GoodwinPoly',4);

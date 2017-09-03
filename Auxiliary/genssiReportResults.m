@@ -13,12 +13,12 @@ function options=genssiReportResults(model,results,options)
     global_ident_par=results.global_ident_par;
     Param_local=results.Param_local;
     Non_identifiable_param=results.Non_identifiable_param;
-    if (length(model.Par)==length(global_ident_par))&&(size(Param_local,2)==0)&&(size(Non_identifiable_param,2)==0)
+    if (length(model.sym.Par)==length(global_ident_par))&&(size(Param_local,2)==0)&&(size(Non_identifiable_param,2)==0)
         fprintf(1,'\n\n***************************************************************\n\n');
         fprintf(1,' -----> THE MODEL IS STRUCTURALLY GLOBALLY IDENTIFIABLE \n\n');
         fprintf(1,'***************************************************************\n\n');
         fprintf(1,'        The structurally globally identifiable parameters are: \n\n');
-        %disp(model.Par);
+        %disp(model.sym.Par);
         fprintf(1,'     \t[');
         for i=1:size(global_ident_par,2)
            fprintf(1,'      %s\t',char(global_ident_par(i)));

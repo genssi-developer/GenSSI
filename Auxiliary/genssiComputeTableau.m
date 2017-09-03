@@ -21,7 +21,7 @@ function [options,results,JacParam]=genssiComputeTableau...
 %     nLieDerivatives=length(VectorLieDerivatives);
 
     %Compute the Jacobian of each non-zero row with respect to the parameters    
-    JacParam=jacobian(VectorLieDerivatives, model.Par);
+    JacParam=jacobian(VectorLieDerivatives, model.sym.Par);
 
     %Eliminate zero rows of the Jacobian 
     [JacParam,tilde,useful_Lie_index]=genssiRemoveZeroRows(JacParam);
@@ -36,10 +36,10 @@ function [options,results,JacParam]=genssiComputeTableau...
     end
     %RD=double(RankE);
     fprintf(1,'\n ----->The rank of the full Jacobian matrix is %u \n', RankJacParam); 
-    if RankJacParam==size(model.Par,2)
+    if RankJacParam==size(model.sym.Par,2)
         fprintf(1,'\n ---->THE RANK OF THE FULL JACOBIAN IS COMPLETE, THUS AT LEAST LOCAL IDENTIFIABILITY IS GUARANTEED.\n');
     else
-        fprintf(1,'\n ----->THE FULL JACOBIAN IS RANK DEFICIENT, YOU MAY CONSIDER ADDING NEW DERIVATIVES, %u \n', double(model.Nder+1));
+        fprintf(1,'\n ----->THE FULL JACOBIAN IS RANK DEFICIENT, YOU MAY CONSIDER ADDING NEW DERIVATIVES, %u \n', double(model.sym.Nder+1));
     end
 
     %Construct the 0-1 tableau
@@ -49,7 +49,7 @@ function [options,results,JacParam]=genssiComputeTableau...
     else
         JacParam01(find(JacParam))=1;
     end
-    genssiTableauImage(01,JacParam01,model.Par,options);
+    genssiTableauImage(01,JacParam01,model.sym.Par,options);
 end
 
 

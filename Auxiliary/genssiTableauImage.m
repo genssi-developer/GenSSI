@@ -54,7 +54,9 @@ function genssiTableauImage(figNum,tabMat,paramDisplay,options)
     figName = ['Figure' num2str(figNum) '.fig'];
     fileName=fullfile(options.problem_folder_path,figName);
     saveas(figure(figNum),fileName);
-    close(fh);
-    clear('fh')
+    if options.closeFigure
+        close(fh);
+        clear('fh')
+    end
 end
 

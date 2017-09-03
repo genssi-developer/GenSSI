@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function model = Goodwin()
-    model.Name='Goodwin';
+%     model.Name='Goodwin';
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %     DECLARE SYMBOLIC VARIABLES:                          %
@@ -21,36 +21,33 @@ function model = Goodwin()
     %   MODEL RELATED DATA  %
     %%%%%%%%%%%%%%%%%%%%%%%%%
 
-    model.Nder=3;            % Number of derivatives
+    model.sym.x = [x1 x2 x3];
 
-    model.Neq=3;             % Number of states 
-    model.X=[x1 x2 x3];
+%     model.Npar=8;            % Number of model parameters
 
-    model.Npar=8;            % Number of model parameters
+%     model.Noc=0;             % Number of controls
 
-    model.Noc=0;             % Number of controls
+%     model.Nobs=1;                % Number of observables
 
-    model.Nobs=1;                % Number of observables
+    % Equations of the model 
+    model.sym.xdot=[-p4*x1+p1/(p2+x3^p3),...
+                     p5*x1-p6*x2,...
+                     p7*x2-p8*x3];
 
-    A1 = -p4*x1+p1/(p2+x3^p3);   % Equations of the model 
-    A2 = p5*x1-p6*x2;
-    A3 = p7*x2-p8*x3;
-    model.F=[A1 A2 A3];
+    % controls
+    model.sym.u = [];
 
-    g1=0;g2=0;g3=0;              % Controls
-    model.G=[g1 g2 g3];
+    % Observables
+    model.sym.y = [x1,x2,x3]; % This results in Nobs=3!
 
-    h1=x1;h2=x2;h3=x3;           % Observables
-    model.H=[h1 h2 h3];
-
-    model.IC=[0.3 0.9 1.3];      % Initial conditions
+    model.sym.x0 = [0.3 0.9 1.3];      % Initial conditions
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %  PARAMETERS CONSIDERED FOR IDENTIFIABILITY   %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    model.P=[p1 p2 p3 p4 p5 p6 p7 p8];
-    model.Par=[p1 p2 p4 p5 p6 p7 p8];
+    model.sym.p = [p1 p2 p3 p4 p5 p6 p7 p8];
+%     model.Par=[p1 p2 p4 p5 p6 p7 p8];
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %   GENERATING SERIES FUNCTION     %

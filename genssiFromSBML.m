@@ -9,16 +9,21 @@ function genssiFromSBML (modelNameIn,modelNameOut)
     % Return values:
     %  void
     %
+    if ~exist('modelNameOut','var')
+        modelNameOut = modelNameIn;
+    end
     GenSSIDir=fileparts(mfilename('fullpath'));
-    addpath(fullfile(GenSSIDir,'Examples','SBML'));
-    addpath(fullfile(GenSSIDir,'SBMLimporter'));
-    fileNameIn = fullfile(GenSSIDir,'Examples','SBML',modelNameIn);
+%     addpath(fullfile(GenSSIDir,'SBMLimporter'));
+    fileNameIn = fullfile(GenSSIDir,'Examples',modelNameIn);
     ODE = SBMLode(fileNameIn);
-    AMICIDir = fullfile(GenSSIDir,'Examples','AMICI');
+    AMICIDir = fullfile(GenSSIDir,'Examples');
     cd(AMICIDir);
     ODE.writeAMICI(modelNameIn);
+    fileNameOut = fullfile(GenSSIDir,'Examples',modelNameOut);
+    ODE.writeAMICI(modelNameIn);
+%     ODE.writeAMICI(fileNameOut);
     cd(GenSSIDir);
-    modelNameAMICI = [modelNameIn '_syms'];
-    genssiFromAmici (modelNameAMICI,modelNameOut)
+%     modelNameAMICI = [modelNameIn '_syms'];
+%     genssiFromAmici (modelNameAMICI,modelNameOut)
 %     delete([modelNameAMICI,'.m']);
 end

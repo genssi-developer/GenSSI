@@ -8,7 +8,7 @@
 
  - Chiş, O., Banga, J.R. and Balsa-Canto, E. (2011) GenSSI: a software toolbox for structural identifiability analysis of biological models, Bioinformatics, 27, 2610-2611.
 
- With GenSSI, the user can specify differential equation models in terms of symbolic variables in Matlab and then analyze the models to determine which parameters are globally or locally identifiable. In addition, there are some utilities for converting models to polynomial form, or to or from AMICI format.
+ With GenSSI, the user can specify differential equation models in terms of symbolic variables in Matlab and then analyze the models to determine which parameters are globally or locally identifiable. In addition, there are some utilities for importing models from SBML, or converting models to polynomial form and for creating multi-experiment models.
   
  @section download Availability
  
@@ -50,12 +50,10 @@
  Models are generally stored in
  @code
  GenSSI/Examples
- GenSSI/Examples/AMICI
- GenSSI/Examples/SBML
  @endcode
  but GenSSI should be able to find them in any directory that is is the Matlab path.
 
- When a model is analyzed GenSSI stores the results in
+ When a model is analyzed, GenSSI stores the results in
  @code GenSSI/Results @endcode
  
  To use GenSSI, start Matlab and add the GenSSI direcory to the Matlab path. To add all toolbox directories to the Matlab path, execute the Matlab script

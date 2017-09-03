@@ -13,18 +13,6 @@
  
  @code function [model] = Goodwin() @endcode
 
- @subsection name Name
-
- Give the model a name.
-
- @code model.Name = 'Goodwin'; @endcode
- 
- @subsection derivatives Derivatives
- 
- Set the number of derivatives to be calculated.
-
- @code model.Nder = 8; @endcode
- 
  @subsection states States
  
  Create the respective symbolic variables. The name of the symbolic variable can be chosen arbitrarily.
@@ -33,25 +21,13 @@
  
  Create the state vector containing all states:
  
- @code model.X = [x1 x2 x3]; @endcode
-
- Define the number of states.
-
- @code model.Neq = 3; @endcode
+ @code model.sym.x = [x1 x2 x3]; @endcode
  
  @subsection parameters Parameters
  
  Create the respective symbolic variables. The name of the symbolic variable can be chosen arbitrarily.
  
  @code syms p1 p2 p3 p4 p5 p6 p7 p8 @endcode
- 
- Create the parameters vector of parameters to be considered for identifiability.
- 
- @code model.Par = [p1 p2 p3 p4 p5 p6 p7 p8]; @endcode
-
- Specify the number of parameters to be considered for identifiability.
-
- @code model.Npar = 8; @endcode
 
  @subsection equtions Equations
 
@@ -61,7 +37,7 @@
  A1 = -p4*x1+p1/(p2+x3^p3);
  A2 = p5*x1-p6*x2;
  A3 = p7*x2-p8*x3;
- model.F=[A1 A2 A3];
+ model.sym.xdot=[A1 A2 A3];
  @endcode
 
  @subsection controls Controls
@@ -72,7 +48,7 @@
  g1=0;
  g2=0;
  g3=0;
- model.G=[g1 g2 Ag3];
+ model.sym.u=[g1 g2 Ag3];
  @endcode
 
  Define the number of controls.
@@ -89,28 +65,31 @@
  h1 = x1;
  h2 = x2;
  h3 = x3;
- model.H = [h1 h2 h3];
+ model.sym.y = [h1 h2 h3];
  @endcode
-
- Define the number of obserables.
-
- @code model.Nobs = 1; @endcode
 
  @subsection ic Initial Conditions
 
  Define the initial conditions.
 
- @code model.IC = [0.3 0.9 1.3];@endcode
+ @code model.sym.x0 = [0.3 0.9 1.3];@endcode
   
  @section analysis Model Analysis
  
- The model can then be analyzed by calling genssiMain. The first parameter is the name of the model, and the second parameter is the format. If the format is absent, the model is assumed to be a function, as described above. If it is equal to 'mat', the model is assumed to be a Matlab file with name Modelname.mat (e.g. Goodwin.mat) and containing the model struct.
+ The model can then be analyzed by calling genssiMain. The first parameter is the name of the model, the second parameter (Nder) is the number of derivatives to be calculated, and the third parameter (Par) is the list of parameters to be considered for identifiability. If the second parameter is absent a default number of derivatives is used. If the third parameter is absent, the full list of parameters will be used.
  
  @code
- genssiMain('Goodwin')
+ genssiMain('modelName',Nder,Par);
  @endcode
  
- The function genssiMain will call the model function or load the .mat file, which puts the model struct in memory. After that, it will call all other GenSSI functions required to annalyze the model. 
+ The function genssiMain will call the model function, which puts the model struct in memory. After that, it will call all other GenSSI functions required to annalyze the model. 
+
+ To make this easier to find, we have also provided a simple "run" script, "runGoodwin".
+
+ @code
+ syms p1 p2 p4 p5 p6 p7 p8;
+ genssiMain('Goodwin',7,[p1 p2 p4 p5 p6 p7 p8]);
+ @endcode
 
  @section conversion Conversion Utilities
 
@@ -118,13 +97,14 @@
 
  @subsection fromsbml Convert from SBML Format
 
- @code genssiFromSBML(modelNameIn,modelNameOut) @endcode
+ @code
+ ODE = SBMLode(modelName);
+ ODE.writeAMICI(modelName);
+ @endcode
 
- genssiFromSBML converts an SBML model to GenSSI format.
+ SBMLode and writeAMICI convert an SBML model to GenSSI/AMICI format.
 
- modelNameIn: name of the SBML model (string).
-
- modelNameOut: name of the GenSSI model (string).
+ modelName: name of the SBML and GenSSI model (string).
 
  Reminder: To use the SBML import, 
  libSBML (http://sbml.org/Software/libSBML/Downloading_libSBML#MATLAB)
@@ -132,56 +112,37 @@
 
  The input SBML model should be stored in the directory
  @code
- GenSSI/Examples/SBML
+ GenSSI/Examples
  @endcode
 
- Note: There are limitations to this conversion. The SBML model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
+ Note: GenSSI now uses AMICI format. This reduces duplication and gives us full functionality of the AMICI routines. Because of this, the number of derivatives and the parameters considered for identifiability have been moved from the model definition to the call to genssiMain.
 
- As an example for this conversion, we have chosen to use an SMBL model from the biomodels database. We begin by accessing the web site  http://www.ebi.ac.uk/biomodels-main/ searching for MAPK and dowloading the file BIOMD0000000010.xml. In order to make this easier to write, we renamed the file, so that our SBML model is now contained in
+ Note: There are limitations to this conversion. The SBML model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion. Both GenSSI and AMICI require specification of the observables, but this is not defined in SBML. If SBMLode finds rules that are not used in the model, it will assume that they were intended as observables. In any case, it is advisable to inspect the observables and modify them as needed.
 
- @code Kholodenko.xml @endcode
+ As an example for this conversion, we have chosen to use an SMBL model from the biomodels database. We begin by accessing the web site  http://www.ebi.ac.uk/biomodels-main/ searching for MAPK and dowloading the file BIOMD0000000010.xml. In order to make this easier to write, we renamed the file to BIOMD10.xml, so that our SBML model is now contained in
 
- To convert this SBML model to a GenSSI model with the same name, we execute
+ @code BIOMD10.xml @endcode
 
- @code genssiFromSBML('Kholodenko','Kholodenko'); @endcode
+ To convert this SBML model to a GenSSI model with the same name, we execute the script
 
- The resulting file includes several default values. Here, we set the full list of parameters model.P to model.Par and reduce the list of parameters model.Par for which identifiability analysis is performed. Using all 22 parameters is in principle possible, but does not work on a desktop computer with 8GB RAM, because the size of the Jacobian grows quickly with number of of parameters. In addition to the parameters, we set the observables (model.H = [MAPK, MAPK_P, and MAPK_PP]), the number of observables (model.Nobs = 3) and the number of Lie derivatives (model.Nder = 6). In addition we split the long lines (syms, model.P, and model.F) to improve the readability of the of the file. This yields a GenSSI model:
+ @code runBIOMD10; @endcode
+
+ The resulting file includes several default values. Here, the full list of parameters is contained in ODE.parameter (later model.sym.p) to Par (parameter in genssiMain) and reduce the list of parameters Par for which identifiability analysis is performed. Using all 22 parameters is in principle possible, but does not work on a desktop computer with 16GB RAM, because the size of the Jacobian grows quickly with number of of parameters. In addition to the parameters, we set the observables (ODE.observable and model.sym.y = [MAPK, MAPK_P, and MAPK_PP]), the number of observables (3) and the number of Lie derivatives (parameter Nder = 6 in genssiMain).
 
  @code
- function model = Kholodenko()
-     syms MKKK MKKK_P MKK MKK_P MKK_PP MAPK MAPK_P MAPK_PP
-     syms V1_J0 Ki_J0 n_J0 K1_J0 V2_J1 KK2_J1 k3_J2 KK3_J2 k4_J3 KK4_J3 V5_J4
-     syms KK5_J4 V6_J5 KK6_J5 k7_J6 KK7_J6 k8_J7 KK8_J7 V9_J8 KK9_J8 V10_J9 KK10_J9
-     model.Name = 'Kholodenko';
-     model.Nder = 6;
-     model.X = [MKKK,MKKK_P,MKK,MKK_P,MKK_PP,MAPK,MAPK_P,MAPK_PP];
-     model.Neq = 8;
-     model.G = [0,0,0,0,0,0,0,0];
-     model.Noc = 0;
-     model.P = [V1_J0,Ki_J0,n_J0,K1_J0,V2_J1,KK2_J1,k3_J2,KK3_J2,k4_J3,...
-                KK4_J3,V5_J4,KK5_J4,V6_J5,KK6_J5,k7_J6,KK7_J6,k8_J7,...
-                KK8_J7,V9_J8,KK9_J8,V10_J9,KK10_J9];
-     model.Par = [V1_J0,V2_J1,V5_J4,V6_J5,V9_J8,V10_J9];
-     model.Npar = 6;
-     model.IC = [90,10,280,10,10,280,10,10];
-     model.H = [MAPK,MAPK_P,MAPK_PP];
-     model.Nobs = 3;
-     model.F = [(MKKK_P*V2_J1)/(KK2_J1 + MKKK_P) - (MKKK*V1_J0)/(((MAPK_PP/Ki_J0)^n_J0 + 1)*(K1_J0 + MKKK)),...
-        (MKKK*V1_J0)/(((MAPK_PP/Ki_J0)^n_J0 + 1)*(K1_J0 + MKKK)) - (MKKK_P*V2_J1)/(KK2_J1 + MKKK_P),...
-        (MKK_P*V6_J5)/(KK6_J5 + MKK_P) - (MKK*MKKK_P*k3_J2)/(KK3_J2 + MKK),...
-        (MKK_PP*V5_J4)/(KK5_J4 + MKK_PP) - (MKK_P*V6_J5)/(KK6_J5 + MKK_P)...
-            + (MKK*MKKK_P*k3_J2)/(KK3_J2 + MKK) - (MKK_P*MKKK_P*k4_J3)/(KK4_J3 + MKK_P),...
-        (MKK_P*MKKK_P*k4_J3)/(KK4_J3 + MKK_P) - (MKK_PP*V5_J4)/(KK5_J4 + MKK_PP),...
-        (MAPK_P*V10_J9)/(KK10_J9 + MAPK_P) - (MAPK*MKK_PP*k7_J6)/(KK7_J6 + MAPK),...
-        (MAPK_PP*V9_J8)/(KK9_J8 + MAPK_PP) - (MAPK_P*V10_J9)/(KK10_J9 + MAPK_P)...
-            + (MAPK*MKK_PP*k7_J6)/(KK7_J6 + MAPK) - (MAPK_P*MKK_PP*k8_J7)/(KK8_J7 + MAPK_P),...
-        (MAPK_P*MKK_PP*k8_J7)/(KK8_J7 + MAPK_P) - (MAPK_PP*V9_J8)/(KK9_J8 + MAPK_PP)];
- end
+ modelName = 'BIOMD10';
+ ODE = SBMLode(modelName);
+ % set last 3 states as observable
+ ODE.observable = ODE.state(6:8);
+ ODE.writeAMICI(modelName);
+ % check structural identifiability using all Vn_ parameters
+ Par=ODE.parameter(logical([1,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0]));
+ genssiMain('BIOMD10_syms',6,Par);
  @endcode
 
  This model can now be analyzed using the fucntionality of GenSSI:
 
- @code genssiMain('Kholodenko'); @endcode
+ @code genssiMain('BIOMD10_syms',6,Par); @endcode
 
  The results show that 3 of the 6 parameters are locally identifiable and the other 3 are globally identifiable.
 
@@ -194,45 +155,6 @@
  modeNameIn: name of model to be converted (string).
 
  modelNameOut: name of model to be created (string).
-
- @subsection toamici Convert to AMICI Format
-
- @code genssiToAMICI(modelNameIn,modelNameOut) @endcode
-
- genssiToAMICI converts a GenSSI model to AMICI format. The AMICI package uses Sundials Cvodes to efficiently solve ODEs from within Matlab. It is available at https://github.com/AMICI-developer/AMICI.
-
- modelNameIn: name of the GenSSI model (string).
-
- modelNameOut: name of the AMICI model (string).
-
- Note: There are limitations to this conversion. The GenSSI model contains a list of parameters to be considered for analysis, but AMICI needs a "sym" statement containing a list of all parameters used by the model. It may be necessary to manually edit the AMICI model after conversion. In order to avoid this, the GenSSI model can contain a variable model.P, containing all parameters (model.Par only contains the parameters to be considered for identifiability).
-
- @subsection fromamici Convert from AMICI Format
-
- @code genssiFromAMICI(modelNameIn,modelNameOut) @endcode
-
- genssiFromAMICI converts an AMICI model to GenSSI format.
-
- modelNameIn: name of the AMICI model (string).
-
- modelNameOut: name of the GenSSI model (string).
-
- The input AMICI model should be stored in the directory
- @code
- GenSSI/Examples/AMICI
- @endcode
-
- Note: There are limitations to this conversion. The AMICI model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion.
-
- @subsection structtosource Convert from Model Structure to Model Source Format
-
- @code genssiStructToSource(model) @endcode
-
- @code amiciStructToSource(model) @endcode
-
- genssiStructToSource reads the GenSSI model struct and converts it to source format (Matlab function definition), and amiciStructToSource does the same for AMICI models. In general, the source format is more convenient for smaller models, since it is easier to modify, but the struct format, typically saved in a Matlab file (e.g. Goodwin.mat) is more convenient for large models, since it does not require editing of long lines of code.
-
- model: model definition (struct).
 
  @subsection multiexp Create Multi-Experiment Model
 
@@ -258,28 +180,21 @@
 
  @code
  function model = M1_1_U2()
-     model.Name='M1_1_U1';
      syms  m G d b kTL m0
-     model.Nder=4;
-     model.X=[m G];
-     model.Neq=2;
+     model.sym.x=[m G];
      A1=-d*m;
      A2=0;
-     model.F=[A1 A2];
-     model.G=[0,kTL*m;...
+     model.sym.xdot=[A1 A2];
+     model.sym.u=[0,kTL*m;...
               0,-b*G];
-     model.Noc=2;
      h1=G;
-     model.H=[h1];
-     model.Nobs=1;
-     model.IC=[m0 0];
-     model.P=[d b kTL m0];
-     model.Par=[d b kTL m0];
-     model.Npar=4;
+     model.sym.y=[h1];
+     model.sym.x0=[m0 0];
+     model.sym.p=[d b kTL m0];
  end
  @endcode
 
- The states (model.X) are m (mRNA) and G (GFP, green fluorescent protein), of which only GFP is observed (model.H).  The differential equations (model.F) define degradation of mRNA (-d*m), degradation of GFP (-b*G) and translation of mRNA to GFP (kTL*m).  Note that translation and GFP degradation have been defined as controls (model.G).
+ The states (model.sym.x) are m (mRNA) and G (GFP, green fluorescent protein), of which only GFP is observed (model.sym.y).  The differential equations (model.sym.xdot) define degradation of mRNA (-d*m), degradation of GFP (-b*G) and translation of mRNA to GFP (kTL*m).  Note that translation and GFP degradation have been defined as controls (model.sym.u).
 
  Based on this model, we define a total of 4 experiments, in the experiment definition function.  The expriments are defined by modifying the controls and the initial conditions. The expriments are:
 
@@ -325,19 +240,12 @@ The experiment definition is:
  function model = M1_1_ME4()
      syms mExp1 GExp1 mExp2 GExp2 mExp3 GExp3 mExp4 GExp4
      syms d b kTL m0Exp1
-     model.Name = 'M1_1_ME4';
-     model.Nder = 4;
-     model.X = [mExp1,GExp1,mExp2,GExp2,mExp3,GExp3,mExp4,GExp4];
-     model.Neq = 8;
-     model.G = [0,0,0,0,0,0,0,0];
-     model.Noc = 0;
-     model.P = [d,b,kTL,m0Exp1];
-     model.Par = [d,b,kTL,m0Exp1];
-     model.Npar = 4;
-     model.IC = [m0Exp1,0,m0Exp1/2,0,m0Exp1,0,m0Exp1,0];
-     model.H = [GExp1,GExp2,GExp3,GExp4];
-     model.Nobs = 4;
-     model.F = [-d*mExp1,...
+     model.sym.x = [mExp1,GExp1,mExp2,GExp2,mExp3,GExp3,mExp4,GExp4];
+     model.sym.u = [];
+     model.sym.p = [d,b,kTL,m0Exp1];
+     model.sym.x0 = [m0Exp1,0,m0Exp1/2,0,m0Exp1,0,m0Exp1,0];
+     model.sym.y = [GExp1,GExp2,GExp3,GExp4];
+     model.sym.xdot = [-d*mExp1,...
                 kTL*mExp1 - GExp1*b,...
                 -d*mExp2,...
                 kTL*mExp2 - GExp2*b,...
@@ -348,7 +256,7 @@ The experiment definition is:
  end
  @endcode
 
- Based on the original 2 state variables and 4 experiments, we now have 2*4=8 state variables (model.X).  In addition, all parameters now appear directly in the differential equations (model.F), and there are no controls.
+ Based on the original 2 state variables and 4 experiments, we now have 2*4=8 state variables (model.sym.x).  In addition, all parameters now appear directly in the differential equations (model.sym.xdot), and there are no controls.
  
  @subsection transf Transform Model
 
@@ -370,30 +278,22 @@ The experiment definition is:
 
  @code
  function model = M2_1_Y1()
-     model.Name='M2_1_Y1';
      syms m G E1 mE d1 d2 d3 b kTL m0 E0
-     model.Nder=8;
-     model.Neq=4;
-     model.Npar=7;
-     model.Noc=0;
-     model.Nobs=1;
-     model.X=[m G E1 mE];
+     model.sym.x=[m G E1 mE];
      A1=-d1*m-d2*m*E1;
      A2=+kTL*m-b*G;
      A3=+d3*mE-d2*m*E1;
      A4=-d3*mE+d2*m*E1;
-     model.F=[A1 A2 A3 A4];
-     g1=0;g2=0;g3=0;g4=0;
-     model.G=[g1 g2 g3 g4];
+     model.sym.xdot=[A1 A2 A3 A4];
+     model.sym.u=[];
      h1=G;
-     model.H=[h1];
-     model.IC=[m0 0 E0 0];    
-     model.P=[d1 d2 d3 b kTL m0 E0];
-     model.Par=[d1 d2 d3 b kTL m0 E0];
+     model.sym.y=[h1];
+     model.sym.x0=[m0 0 E0 0];    
+     model.sym.p=[d1 d2 d3 b kTL m0 E0];
  end
  @endcode
 
- The state variables in this model (model.X) are mRNA (m), GFP (G), enzyme (E1), and the mRNA-enzyme complex (mE).  We have used E1 as the name of the enzyme instead of E since there are cases where Matlab will treat the symbolic variable E as e or exp(1).  The differential equations show mRNA (m) decreasing due to degradation (-d1*m) and decreasing due to complexation (-d2*m*E1).  GFP (G) increases due to translation (kTL*m) and decreases due to complexation (-d2*m*E1). The enzyme (E1) decreases due to complexation (-d2*m*E1) and increases due to decomplexation (d3*mE).  The change in the complex (mE) is exactly the opposite of the change in the enzyme.  As a result of this, we know that E1-E1(0)=-(mE-mE(0)) or, since mE(0)=0, E1-E0+mE=0.  In addition, we know that the concentration of GFP always depends on the product of mRNA(0)*kTL, so we will be able to reduce the number of parameters by rescaling (dividing by m0).
+ The state variables in this model (model.sym.x) are mRNA (m), GFP (G), enzyme (E1), and the mRNA-enzyme complex (mE).  We have used E1 as the name of the enzyme instead of E since there are cases where Matlab will treat the symbolic variable E as e or exp(1).  The differential equations show mRNA (m) decreasing due to degradation (-d1*m) and decreasing due to complexation (-d2*m*E1).  GFP (G) increases due to translation (kTL*m) and decreases due to complexation (-d2*m*E1). The enzyme (E1) decreases due to complexation (-d2*m*E1) and increases due to decomplexation (d3*mE).  The change in the complex (mE) is exactly the opposite of the change in the enzyme.  As a result of this, we know that E1-E1(0)=-(mE-mE(0)) or, since mE(0)=0, E1-E0+mE=0.  In addition, we know that the concentration of GFP always depends on the product of mRNA(0)*kTL, so we will be able to reduce the number of parameters by rescaling (dividing by m0).
 
  With these observations, we can create our transformation definition:
 
@@ -430,24 +330,17 @@ The experiment definition is:
  function model = M2_2_test()
      syms mnew Gnew E1new
      syms d1 d2tm0 d3 b kTLtm0 E0dm0
-     model.Name = 'M2_2_test';
-     model.Nder = 8;
-     model.X = [mnew,Gnew,E1new];
-     model.Neq = 3;
-     model.G = [0,0,0,0];
-     model.Noc = 0;
-     model.P = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
-     model.Par = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
-     model.Npar = 6;
-     model.IC = [1,0,E0dm0];
-     model.H = [Gnew];
-     model.Nobs = 1;
-     model.F = [- d1*mnew - E1new*d2tm0*mnew,...
+     model.sym.x = [mnew,Gnew,E1new];
+     model.sym.u = [];
+     model.sym.p = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
+     model.sym.x0 = [1,0,E0dm0];
+     model.sym.y = [Gnew];
+     model.sym.xdot = [- d1*mnew - E1new*d2tm0*mnew,...
                 kTLtm0*mnew - Gnew*b,...
                 (E0*d3)/m0 - E1new*d2tm0*mnew - E1new*d3];
  end
  @endcode
 
- In this transformed model, the new state variables are mnew, Gnew, and E1new, based on the definition transDef.stateSubs. We could just as well have left the names of mdm0, G, and E1dm0, or used the simpler names of m, G, and E1 for the new state vector. A similar remark is valid for the parameter names. The resulting differential equations (model.F) are less readable than in the original model, but we have eliminated one state variable and one parameter.
+ In this transformed model, the new state variables are mnew, Gnew, and E1new, based on the definition transDef.stateSubs. We could just as well have left the names of mdm0, G, and E1dm0, or used the simpler names of m, G, and E1 for the new state vector. A similar remark is valid for the parameter names. The resulting differential equations (model.sym.xdot) are less readable than in the original model, but we have eliminated one state variable and one parameter.
 
  */

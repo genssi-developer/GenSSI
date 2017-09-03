@@ -21,7 +21,7 @@ function [options,results,RJacParam01,ECC,rParam]=genssiComputeReducedTableau...
     fprintf(1,'\n\n************************************************\n');
     fprintf(1,'-> COMPUTE REDUCED IDENTIFIABILITY TABLEAUS\n');
     fprintf(1,'************************************************\n');
-    rParam=model.Par; % reduced parameter list starts as model parameter list
+    rParam=model.sym.Par; % reduced parameter list starts as model parameter list
     sizeJacParam=size(JacParam);
     RJacParam=[];
     keepIndex=[];

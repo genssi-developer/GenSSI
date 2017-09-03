@@ -1,49 +1,35 @@
-% function options = GenSSI_generating_series(modelName,fileFormat)
-function varargout = genssiMain(varargin)
+function options = genssiMain(modelName,Nder,Par)
     % genssiMain is the main function of GenSSI. It reads a model and 
     %  calls all other functions necessary for analyzing the model.
     %
     % Parameters:
-    %  varargin: generic input arguments
     %  modelName: the name of the model to be analyzed (a string)
-    %  fileFormat: the format of the model file
-    %   'model': (default) if the model is a function file (e.g.
-    %    Goodwin.m)
-    %   'mat': if the model is a MATLAB file (e.g. Goodwin.mat)
+    %  Nder: number of Lie derivatives
+    %  Par: vector of parameters to be considered
     %
     % Return values:
-    %  varargout: generic output arguments
     %  options: struct containing options
     %
-    if nargin >= 1
-        modelName = varargin{1};
-    else
+    if ~exist('modelName','var')
         error('please supply the name of a model in the first parameter');
     end
-    if nargin >= 2
-        fileFormat = varargin{2};
-    else
-        fileFormat = 'function';
-    end
-    if strcmp(fileFormat,'mat')
-        load(modelName,'model');
-    else
-        runModel = str2func(modelName);
-        model = runModel();
-    end
-    options.verbose=true;
-    options.noRank=false;
+    runModel = str2func(modelName);
+    model = runModel();
+    model.sym.Name = modelName;
+    options.verbose=true; % maximum (verbose) information in results file
+    options.noRank=false; % no rank calculation (for speed with loss)
+    options.closeFigure=true; % closes figures
     GenSSIDir=fileparts(mfilename('fullpath'));
     resultsDir=fullfile(GenSSIDir,'Results');
     runNumber=1;
     subfolder=strcat('run',num2str(runNumber));
-    options.problem_folder_path=fullfile(resultsDir,model.Name,subfolder);
+    options.problem_folder_path=fullfile(resultsDir,modelName,subfolder);
     runSearch=true;
     while (runSearch)
         if exist(options.problem_folder_path,'dir')
             runNumber=runNumber+1;
             subfolder=strcat('run',num2str(runNumber));
-            options.problem_folder_path=fullfile(resultsDir,model.Name,subfolder);
+            options.problem_folder_path=fullfile(resultsDir,model.sym.Name,subfolder);
         else
             runSearch=false;
         end
@@ -57,9 +43,59 @@ function varargout = genssiMain(varargin)
         tocTotal=0;
         tic;
     end
-    model.Neq = size(model.F,1);
-    model.Noc = size(model.G,1);
-    model.Nobs = size(model.H,1);
+    if exist('Nder','var')
+        model.sym.Nder = Nder;
+    else
+        model.sym.Nder = 4;
+    end
+    if exist('Par','var')
+        model.sym.Par = Par;
+    else
+        if isfield(model.sym,'p')
+            model.sym.Par = model.sym.p;
+        else
+            error(['please supply a vector of paramaters to be ',...
+                   'considered in the third parameter ',...
+                   '(or a full list of parameters in model.sym.p)']);
+        end
+    end
+    if iscolumn(model.sym.Par)
+        model.sym.Par = transpose(model.sym.Par);
+    end    
+    if iscolumn(model.sym.x)
+        model.sym.x = transpose(model.sym.x);
+    end
+    model.sym.Neq = length(model.sym.x);
+    if ~isfield(model.sym,'u')
+        model.sym.u = [];
+    end
+%     model.sym.G=sym(zeros(1,model.sym.Neq)); % required even if Noc=0
+    model.sym.G=sym(zeros(max(size(model.sym.u,1),1),model.sym.Neq)); % required even if Noc=0
+    if isfield(model.sym,'u')
+%         for iC = 1:length(model.sym.u)
+%             model.sym.G(iC) = model.sym.u(iC);
+%         end
+%         model.sym.Noc=length(model.sym.u);
+        for iCrow = 1:size(model.sym.u,1)
+%             model.sym.G(iC,:) = model.sym.u(iC,:);
+            for iCcol = 1:size(model.sym.u,2)
+                model.sym.G(iCrow,iCcol) = model.sym.u(iCrow,iCcol);
+            end
+        end
+        model.sym.Noc=size(model.sym.u,2);
+    else
+        model.sym.Noc=0;
+    end
+    if iscolumn(model.sym.G)
+        model.sym.G = transpose(model.sym.G);
+    end
+    if iscolumn(model.sym.y)
+        model.sym.y = transpose(model.sym.y);
+    end
+    model.sym.Nobs = length(model.sym.y);
+    if iscolumn(model.sym.xdot)
+        model.sym.xdot = transpose(model.sym.xdot);
+    end     
     options=genssiReportInputs(model,options);
     if options.verbose
         disp(['Report inputs elapsed time: ' num2str(toc)]);
@@ -107,5 +143,5 @@ function varargout = genssiMain(varargin)
     fprintf(1,'\n --->THE RESULTS ARE STORED IN: \n'); 
     disp(options.problem_folder_path)
     fprintf(1,'\n\n');
-    varargout{1} = options;
+%     varargout{1} = options;
 end

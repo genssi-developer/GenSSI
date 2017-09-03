@@ -1,0 +1,1 @@
+genssiMain('Degradation',10);

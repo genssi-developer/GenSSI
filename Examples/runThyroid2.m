@@ -1,0 +1,1 @@
+genssiMain('Thyroid2',7);

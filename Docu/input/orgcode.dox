@@ -9,13 +9,11 @@
 
  - GenSSI/Auxiliary contains some auxiliary functions, such as genssiRemoveZeroRows.
  - GenSSI/Examples contains GenSSI model definitions.
- - GenSSI/Examples/AMICI contains AMICI model definitions.
- - GenSSI/Examples/SBML contains SBML model definitions.
  - GenSSI/Results contains the results of analysis.
  - GenSSI/Docu contains tools for creating the GenSSI documentation, as well as input and output of that process.
  - GenSSI/Docu/config contains configuration files for the documentation tools.
  - GenSSI/Docu/input contains input for document creation, including .dox files.
- - GenSSI/Docu/output contains
+ - GenSSI/Docu/output contains the output of document creation.
 
  @section document Document Creation
 

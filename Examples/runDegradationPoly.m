@@ -1,0 +1,1 @@
+genssiMain('DegradationPoly',4);

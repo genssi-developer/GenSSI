@@ -1,16 +1,25 @@
-function model = pharmacokineticsPoly()
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                      PHARMACOKINETICS POLYNOMIAL                           %%%
+%%%  Bibliography: cf. Bioinformatics Note SI and reference manual             %%%
+%%%                                                                            %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function model = PharmacokineticsPoly()
 	syms x1 x2 x3 x4 xi1
 	syms a1 a2 b1 b2 ka kc vm c0 g
-	model.Name = 'pharmacokineticsPoly';
-	model.Nder = 3;
-	model.X = [x1,x2,x3,x4,xi1];
-	model.Neq = 5;
-	model.G = [0,0,0,0,0];
-	model.Noc = 0;
-	model.Par = [a1,a2,b1,b2,ka,kc,vm,c0,g];
-	model.Npar = 9;
-	model.IC = [c0,0,c0*g,0,1/(c0*ka + ka*kc + c0*g*kc)];
-	model.H = [x1,x2,x3];
-	model.Nobs = 3;
-	model.F = [- a1*(x1 - x2) - ka*vm*x1*xi1,a2*(x1 - x2),- b1*(x3 - x4) - kc*vm*x3*xi1,b2*(x3 - x4),ka*xi1^2*(a1*(x1 - x2) + ka*vm*x1*xi1) + kc*xi1^2*(b1*(x3 - x4) + kc*vm*x3*xi1)];
+	model.sym.x = [x1,x2,x3,x4,xi1];
+	model.sym.u = [];
+	model.sym.p = [a1,a2,b1,b2,ka,kc,vm,c0,g];
+	model.sym.x0 = [c0,...
+                    0,...
+                    c0*g,...
+                    0,...
+                    1/(c0*ka + ka*kc + c0*g*kc)];
+	model.sym.y = [x1,x2,x3];
+	model.sym.xdot = [- a1*(x1 - x2) - ka*vm*x1*xi1,...
+                        a2*(x1 - x2),...
+                        - b1*(x3 - x4) - kc*vm*x3*xi1,...
+                        b2*(x3 - x4),...
+                        ka*xi1^2*(a1*(x1 - x2) + ka*vm*x1*xi1) + kc*xi1^2*(b1*(x3 - x4) + kc*vm*x3*xi1)];
 end
