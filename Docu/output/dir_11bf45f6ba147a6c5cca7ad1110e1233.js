@@ -1,0 +1,26 @@
+var dir_11bf45f6ba147a6c5cca7ad1110e1233 =
+[
+    [ "amiciStructToSource.m", "_docu_2input_2amici_struct_to_source_8m.html", "_docu_2input_2amici_struct_to_source_8m" ],
+    [ "convert2PolySys.m", "convert2_poly_sys_8m_source.html", null ],
+    [ "genssiComputeLieDerivatives.m", "_docu_2input_2genssi_compute_lie_derivatives_8m.html", "_docu_2input_2genssi_compute_lie_derivatives_8m" ],
+    [ "genssiComputeReducedTableau.m", "_docu_2input_2genssi_compute_reduced_tableau_8m.html", "_docu_2input_2genssi_compute_reduced_tableau_8m" ],
+    [ "genssiComputeTableau.m", "_docu_2input_2genssi_compute_tableau_8m.html", "_docu_2input_2genssi_compute_tableau_8m" ],
+    [ "genssiFromAmici.m", "_docu_2input_2genssi_from_amici_8m.html", "_docu_2input_2genssi_from_amici_8m" ],
+    [ "genssiFromSBML.m", "_docu_2input_2genssi_from_s_b_m_l_8m.html", "_docu_2input_2genssi_from_s_b_m_l_8m" ],
+    [ "genssiMain.m", "_docu_2input_2genssi_main_8m.html", "_docu_2input_2genssi_main_8m" ],
+    [ "genssiMultiExperiment.m", "_docu_2input_2genssi_multi_experiment_8m.html", "_docu_2input_2genssi_multi_experiment_8m" ],
+    [ "genssiOrderTableau.m", "_docu_2input_2genssi_order_tableau_8m.html", "_docu_2input_2genssi_order_tableau_8m" ],
+    [ "genssiPolySys.m", "_docu_2input_2genssi_poly_sys_8m.html", "_docu_2input_2genssi_poly_sys_8m" ],
+    [ "genssiRemoveZeroColumns.m", "_docu_2input_2genssi_remove_zero_columns_8m.html", "_docu_2input_2genssi_remove_zero_columns_8m" ],
+    [ "genssiRemoveZeroElementsC.m", "_docu_2input_2genssi_remove_zero_elements_c_8m.html", "_docu_2input_2genssi_remove_zero_elements_c_8m" ],
+    [ "genssiRemoveZeroElementsR.m", "_docu_2input_2genssi_remove_zero_elements_r_8m.html", "_docu_2input_2genssi_remove_zero_elements_r_8m" ],
+    [ "genssiRemoveZeroRows.m", "_docu_2input_2genssi_remove_zero_rows_8m.html", "_docu_2input_2genssi_remove_zero_rows_8m" ],
+    [ "genssiReportInputs.m", "_docu_2input_2genssi_report_inputs_8m.html", "_docu_2input_2genssi_report_inputs_8m" ],
+    [ "genssiReportResults.m", "_docu_2input_2genssi_report_results_8m.html", "_docu_2input_2genssi_report_results_8m" ],
+    [ "genssiStartup.m", "_docu_2input_2genssi_startup_8m.html", "_docu_2input_2genssi_startup_8m" ],
+    [ "genssiStructToSource.m", "_docu_2input_2genssi_struct_to_source_8m.html", "_docu_2input_2genssi_struct_to_source_8m" ],
+    [ "genssiTableauImage.m", "_docu_2input_2genssi_tableau_image_8m.html", "_docu_2input_2genssi_tableau_image_8m" ],
+    [ "genssiToAmici.m", "_docu_2input_2genssi_to_amici_8m.html", "_docu_2input_2genssi_to_amici_8m" ],
+    [ "genssiToPolynomial.m", "_docu_2input_2genssi_to_polynomial_8m.html", "_docu_2input_2genssi_to_polynomial_8m" ],
+    [ "genssiTransformation.m", "_docu_2input_2genssi_transformation_8m.html", "_docu_2input_2genssi_transformation_8m" ]
+];

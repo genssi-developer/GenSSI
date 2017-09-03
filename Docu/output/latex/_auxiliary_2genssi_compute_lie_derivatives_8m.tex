@@ -1,0 +1,87 @@
+\hypertarget{_auxiliary_2genssi_compute_lie_derivatives_8m}{}\subsection{Auxiliary/genssi\+Compute\+Lie\+Derivatives.m File Reference}
+\label{_auxiliary_2genssi_compute_lie_derivatives_8m}\index{Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m@{Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m}}
+
+
+genssi\+Compute\+Lie\+Derivatives computes Lie derivatives of the output functions (model.\+H), the state vectors (model.\+X), and the initial conditions (model.\+IC) with respect to the equations (model.\+F) and controls (model.\+G)  
+
+
+\subsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+mlhs\+Subst$<$ mlhs\+Inner\+Subst$<$ matlabtypesubstitute $>$,mlhs\+Inner\+Subst$<$ matlabtypesubstitute $>$ $>$ \hyperlink{_auxiliary_2genssi_compute_lie_derivatives_8m_acf0ab1dc4da7184e89d949c4c30985f2}{genssi\+Compute\+Lie\+Derivatives} (matlabtypesubstitute model, matlabtypesubstitute options)
+\begin{DoxyCompactList}\small\item\em genssi\+Compute\+Lie\+Derivatives computes Lie derivatives of the output functions (model.\+H), the state vectors (model.\+X), and the initial conditions (model.\+IC) with respect to the equations (model.\+F) and controls (model.\+G) \end{DoxyCompactList}\item 
+mlhs\+Subst$<$ mlhs\+Inner\+Subst$<$ matlabtypesubstitute $>$,mlhs\+Inner\+Subst$<$ matlabtypesubstitute $>$ $>$ \hyperlink{_auxiliary_2genssi_compute_lie_derivatives_8m_a7d88609316ec3c26a99d84c7809f23f3}{mtoc\+\_\+subst\+\_\+genssi\+Compute\+Lie\+Derivatives\+\_\+m\+\_\+tsbus\+\_\+cotm\+\_\+jac\+Rank} (matlabtypesubstitute L\+Der, matlabtypesubstitute rank\+Vector, matlabtypesubstitute order, matlabtypesubstitute model, matlabtypesubstitute options)
+\begin{DoxyCompactList}\small\item\em jac\+Rank computes jacobian and rank, producing output text \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsubsection{Function Documentation}
+\mbox{\Hypertarget{_auxiliary_2genssi_compute_lie_derivatives_8m_acf0ab1dc4da7184e89d949c4c30985f2}\label{_auxiliary_2genssi_compute_lie_derivatives_8m_acf0ab1dc4da7184e89d949c4c30985f2}} 
+\index{Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m@{Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m}!genssi\+Compute\+Lie\+Derivatives@{genssi\+Compute\+Lie\+Derivatives}}
+\index{genssi\+Compute\+Lie\+Derivatives@{genssi\+Compute\+Lie\+Derivatives}!Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m@{Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m}}
+\paragraph{\texorpdfstring{genssi\+Compute\+Lie\+Derivatives()}{genssiComputeLieDerivatives()}}
+{\footnotesize\ttfamily mlhs\+Subst$<$ mlhs\+Inner\+Subst$<$ matlabtypesubstitute $>$,mlhs\+Inner\+Subst$<$ matlabtypesubstitute $>$ $>$ genssi\+Compute\+Lie\+Derivatives (\begin{DoxyParamCaption}\item[{matlabtypesubstitute}]{model,  }\item[{matlabtypesubstitute}]{options }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em model} & model definition (struct) \\
+\hline
+{\em options} & processing options (struct)\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em options} & processing options (struct) \\
+\hline
+{\em Vector\+Lie\+Derivatives} & a vector of all Lie derivatives \\
+\hline
+\end{DoxyRetVals}
+
+
+Definition at line 17 of file genssi\+Compute\+Lie\+Derivatives.\+m.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_auxiliary_2genssi_compute_lie_derivatives_8m_acf0ab1dc4da7184e89d949c4c30985f2_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=331pt]{_auxiliary_2genssi_compute_lie_derivatives_8m_acf0ab1dc4da7184e89d949c4c30985f2_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{_auxiliary_2genssi_compute_lie_derivatives_8m_a7d88609316ec3c26a99d84c7809f23f3}\label{_auxiliary_2genssi_compute_lie_derivatives_8m_a7d88609316ec3c26a99d84c7809f23f3}} 
+\index{Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m@{Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m}!mtoc\+\_\+subst\+\_\+genssi\+Compute\+Lie\+Derivatives\+\_\+m\+\_\+tsbus\+\_\+cotm\+\_\+jac\+Rank@{mtoc\+\_\+subst\+\_\+genssi\+Compute\+Lie\+Derivatives\+\_\+m\+\_\+tsbus\+\_\+cotm\+\_\+jac\+Rank}}
+\index{mtoc\+\_\+subst\+\_\+genssi\+Compute\+Lie\+Derivatives\+\_\+m\+\_\+tsbus\+\_\+cotm\+\_\+jac\+Rank@{mtoc\+\_\+subst\+\_\+genssi\+Compute\+Lie\+Derivatives\+\_\+m\+\_\+tsbus\+\_\+cotm\+\_\+jac\+Rank}!Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m@{Auxiliary/genssi\+Compute\+Lie\+Derivatives.\+m}}
+\paragraph{\texorpdfstring{mtoc\+\_\+subst\+\_\+genssi\+Compute\+Lie\+Derivatives\+\_\+m\+\_\+tsbus\+\_\+cotm\+\_\+jac\+Rank()}{mtoc\_subst\_genssiComputeLieDerivatives\_m\_tsbus\_cotm\_jacRank()}}
+{\footnotesize\ttfamily mlhs\+Subst$<$ mlhs\+Inner\+Subst$<$ matlabtypesubstitute $>$,mlhs\+Inner\+Subst$<$ matlabtypesubstitute $>$ $>$ mtoc\+\_\+subst\+\_\+genssi\+Compute\+Lie\+Derivatives\+\_\+m\+\_\+tsbus\+\_\+cotm\+\_\+jac\+Rank (\begin{DoxyParamCaption}\item[{matlabtypesubstitute}]{L\+Der,  }\item[{matlabtypesubstitute}]{rank\+Vector,  }\item[{matlabtypesubstitute}]{order,  }\item[{matlabtypesubstitute}]{model,  }\item[{matlabtypesubstitute}]{options }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em L\+Der} & model definition (struct) \\
+\hline
+{\em rank\+Vector} & vector of ranks (for results) \\
+\hline
+{\em order} & for output text, computing derivatives of order \\
+\hline
+{\em model} & model definition \\
+\hline
+{\em options} & processing options (struct)\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em rank\+Full} & boolean, true if rank is full \\
+\hline
+{\em rank\+Vector} & vector of ranks (for results) \\
+\hline
+\end{DoxyRetVals}
+
+
+Definition at line 106 of file genssi\+Compute\+Lie\+Derivatives.\+m.
+

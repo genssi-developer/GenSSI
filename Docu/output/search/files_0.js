@@ -1,20 +1,4 @@
 var searchData=
 [
-  ['genssicomputeliederivatives_2em',['genssiComputeLieDerivatives.m',['../genssi_compute_lie_derivatives_8m.html',1,'']]],
-  ['genssicomputereducedtableau_2em',['genssiComputeReducedTableau.m',['../genssi_compute_reduced_tableau_8m.html',1,'']]],
-  ['genssicomputetableau_2em',['genssiComputeTableau.m',['../genssi_compute_tableau_8m.html',1,'']]],
-  ['genssifromamici_2em',['genssiFromAmici.m',['../genssi_from_amici_8m.html',1,'']]],
-  ['genssijacobian2d_2em',['genssiJacobian2D.m',['../genssi_jacobian2_d_8m.html',1,'']]],
-  ['genssimain_2em',['genssiMain.m',['../genssi_main_8m.html',1,'']]],
-  ['genssiordertableau_2em',['genssiOrderTableau.m',['../genssi_order_tableau_8m.html',1,'']]],
-  ['genssiremovezerocolumns_2em',['genssiRemoveZeroColumns.m',['../genssi_remove_zero_columns_8m.html',1,'']]],
-  ['genssiremovezeroelementsc_2em',['genssiRemoveZeroElementsC.m',['../genssi_remove_zero_elements_c_8m.html',1,'']]],
-  ['genssiremovezeroelementsr_2em',['genssiRemoveZeroElementsR.m',['../genssi_remove_zero_elements_r_8m.html',1,'']]],
-  ['genssiremovezerorows_2em',['genssiRemoveZeroRows.m',['../genssi_remove_zero_rows_8m.html',1,'']]],
-  ['genssireportinputs_2em',['genssiReportInputs.m',['../genssi_report_inputs_8m.html',1,'']]],
-  ['genssireportresults_2em',['genssiReportResults.m',['../genssi_report_results_8m.html',1,'']]],
-  ['genssistartup_2em',['genssiStartup.m',['../genssi_startup_8m.html',1,'']]],
-  ['genssistructtosource_2em',['genSsiStructToSource.m',['../gen_ssi_struct_to_source_8m.html',1,'']]],
-  ['genssitoamici_2em',['genssiToAmici.m',['../genssi_to_amici_8m.html',1,'']]],
-  ['genssitopolynomial_2em',['genssiToPolynomial.m',['../genssi_to_polynomial_8m.html',1,'']]]
+  ['amicistructtosource_2em',['amiciStructToSource.m',['../amici_struct_to_source_8m.html',1,'']]]
 ];

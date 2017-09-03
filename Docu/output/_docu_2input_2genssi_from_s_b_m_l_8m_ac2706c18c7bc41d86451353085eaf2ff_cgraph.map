@@ -1,0 +1,4 @@
+<map id="genssiFromSBML" name="genssiFromSBML">
+<area shape="rect" id="node2" href="$_docu_2input_2genssi_from_amici_8m.html#aa177acfd2eae54685d2487430b93091e" title="GenSsiFromAmici converts an AMICI model in the examples/AMICI directory to a GenSSI model and puts th..." alt="" coords="181,5,304,33"/>
+<area shape="rect" id="node3" href="$_docu_2input_2genssi_struct_to_source_8m.html#a89e0f25ee6214137a181974078dedd04" title="genSsiStructToSource converts a model definition (struct) to a source format (Matlab function file) a..." alt="" coords="352,5,503,33"/>
+</map>
