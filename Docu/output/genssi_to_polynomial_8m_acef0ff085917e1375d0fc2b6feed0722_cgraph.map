@@ -1,4 +1,0 @@
-<map id="genssiToPolynomial" name="genssiToPolynomial">
-<area shape="rect" id="node2" href="$genssi_poly_sys_8m.html#aa4ebd4f1cbd5ee9533ecbc318a4fbbc2" title="genssiPolySys converts a model to polynomial form. [X,DX,X0} = genssiPolySys(X,DX,X0) " alt="" coords="214,5,322,33"/>
-<area shape="rect" id="node3" href="$genssi_struct_to_source_8m.html#a89e0f25ee6214137a181974078dedd04" title="genSsiStructToSource converts a model definition (struct) to a source format (Matlab function file) a..." alt="" coords="193,56,344,83"/>
-</map>

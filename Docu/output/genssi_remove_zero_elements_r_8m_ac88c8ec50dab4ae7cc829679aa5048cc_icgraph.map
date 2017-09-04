@@ -1,7 +1,0 @@
-<map id="genssiRemoveZeroElementsR" name="genssiRemoveZeroElementsR">
-<area shape="rect" id="node2" href="$genssi_compute_lie_derivatives_8m.html#acf0ab1dc4da7184e89d949c4c30985f2" title="genssiComputeLieDerivatives computes Lie derivatives of the output functions (model.H), the state vectors (model.X), and the initial conditions (model.IC) with respect to the equations (model.F) and controls (model.G) " alt="" coords="292,5,483,32"/>
-<area shape="rect" id="node4" href="$genssi_compute_reduced_tableau_8m.html#ac656317846d242aa597f059c664ecac1" title="genssiComputeReducedTableau computes reduced tableaus of the jacobian by eliminating rows and columns..." alt="" coords="283,56,491,83"/>
-<area shape="rect" id="node5" href="$genssi_order_tableau_8m.html#aa6a1ccc8edfe7bfb0dc157b05f76bc43" title="genssiOrderTableau orders tableaus, searches for new opportunities to eliminate rows or columns be so..." alt="" coords="319,107,456,133"/>
-<area shape="rect" id="node6" href="$genssi_order_tableau_8m.html#af6cac42e06df507ddf85db9f8500ba9c" title="displayRelevantParameters displays relevant parameters " alt="" coords="248,158,527,199"/>
-<area shape="rect" id="node3" href="$genssi_main_8m.html#aac78e2620e69e2ecf610a2526a32c7fb" title="genssiMain is the main function of GenSSI. It reads a model and calls all other functions necessary f..." alt="" coords="575,56,663,83"/>
-</map>

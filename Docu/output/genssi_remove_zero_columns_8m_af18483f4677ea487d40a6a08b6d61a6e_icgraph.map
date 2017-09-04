@@ -1,6 +1,0 @@
-<map id="genssiRemoveZeroColumns" name="genssiRemoveZeroColumns">
-<area shape="rect" id="node2" href="$genssi_compute_reduced_tableau_8m.html#ac656317846d242aa597f059c664ecac1" title="genssiComputeReducedTableau computes reduced tableaus of the jacobian by eliminating rows and columns..." alt="" coords="251,5,459,32"/>
-<area shape="rect" id="node4" href="$genssi_order_tableau_8m.html#aa6a1ccc8edfe7bfb0dc157b05f76bc43" title="genssiOrderTableau orders tableaus, searches for new opportunities to eliminate rows or columns be so..." alt="" coords="287,56,424,83"/>
-<area shape="rect" id="node5" href="$genssi_order_tableau_8m.html#a138fca3f232c92c207f047feff4453a6" title="getIndexOfDuplicateParams gets index of duplicate parameters " alt="" coords="236,107,475,163"/>
-<area shape="rect" id="node3" href="$genssi_main_8m.html#aac78e2620e69e2ecf610a2526a32c7fb" title="genssiMain is the main function of GenSSI. It reads a model and calls all other functions necessary f..." alt="" coords="523,31,611,57"/>
-</map>

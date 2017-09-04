@@ -3,11 +3,13 @@ function varargout = genssiPolySys(varargin)
     %  [X,DX,X0} = genssiPolySys(X,DX,X0)
     %
     % Parameters:
+    %  varargin: generic input arguments    
     %  X: the state variables of the input model (a vector)
     %  DX: the ODEs of the input model (a vector)
     %  X0: the initial conditions of the input model (a vector)
     %
     % Return values:
+    %  varargout: generic output arguments
     %  X: the state variables of the output model (a vector)
     %  DX: the ODEs of the output model (a vector)
     %  X0: the initial conditions of the output model (a vector)

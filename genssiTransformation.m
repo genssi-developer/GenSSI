@@ -5,8 +5,6 @@ function varargout = genssiTransformation(varargin)
     % Parameters:
     %  varargin: generic input arguments    
     %  modelNameIn: the name of the input model (a string)
-    %  fileFormat: either 'function' (default), if the model is a MATLAB
-    %              function, or 'mat', if the model is a .mat file
     %  transDef: the name of a transformation definition file (string)
     %  modelNameOut: the name of the output model (a string)
     %
@@ -19,62 +17,45 @@ function varargout = genssiTransformation(varargin)
         error('please supply the name of an input model in the first parameter');
     end
     if nargin >= 2
-        fileFormat = varargin{2};
+        transDefName = varargin{2};
     else
-        fileFormat = 'function';
+        error('please supply the name of a transformation definition in the second parameter');
     end
     if nargin >= 3
-        transDefName = varargin{3};
+        modelNameOut = varargin{3};
     else
-        error('please supply the name of a transformation definition in the third parameter');
-    end
-    if nargin >= 4
-        modelNameOut = varargin{4};
-    else
-        error('please supply the name of an output model in the fourth parameter');
+        error('please supply the name of an output model in the third parameter');
     end
     
-    if strcmp(fileFormat,'mat')
-        load(modelNameIn,'model');
-    else
-        runModel = str2func(modelNameIn);
-        modelIn = runModel();
-    end
+    runModel = str2func(modelNameIn);
+    modelIn = runModel();
     runTransDef = str2func(transDefName);
     transDef = runTransDef();
      
-    isSaveGenSSIModel = true;
     GenSSIDir = fileparts(mfilename('fullpath'));
     addpath(fullfile(GenSSIDir,'Examples'));
 
     model = modelIn;
-    model.Name = modelNameOut;
-    model.P = transDef.P;
-    model.Par = transDef.Par;
-    model.Npar = length(model.Par);
+    model.sym.p = transDef.sym.p;
     
-    X = transpose(modelIn.X);
-    F = transpose(modelIn.F);
-    IC = transpose(modelIn.IC);
-    G = transpose(modelIn.G);
-    H = transpose(modelIn.H);
-    if isfield(modelIn,'P') && ~isempty(modelIn.P)
-        P = transpose(modelIn.P);
-    else
-        P = transpose(modelIn.Par);
-    end
-    if isfield(transDef,'stateSubs')
-        stateSubs = transDef.stateSubs;
+    X = transpose(modelIn.sym.x);
+    XDOT = transpose(modelIn.sym.xdot);
+    X0 = transpose(modelIn.sym.x0);
+    U = transpose(modelIn.sym.u);
+    Y = transpose(modelIn.sym.y);
+    P = transpose(modelIn.sym.p);
+    if isfield(transDef.sym,'stateSubs')
+        stateSubs = transDef.sym.stateSubs;
     else
         stateSubs = [];
     end
-    if isfield(transDef,'parSubs')
-        parSubs = transDef.parSubs;
+    if isfield(transDef.sym,'parSubs')
+        parSubs = transDef.sym.parSubs;
     else
         parSubs = [];
     end
-    T = transDef.Transformation;
-    C = transDef.Constraint;
+    T = transDef.sym.Transformation;
+    C = transDef.sym.Constraint;
 %     symsDefTest = symsDef(X);
 %     syms m G E1 mE
 %     eval(symsDefTest);
@@ -93,81 +74,88 @@ function varargout = genssiTransformation(varargin)
         Tinv(i,1) = eval(['sol.' char(X(i))]);
     end
     
-    Fnew = simplify(jacobian(T,X)*subs(F,X,Tinv));
-    Hnew = simplify(subs(H,X,Tinv));
-    Gnew = simplify(subs(G,X,Tinv));
-    ICnew = simplify(subs(T,X,IC));
+    XDOTnew = simplify(jacobian(T,X)*subs(XDOT,X,Tinv));
+    Ynew = simplify(subs(Y,X,Tinv));
+    Unew = simplify(subs(U,X,Tinv));
+    X0new = simplify(subs(T,X,X0));
     
+% Support of character vectors that are not valid variable names or define
+% a number will be removed in a future release
     Xnew = sym(strrep(char(Xnew),'Xnew_',''));
-    Fnew = sym(strrep(char(Fnew),'Xnew_',''));
-    Hnew = sym(strrep(char(Hnew),'Xnew_',''));
-    Gnew = sym(strrep(char(Gnew),'Xnew_',''));
-    ICnew = sym(strrep(char(ICnew),'Xnew_',''));
+    XDOTnew = sym(strrep(char(XDOTnew),'Xnew_',''));
+    Ynew = sym(strrep(char(Ynew),'Xnew_',''));
+    Unew = sym(strrep(char(Unew),'Xnew_',''));
+    X0new = sym(strrep(char(X0new),'Xnew_',''));
+%     for ind = 1:length(Xnew)
+%         Xnew(ind) = sym(strrep(char(Xnew(ind)),'Xnew_',''));
+%     end
+%     for ind = 1:length(XDOTnew)
+%         XDOTnew(ind) = sym(strrep(char(XDOTnew(ind)),'Xnew_',''));
+%     end
+%     for ind = 1:length(Ynew)
+%         Ynew(ind) = sym(strrep(char(Ynew(ind)),'Xnew_',''));
+%     end
+%     for ind = 1:length(Unew)
+%         Unew(ind) = sym(strrep(char(Unew(ind)),'Xnew_',''));
+%     end
+%     for ind = 1:length(X0new)
+%         X0new(ind) = sym(strrep(char(X0new(ind)),'Xnew_',''));
+%     end
     
     if isempty(stateSubs)
     else
         Xnew = subs(Xnew,stateSubs(:,1),stateSubs(:,2));
-        Fnew = subs(Fnew,stateSubs(:,1),stateSubs(:,2));
-        Hnew = subs(Hnew,stateSubs(:,1),stateSubs(:,2));
-        Gnew = subs(Gnew,stateSubs(:,1),stateSubs(:,2));
-        ICnew= subs(ICnew,stateSubs(:,1),stateSubs(:,2));        
+        XDOTnew = subs(XDOTnew,stateSubs(:,1),stateSubs(:,2));
+        Ynew = subs(Ynew,stateSubs(:,1),stateSubs(:,2));
+        Unew = subs(Unew,stateSubs(:,1),stateSubs(:,2));
+        X0new= subs(X0new,stateSubs(:,1),stateSubs(:,2));        
     end
     
     if isempty(parSubs)
-        Fnew = expand(Fnew);
+        XDOTnew = expand(XDOTnew);
         for i = 1:length(P)
             for j = 1:length(P)
-                Fnew = subs(Fnew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                Fnew = subs(Fnew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
+                XDOTnew = subs(XDOTnew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
+                XDOTnew = subs(XDOTnew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
             end
         end
-        Fnew = simplify(Fnew);   
-        Hnew = expand(Hnew);
+        XDOTnew = simplify(XDOTnew);   
+        Ynew = expand(Ynew);
         for i = 1:length(P)
             for j = 1:length(P)
-                Hnew = subs(Hnew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                Hnew = subs(Hnew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
+                Ynew = subs(Ynew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
+                Ynew = subs(Ynew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
             end
         end
-        Hnew = simplify(Hnew);
-        Gnew = expand(Gnew);
+        Ynew = simplify(Ynew);
+        Unew = expand(Unew);
         for i = 1:length(P)
             for j = 1:length(P)
-                Gnew = subs(Gnew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                Gnew = subs(Gnew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
+                Unew = subs(Unew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
+                Unew = subs(Unew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
             end
         end
-        Gnew = simplify(Gnew);
-        ICnew = expand(ICnew);
+        Unew = simplify(Unew);
+        X0new = expand(X0new);
         for i = 1:length(P)
             for j = 1:length(P)
-                ICnew = subs(ICnew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                ICnew = subs(ICnew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
+                X0new = subs(X0new,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
+                X0new = subs(X0new,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
             end
         end
-        ICnew = simplify(ICnew);     
+        X0new = simplify(X0new);     
     else
-        Fnew = expand(simplify(subs(Fnew,parSubs(:,1),parSubs(:,2))));
-        Hnew = expand(simplify(subs(Hnew,parSubs(:,1),parSubs(:,2))));
-        Gnew = expand(simplify(subs(Gnew,parSubs(:,1),parSubs(:,2))));
-        ICnew= expand(simplify(subs(ICnew,parSubs(:,1),parSubs(:,2))));
+        XDOTnew = expand(simplify(subs(XDOTnew,parSubs(:,1),parSubs(:,2))));
+        Ynew = expand(simplify(subs(Ynew,parSubs(:,1),parSubs(:,2))));
+        Unew = expand(simplify(subs(Unew,parSubs(:,1),parSubs(:,2))));
+        X0new= expand(simplify(subs(X0new,parSubs(:,1),parSubs(:,2))));
     end
     
-    model.X = transpose(Xnew);
-    model.Neq = length(model.X);
-    model.F = transpose(Fnew);
-    model.IC = transpose(ICnew);
-    model.G = transpose(Gnew);
-    model.H = transpose(Hnew);
-    save(fullfile(GenSSIDir,'Examples',[model.Name '.mat']),'model');
-    if isSaveGenSSIModel
-        genssiStructToSource(model);
-    end
-%     function symsStr = symsDef(matIn)
-%         symsStr = 'syms';
-%         for iMat = 1:length(matIn)
-%             symsStr = [symsStr,' ',char(matIn(iMat,1))];
-%         end
-%     end
+    model.sym.x = transpose(Xnew);
+    model.sym.xdot = transpose(XDOTnew);
+    model.sym.x0 = transpose(X0new);
+    model.sym.u = transpose(Unew);
+    model.sym.y = transpose(Ynew);
+    genssiStructToSource(model,modelNameOut);
 end
 

@@ -1,1 +1,0 @@
-genssiMain('Pharmacokinetics',3);

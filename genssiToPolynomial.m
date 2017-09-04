@@ -11,26 +11,16 @@ function genssiToPolynomial (modelNameIn,modelNameOut)
     % Return values:
     %  void
     %  
-    isSaveGenSSIModel=true;
     GenSSIDir=fileparts(mfilename('fullpath'));
     addpath(fullfile(GenSSIDir,'Examples'));
     runModel = str2func(modelNameIn);
     modelIn=runModel();
-    model.Name=modelNameOut;
-    [model.X,model.F,model.IC] = genssiPolySys(transpose(modelIn.X),transpose(modelIn.F),transpose(modelIn.IC));
-    model.X = transpose(model.X);
-    model.F = transpose(model.F);
-    model.IC = transpose(model.IC);
-    model.Nder=4;
-    model.Neq = length(model.X);
-    model.G = sym(zeros(1,length(model.X)));
-    model.Noc = 0;
-    model.H = model.X;
-    model.Nobs = length(model.H);
-    model.Par = modelIn.Par;
-    model.Npar = length(model.Par);
-    save(fullfile(GenSSIDir,'Examples',[model.Name '.mat']),'model');
-    if isSaveGenSSIModel
-        genssiStructToSource(model);
-    end
+    [model.sym.x,model.sym.xdot,model.sym.x0] = genssiPolySys(transpose(modelIn.sym.x),transpose(modelIn.sym.xdot),transpose(modelIn.sym.x0));
+    model.sym.x = transpose(model.sym.x);
+    model.sym.xdot = transpose(model.sym.xdot);
+    model.sym.x0 = transpose(model.sym.x0);
+    model.sym.u = sym(zeros(1,length(model.sym.x)));
+    model.sym.y = model.sym.x;
+    model.sym.p = modelIn.sym.p;
+    genssiStructToSource(model,modelNameOut);
 end

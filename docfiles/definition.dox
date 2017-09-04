@@ -29,6 +29,10 @@
  
  @code syms p1 p2 p3 p4 p5 p6 p7 p8 @endcode
 
+ Create the parameter vector:
+
+ @code model.sym.p = [p1 p2 p3 p4 p5 p6 p7 p8] @endcode
+
  @subsection equtions Equations
 
  Define the equations of the model.
@@ -50,12 +54,6 @@
  g3=0;
  model.sym.u=[g1 g2 Ag3];
  @endcode
-
- Define the number of controls.
-
- @code model.Noc = 0; @endcode
-
- Note that the length of the control vector should match the number of states, even if there are fewer controls.
 
  @subsection obserables Observables
 
@@ -115,9 +113,10 @@
  GenSSI/Examples
  @endcode
 
- Note: GenSSI now uses AMICI format. This reduces duplication and gives us full functionality of the AMICI routines. Because of this, the number of derivatives and the parameters considered for identifiability have been moved from the model definition to the call to genssiMain.
+ Note: GenSSI now uses AMICI format. This reduces duplication and gives us full functionality of the AMICI routines. Because of this, the number of derivatives and the parameters considered for identifiability have been moved from the model definition to the call to genssiMain. These parameters are
+more a matter of analysis than of model definition.
 
- Note: There are limitations to this conversion. The SBML model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. In addition, the GenSSI model created by the conversion contains default values for parameters such as the number of derivatives. It may be necessary to manually edit the GenSSI model after conversion. Both GenSSI and AMICI require specification of the observables, but this is not defined in SBML. If SBMLode finds rules that are not used in the model, it will assume that they were intended as observables. In any case, it is advisable to inspect the observables and modify them as needed.
+ Note: There are limitations to this conversion. The SBML model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. It may be necessary to manually edit the GenSSI model after conversion. Both GenSSI and AMICI require specification of the observables, but this is not defined in SBML. If SBMLode finds rules that are not used in the model, it will assume that they were intended as observables. In any case, it is advisable to inspect the observables and modify them as needed.
 
  As an example for this conversion, we have chosen to use an SMBL model from the biomodels database. We begin by accessing the web site  http://www.ebi.ac.uk/biomodels-main/ searching for MAPK and dowloading the file BIOMD0000000010.xml. In order to make this easier to write, we renamed the file to BIOMD10.xml, so that our SBML model is now contained in
 
@@ -127,7 +126,7 @@
 
  @code runBIOMD10; @endcode
 
- The resulting file includes several default values. Here, the full list of parameters is contained in ODE.parameter (later model.sym.p) to Par (parameter in genssiMain) and reduce the list of parameters Par for which identifiability analysis is performed. Using all 22 parameters is in principle possible, but does not work on a desktop computer with 16GB RAM, because the size of the Jacobian grows quickly with number of of parameters. In addition to the parameters, we set the observables (ODE.observable and model.sym.y = [MAPK, MAPK_P, and MAPK_PP]), the number of observables (3) and the number of Lie derivatives (parameter Nder = 6 in genssiMain).
+ The script file includes several default values. Here, the full list of parameters is contained in ODE.parameter (later model.sym.p) is copied to Par (parameter in genssiMain) and reduced in size the list of parameters Par for which identifiability analysis is performed. Using all 22 parameters is in principle possible, but does not work on a desktop computer with 16GB RAM, because the size of the Jacobian grows exponentially with number of of parameters. In addition to the parameters, we set the observables (ODE.observable and model.sym.y = [MAPK, MAPK_P, and MAPK_PP]), and the number of Lie derivatives (parameter Nder = 6 in genssiMain).
 
  @code
  modelName = 'BIOMD10';
@@ -136,7 +135,7 @@
  ODE.observable = ODE.state(6:8);
  ODE.writeAMICI(modelName);
  % check structural identifiability using all Vn_ parameters
- Par=ODE.parameter(logical([1,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0]));
+ Par = ODE.parameter(logical([1,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0]));
  genssiMain('BIOMD10_syms',6,Par);
  @endcode
 
@@ -158,19 +157,17 @@
 
  @subsection multiexp Create Multi-Experiment Model
 
- @code genssiMultiExperiment(modelNameIn,fileFormat,mExDef,modelNameOut) @endcode
+ @code genssiMultiExperiment(modelNameIn,mExDef,modelNameOut) @endcode
 
  genssiMultiExperiment converts a GenSSI model to a new GenSSI model based on a multi-experiment definition.
 
  modelNameIn: the name of the input model (a string).
 
- fileFormat: either 'function' (default), if the model is a MatLab function, or 'mat', if the model is a .mat file.
-
  mExDef: the name of a multi-experiment definition file (string).
 
  modelNameOut: the name of the output model (a string).
 
- In chemistry, it is often possible for the chemist to arbitrarily change certain parameters, such as tempurature, pressure, and the concentration of specific substances.  For example, in a continuous-flow stirred tank reactor (CFSTR), the feed flow provides a constant feed of substances, at a rate that can be chosen as needed.  This situation has led to the concept of "controls", which are also used in identifiability analysis.  From the point of theory, the controls are variables that can be changed at will, so they have a very strong positive influence on the identifiability of a model.
+ In chemistry, it is often possible for the chemist to arbitrarily change certain parameters, such as temperature, pressure, and the concentration of specific substances.  For example, in a continuous-flow stirred tank reactor (CFSTR), the feed flow provides a constant feed of substances, at a rate that can be chosen as needed.  This situation has led to the concept of "controls", which are also used in identifiability analysis.  From the point of theory, the controls are variables that can be changed at will, so they have a very strong positive influence on the identifiability of a model.
 
  In contrast, in biology, certain parameters and feed rates may be varied, but most often not arbitrarily. Often, these parameters can be varied discretely by creating a new experiment with new substances or substance concentrations.  Now, in identifiability, we would like to analyze multiple experiments in one model.  The result is a model for which the identifiability lies somewhere between the models without controls and those with controls.
 
@@ -180,13 +177,13 @@
 
  @code
  function model = M1_1_U2()
-     syms  m G d b kTL m0
+     syms m G d b kTL m0
      model.sym.x=[m G];
      A1=-d*m;
      A2=0;
      model.sym.xdot=[A1 A2];
      model.sym.u=[0,kTL*m;...
-              0,-b*G];
+                  0,-b*G];
      h1=G;
      model.sym.y=[h1];
      model.sym.x0=[m0 0];
@@ -200,7 +197,7 @@
 
  1) original configuration
 
- 2) change in transfection (m0) via IC: The initial concentration of mRNA is changed.
+ 2) change in transfection (m0) via x0: The initial concentration of mRNA is changed.
 
  3) change in translation via control u1 = uInh: The rate of translation is changed, for example by treating the cell with an antibiotic.
 
@@ -210,29 +207,27 @@ The experiment definition is:
 
  @code
  function multiExp = M1_1_eDef4()
-     multiExp.Name='M1_1_eDef4';
      syms d b kTL m0Exp1
-     multiExp.Nexp=4;
-     multiExp.U = [1,1;...
-                   1,1;...
-                   .5,1;...
-                   1,.75];
-     multiExp.IC = [m0Exp1,0,...
-                    0.5*m0Exp1,0,...
-                    m0Exp1,0,...
-                    m0Exp1,0];
-     multiExp.P=[d,b,kTL,m0Exp1];
-     multiExp.Par=[d,b,kTL,m0Exp1];
+     multiExp.sym.Nexp=4;
+     multiExp.sym.u = [1,1;...
+                       1,1;...
+                       .5,1;...
+                       1,.75];
+     multiExp.sym.x0 = [m0Exp1,0,...
+                        0.5*m0Exp1,0,...
+                        m0Exp1,0,...
+                        m0Exp1,0];
+     multiExp.sym.p=[d,b,kTL,m0Exp1];
  end
  @endcode
 
  The number of expriments is coded in multiExp.Nexp=4.
 
- The variable multiExp.U defines the changes in the controls and the variable multiExp.IC defines the changes in the initial conditions.  Both of these variables contain one row for each experiment and one column for each state variable. In the first experiment (original configuration), the controls are 1 and the initial mRNA concentration is m0Exp1.  In the second expriment (change in transfection), the initial concentration of mRNA is changed.  In the third experiment (change in translation), the rate of translation is changed by changing the value of the first control.  In the fourth experiment (change in GFP degradation), the rate of GFP degradation is changed by changing the value of the second control.
+ The variable multiExp.sym.u defines the changes in the controls and the variable multiExp.sym.x0 defines the changes in the initial conditions.  Both of these variables contain one row for each experiment and one column for each state variable. In the first experiment (original configuration), the controls are 1 and the initial mRNA concentration is m0Exp1.  In the second expriment (change in transfection), the initial concentration of mRNA is changed.  In the third experiment (change in translation), the rate of translation is changed by changing the value of the first control.  In the fourth experiment (change in GFP degradation), the rate of GFP degradation is changed by changing the value of the second control.
 
  The original model is converted to the multi-experiment model by means of this line of code:
 
- @code genssiMultiExperiment('M1_1_U2','function','M1_1_eDef4','M1_1_ME4'); @endcode
+ @code genssiMultiExperiment('M1_1_U2','M1_1_eDef4','M1_1_ME4'); @endcode
 
  The result of the conversion is the following (multi-experiment) model:
 
@@ -246,13 +241,13 @@ The experiment definition is:
      model.sym.x0 = [m0Exp1,0,m0Exp1/2,0,m0Exp1,0,m0Exp1,0];
      model.sym.y = [GExp1,GExp2,GExp3,GExp4];
      model.sym.xdot = [-d*mExp1,...
-                kTL*mExp1 - GExp1*b,...
-                -d*mExp2,...
-                kTL*mExp2 - GExp2*b,...
-                -d*mExp3,...
-                (kTL*mExp3)/2 - GExp3*b,...
-                -d*mExp4,...
-                kTL*mExp4 - (3*GExp4*b)/4];
+                       kTL*mExp1 - GExp1*b,...
+                       -d*mExp2,...
+                       kTL*mExp2 - GExp2*b,...
+                       -d*mExp3,...
+                       (kTL*mExp3)/2 - GExp3*b,...
+                       -d*mExp4,...
+                       kTL*mExp4 - (3*GExp4*b)/4];
  end
  @endcode
 
@@ -260,13 +255,11 @@ The experiment definition is:
  
  @subsection transf Transform Model
 
- @code genssiTransformation(modelNameIn,fileFormat,transDef,modelNameOut) @endcode
+ @code genssiTransformation(modelNameIn,transDef,modelNameOut) @endcode
 
  genssiTransformation converts a GenSSI model to a new GenSSI model based on a transformation definition.
 
  modelNameIn: the name of the input model (a string).
-
- fileFormat: either 'function' (default), if the model is a MatLab function, or 'mat', if the model is a .mat file.
 
  transDef: the name of a transformation definition file (string).
 
@@ -299,35 +292,33 @@ The experiment definition is:
 
  @code
  function transDef = M2_1_tDef()
-     transDef.Name='M2_1_tDef';
      syms m G E1 mE m0 E0
      syms mdm0 E1dm0
      syms d1 d2 d3 b kTL
      syms d2tm0 kTLtm0 E0dm0
-     transDef.Transformation = [m/m0;G;E1/m0];
-     transDef.Constraint = [E1-E0+mE];
-     transDef.P = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
-     transDef.Par = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
+     transDef.sym.Transformation = [m/m0;G;E1/m0];
+     transDef.sym.Constraint = [E1-E0+mE];
+     transDef.sym.p = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
      syms mnew Gnew E1new
-     transDef.stateSubs = [mdm0,mnew;...
-                           G,Gnew;...
-                           E1dm0,E1new];
-     transDef.parSubs = [d2*m0,d2tm0;...
-                         kTL*m0,kTLtm0;...
-                         E0/m0,E0dm0];
+     transDef.sym.stateSubs = [mdm0,mnew;...
+                               G,Gnew;...
+                               E1dm0,E1new];
+     transDef.sym.parSubs = [d2*m0,d2tm0;...
+                             kTL*m0,kTLtm0;...
+                             E0/m0,E0dm0];
  end
  @endcode
 
- The transformation is defined by two variables. The first, transDef.Transformation, defines the rescaling. It contains one entry for each element of the final state vector. Since we are converting a model with 4 state variables to 3, this contains 3 elements. The second part of the definition is the constraint, transDef.Constraint. This will be equated to zero during the transformation, so it is E1-E0+mE=0, or, equivalently, E1-E1(0)=-(mE-mE(0)). The variable transDef.Constraint can contain multiple constraints, separated by a semicolon. Finally, there are two optional definitions of substitutions. They contain a variable number of rows, each of which is a substitution, or change of names. During the transformation process, new variables are created for the state vector and the parameters, and the names are changed via the rules "*"->"t" (for "times") and "/"->"d" (for "divided by").  These names can be considered as suggestions for the new names, and the user can override them with the stateSubs and parSubs definitions. For example, mdm0 is replaced by mnew in the state vector, and d2*m0 is replaced by d2tm0 in the parameters. It is considered good practice to leave these 2 definitions out the first time the transformation is run, and then add them in later in order to gain more control over the naming.
+ The transformation is defined by two variables. The first, transDef.sym.Transformation, defines the rescaling. It contains one entry for each element of the final state vector. Since we are converting a model with 4 state variables to 3, this contains 3 elements. The second part of the definition is the constraint, transDef.sym.Constraint. This will be equated to zero during the transformation, so it is E1-E0+mE=0, or, equivalently, E1-E1(0)=-(mE-mE(0)). The variable transDef.sym.Constraint can contain multiple constraints, separated by a semicolon. Finally, there are two optional definitions of substitutions. They contain a variable number of rows, each of which is a substitution, or change of names. During the transformation process, new variables are created for the state vector and the parameters, and the names are changed via the rules "*"->"t" (for "times") and "/"->"d" (for "divided by").  These names can be considered as suggestions for the new names, and the user can override them with the stateSubs and parSubs definitions. For example, mdm0 is replaced by mnew in the state vector, and d2*m0 is replaced by d2tm0 in the parameters. It is considered good practice to leave these 2 definitions out the first time the transformation is run, and then add them in later in order to gain more control over the naming.
 
  This transformation is started by running the following line of code:
 
- @code genssiTransformation('M2_1_Y1','function','M2_1_tDef','M2_2_test'); @endcode
+ @code genssiTransformation('M2_1_Y1','M2_1_tDef','M2_2'); @endcode
 
  The result of the transformation is the following new model:
 
  @code
- function model = M2_2_test()
+ function model = M2_2()
      syms mnew Gnew E1new
      syms d1 d2tm0 d3 b kTLtm0 E0dm0
      model.sym.x = [mnew,Gnew,E1new];
@@ -336,8 +327,8 @@ The experiment definition is:
      model.sym.x0 = [1,0,E0dm0];
      model.sym.y = [Gnew];
      model.sym.xdot = [- d1*mnew - E1new*d2tm0*mnew,...
-                kTLtm0*mnew - Gnew*b,...
-                (E0*d3)/m0 - E1new*d2tm0*mnew - E1new*d3];
+                       kTLtm0*mnew - Gnew*b,...
+                       (E0*d3)/m0 - E1new*d2tm0*mnew - E1new*d3];
  end
  @endcode
 

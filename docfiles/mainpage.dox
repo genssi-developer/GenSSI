@@ -13,9 +13,9 @@
  @section download Availability
  
  The sources for GenSSI are accessible as
- - Source  <a href="https://github.com/thomassligon/GenSSI/tarball/master" target="_blank">tarball</a>
- - Source  <a href="https://github.com/thomassligon/GenSSI/zipball/master" target="_blank">zipball</a>
- - Git repository on  <a href="https://github.com/thomassligon/GenSSI" target="_blank">github</a>
+ - Source  <a href="https://github.com/genssi-developer/GenSSI/tarball/master" target="_blank">tarball</a>
+ - Source  <a href="https://github.com/genssi-developer/GenSSI/zipball/master" target="_blank">zipball</a>
+ - Git repository on  <a href="https://github.com/genssi-developer/GenSSI" target="_blank">github</a>
  
  Once you've obtained your copy check out the @ref install
  
@@ -23,8 +23,8 @@
  In order to always stay up to date with the latest GenSSI versions, simply pull it from our Git repository and
  recompile it when a new release is available. For more information about Git checkout their <a href="http://git-scm.com/" target="_blank">website</a>
  
- The Git repository can currently be found at https://github.com/thomassligon/GenSSI and a direct clone is possible via
- @code git clone https://github.com/thomassligon/GenSSI.git GenSSI @endcode
+ The Git repository can currently be found at https://github.com/genssi-developer/GenSSI and a direct clone is possible via
+ @code git clone https://github.com/genssi-developer/GenSSI.git GenSSI @endcode
  
  @subsection GenSSI License Conditions
  This software is available under the <a href="http://www.opensource.org/licenses/bsd-license.php" target="_blank">BSD license</a>

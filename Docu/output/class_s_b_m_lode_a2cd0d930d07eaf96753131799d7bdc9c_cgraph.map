@@ -1,4 +1,0 @@
-<map id="SBMLode" name="SBMLode">
-<area shape="rect" id="node2" href="$class_s_b_m_lode.html#aade8af59a084facb7787bec29226682f" title="checkODE checks whether the length of various variable names exceeds namelengthmax (would cause troub..." alt="" coords="134,5,219,33"/>
-<area shape="rect" id="node3" href="$class_s_b_m_lode.html#af2ebf8afc99040060a0af5b3ec3632a7" title="writeAMICI writes the symbolic information from an SBMLode object into an AMICI model definition file..." alt="" coords="133,56,220,83"/>
-</map>
