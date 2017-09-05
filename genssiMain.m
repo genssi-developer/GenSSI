@@ -65,12 +65,10 @@ function options = genssiMain(modelName,Nder,Par)
     if iscolumn(model.sym.x)
         model.sym.x = transpose(model.sym.x);
     end
-    model.sym.Neq = length(model.sym.x);
     if ~isfield(model.sym,'u')
         model.sym.u = [];
     end
-%     model.sym.G=sym(zeros(1,model.sym.Neq)); % required even if Noc=0
-    model.sym.G=sym(zeros(max(size(model.sym.u,1),1),model.sym.Neq)); % required even if Noc=0
+    model.sym.G=sym(zeros(max(size(model.sym.u,1),1),length(model.sym.x)));
     if isfield(model.sym,'u')
 %         for iC = 1:length(model.sym.u)
 %             model.sym.G(iC) = model.sym.u(iC);
@@ -92,7 +90,6 @@ function options = genssiMain(modelName,Nder,Par)
     if iscolumn(model.sym.y)
         model.sym.y = transpose(model.sym.y);
     end
-    model.sym.Nobs = length(model.sym.y);
     if iscolumn(model.sym.xdot)
         model.sym.xdot = transpose(model.sym.xdot);
     end     

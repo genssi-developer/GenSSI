@@ -33,7 +33,7 @@ function options = genssiReportInputs(model,options)
 
     fprintf(1,'-----> Maximum number of derivatives for the analysis: %u\n',model.sym.Nder);
     fprintf(1,'-----> Dynamic model:\n');
-    for i=1:model.sym.Neq
+    for i=1:length(model.sym.x)
         fprintf(1,'\tA%u=',i);
         disp(model.sym.xdot(i));
     end
@@ -49,7 +49,7 @@ function options = genssiReportInputs(model,options)
     end
 
     fprintf(1,'-----> Observables:\n');
-    for i=1:model.sym.Nobs
+    for i=1:length(model.sym.y)
         fprintf(1,'\tH%u=',i);
         disp(model.sym.y(i));
     end
