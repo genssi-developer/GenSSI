@@ -1,6 +1,6 @@
 function model = Bilirubin2()
-    % Bilirubin2 provides the GenSSI implementation of the model
-    % of the 2nd Bilirubin model described by
+    % Bilirubin2 provides the GenSSI implementation of a 2nd version
+    % of the Bilirubin model described by
     % 
     %    Meshkat et al. (2014). On finding and using identifiable parameter
     %    combinations in nonlinear dynamic Systems Biology models and
@@ -17,7 +17,7 @@ function model = Bilirubin2()
     model.sym.x = [x1 x2 x3 x4];
 
     % Control vectors
-	model.sym.u = [1];
+    model.sym.G = [1]; error('dimensions of the control vector are incorrect.')
 
     % Autonomous dynamics
 	model.sym.xdot = [-(k21+k31+k41+k01)*x1+k12*x2+k13*x3+k14*x4,...
