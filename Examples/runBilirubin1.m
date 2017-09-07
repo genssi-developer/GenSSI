@@ -1,1 +1,0 @@
-genssiMain('Bilirubin1',6);
