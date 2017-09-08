@@ -15,12 +15,12 @@ function options = genssiMain(modelName,Nder,Par)
     end
     runModel = str2func(modelName);
     model = runModel();
-    model.sym.Name = modelName;
+    model.sym.Name = modelName; % needed for genssiReportInputs
     options.verbose=true; % maximum (verbose) information in results file
     options.noRank=false; % no rank calculation (for speed with loss)
     options.closeFigure=true; % closes figures
     GenSSIDir=fileparts(mfilename('fullpath'));
-    resultsDir=fullfile(GenSSIDir,'Results');
+    resultsDir=fullfile(GenSSIDir,'Examples');
     runNumber=1;
     subfolder=strcat('run',num2str(runNumber));
     options.problem_folder_path=fullfile(resultsDir,modelName,subfolder);
@@ -29,7 +29,7 @@ function options = genssiMain(modelName,Nder,Par)
         if exist(options.problem_folder_path,'dir')
             runNumber=runNumber+1;
             subfolder=strcat('run',num2str(runNumber));
-            options.problem_folder_path=fullfile(resultsDir,model.sym.Name,subfolder);
+            options.problem_folder_path=fullfile(resultsDir,modelName,subfolder);
         else
             runSearch=false;
         end
