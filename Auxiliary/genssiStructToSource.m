@@ -10,8 +10,9 @@ function genssiStructToSource(model,modelName)
     % Return values:
     %  void
     %
-    GenSSIDir = fileparts(mfilename('fullpath'));
-    fileName = fullfile(GenSSIDir,'Examples',[modelName,'.m']);
+%     GenSSIDir = fileparts(mfilename('fullpath'));
+%     fileName = fullfile(GenSSIDir,'..','Examples',[modelName,'.m']);
+    fileName = [modelName, '.m'];
     if exist(fileName,'file')
         delete(fileName);
     end
