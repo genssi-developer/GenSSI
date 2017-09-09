@@ -12,7 +12,7 @@ function model = Transfection3()
 	syms mExp1 GExp1 mExp2 GExp2
 	syms d b kTL m0Exp1 m0Exp2 G0Exp2
 	model.sym.x = [mExp1,GExp1,mExp2,GExp2];
-	model.sym.u = [0  0  0  1];
+	model.sym.g = [0,0,0,1];
 	model.sym.p = [d,b,kTL,m0Exp1,m0Exp2,G0Exp2];
 	model.sym.x0 = [m0Exp1,0,m0Exp2,G0Exp2];
 	model.sym.y = [GExp1,GExp2];

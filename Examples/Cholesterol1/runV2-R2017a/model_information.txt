@@ -14,7 +14,7 @@ options:
                 verbose: 1
                  noRank: 0
             closeFigure: 1
-    problem_folder_path: 'D:\data\Tom\Research\GenSSI\Results\Cholesterol1\run3'
+    problem_folder_path: 'D:\data\Tom\Research\GenSSI\Examples\Cholesterol1\run2'
 
 STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: Cholesterol1 Model
  
@@ -30,7 +30,7 @@ STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: Cholesterol1 Model
 	A2=k21*x1 - x2*(k02 + k12)
  
 -----> Control variables:
-	G1=1
+	G1=[ 1, 0]
  
 -----> Observables:
 	H1=x1/V1
@@ -44,7 +44,7 @@ STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: Cholesterol1 Model
 
 
 
-Report inputs elapsed time: 0.074804
+Report inputs elapsed time: 0.088112
 *******************************
 -> COMPUTE LIE DERIVATIVES
 *******************************
@@ -73,7 +73,7 @@ COMPUTING LIE DERIVATIVES OF ORDER 4
    ->The rank of the next Jacobian is expected to be maximum 5.
 .................................................................
   
-Compute Lie derivatives elapsed time: 0.13544
+Compute Lie derivatives elapsed time: 0.14771
 
 
 ***************************************
@@ -83,7 +83,7 @@ Compute Lie derivatives elapsed time: 0.13544
  ----->The rank of the full Jacobian matrix is 4 
 
  ----->THE FULL JACOBIAN IS RANK DEFICIENT, YOU MAY CONSIDER ADDING NEW DERIVATIVES, 5 
-Compute tableau elapsed time: 1.387
+Compute tableau elapsed time: 0.36535
 
 
 ************************************************
@@ -100,7 +100,7 @@ Compute tableau elapsed time: 1.387
                                                                      (k01 + k21)^2/V1 - c3 + (k12*k21)/V1
  - c4 - (k01 + k21)*((k01 + k21)^2/V1 + (k12*k21)/V1) - k21*((k12*(k02 + k12))/V1 + (k12*(k01 + k21))/V1)
  
-Compute reduced tableau  elapsed time: 1.4661
+Compute reduced tableau  elapsed time: 0.4092
 
 
 ******************************************************************************************
@@ -133,6 +133,6 @@ Compute reduced tableau  elapsed time: 1.4661
                  An explicit solution cannot be given for this subset of parameters. 
                  PLEASE CONSIDER AN EXTRA DERIVATIVE! 
 
-Order tableau elapsed time: 1.446
-Report results elapsed time: 0.001058
-Total elapsed time: 4.5111
+Order tableau elapsed time: 0.52221
+Report results elapsed time: 0.0014786
+Total elapsed time: 1.5366

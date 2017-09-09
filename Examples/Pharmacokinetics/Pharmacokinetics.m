@@ -30,7 +30,7 @@ function model = Pharmacokinetics()
     model.sym.p=[a1 a2 b1 b2 ka kc vm c0 g];
 
     %%% Controls %%%
-    model.sym.u=[];
+    model.sym.g=[];
 
     %%% Observables %%%
     model.sym.y=[x1,x2,x3];

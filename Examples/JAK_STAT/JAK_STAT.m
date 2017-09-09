@@ -43,8 +43,7 @@ function model = JAK_STAT()
                     0];
     
     % Controls
-    model.sym.u = [-p1*STAT,...
-                p1*STAT];
+    model.sym.g = [-p1*STAT,p1*STAT,0,0,0,0,0,0,0];
 
     % Observables
     model.sym.y = [(pSTAT+2*pSTAT_pSTAT)/init_STAT,...

@@ -39,13 +39,9 @@ function options = genssiReportInputs(model,options)
     end
 
     fprintf(1,'-----> Control variables:\n');
-    for i=1:model.sym.Noc
+    for i=1:size(model.sym.g,1)% # controls, model.sym.Noc
         fprintf(1,'\tG%u=',i);
-        if size(model.sym.G,1)>1
-            disp(sym(transpose(model.sym.G(:,i))));
-        else
-            disp(sym(model.sym.G(i)));
-        end
+        disp(sym(model.sym.g(i,:)));
     end
 
     fprintf(1,'-----> Observables:\n');

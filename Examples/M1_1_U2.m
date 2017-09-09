@@ -6,7 +6,7 @@ function model = M1_1_U2()
     A1=-d*m;
     A2=0;
     model.sym.xdot=[A1 A2];
-    model.sym.u=[0,kTL*m;...
+    model.sym.g=[0,kTL*m;...
                  0,-b*G];
     h1=G;
     model.sym.y=[h1];

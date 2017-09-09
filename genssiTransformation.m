@@ -41,7 +41,7 @@ function varargout = genssiTransformation(varargin)
     X = transpose(modelIn.sym.x);
     XDOT = transpose(modelIn.sym.xdot);
     X0 = transpose(modelIn.sym.x0);
-    U = transpose(modelIn.sym.u);
+    G = transpose(modelIn.sym.g);
     Y = transpose(modelIn.sym.y);
     P = transpose(modelIn.sym.p);
     if isfield(transDef.sym,'stateSubs')
@@ -76,7 +76,7 @@ function varargout = genssiTransformation(varargin)
     
     XDOTnew = simplify(jacobian(T,X)*subs(XDOT,X,Tinv));
     Ynew = simplify(subs(Y,X,Tinv));
-    Unew = simplify(subs(U,X,Tinv));
+    Gnew = simplify(subs(G,X,Tinv));
     X0new = simplify(subs(T,X,X0));
     
 % Support of character vectors that are not valid variable names or define
@@ -84,7 +84,7 @@ function varargout = genssiTransformation(varargin)
     Xnew = sym(strrep(char(Xnew),'Xnew_',''));
     XDOTnew = sym(strrep(char(XDOTnew),'Xnew_',''));
     Ynew = sym(strrep(char(Ynew),'Xnew_',''));
-    Unew = sym(strrep(char(Unew),'Xnew_',''));
+    Gnew = sym(strrep(char(Gnew),'Xnew_',''));
     X0new = sym(strrep(char(X0new),'Xnew_',''));
 %     for ind = 1:length(Xnew)
 %         Xnew(ind) = sym(strrep(char(Xnew(ind)),'Xnew_',''));
@@ -95,8 +95,8 @@ function varargout = genssiTransformation(varargin)
 %     for ind = 1:length(Ynew)
 %         Ynew(ind) = sym(strrep(char(Ynew(ind)),'Xnew_',''));
 %     end
-%     for ind = 1:length(Unew)
-%         Unew(ind) = sym(strrep(char(Unew(ind)),'Xnew_',''));
+%     for ind = 1:length(Gnew)
+%         Gnew(ind) = sym(strrep(char(Gnew(ind)),'Xnew_',''));
 %     end
 %     for ind = 1:length(X0new)
 %         X0new(ind) = sym(strrep(char(X0new(ind)),'Xnew_',''));
@@ -107,7 +107,7 @@ function varargout = genssiTransformation(varargin)
         Xnew = subs(Xnew,stateSubs(:,1),stateSubs(:,2));
         XDOTnew = subs(XDOTnew,stateSubs(:,1),stateSubs(:,2));
         Ynew = subs(Ynew,stateSubs(:,1),stateSubs(:,2));
-        Unew = subs(Unew,stateSubs(:,1),stateSubs(:,2));
+        Gnew = subs(Gnew,stateSubs(:,1),stateSubs(:,2));
         X0new= subs(X0new,stateSubs(:,1),stateSubs(:,2));        
     end
     
@@ -128,14 +128,14 @@ function varargout = genssiTransformation(varargin)
             end
         end
         Ynew = simplify(Ynew);
-        Unew = expand(Unew);
+        Gnew = expand(Gnew);
         for i = 1:length(P)
             for j = 1:length(P)
-                Unew = subs(Unew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                Unew = subs(Unew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
+                Gnew = subs(Gnew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
+                Gnew = subs(Gnew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
             end
         end
-        Unew = simplify(Unew);
+        Gnew = simplify(Gnew);
         X0new = expand(X0new);
         for i = 1:length(P)
             for j = 1:length(P)
@@ -147,14 +147,14 @@ function varargout = genssiTransformation(varargin)
     else
         XDOTnew = expand(simplify(subs(XDOTnew,parSubs(:,1),parSubs(:,2))));
         Ynew = expand(simplify(subs(Ynew,parSubs(:,1),parSubs(:,2))));
-        Unew = expand(simplify(subs(Unew,parSubs(:,1),parSubs(:,2))));
+        Gnew = expand(simplify(subs(Gnew,parSubs(:,1),parSubs(:,2))));
         X0new= expand(simplify(subs(X0new,parSubs(:,1),parSubs(:,2))));
     end
     
     model.sym.x = transpose(Xnew);
     model.sym.xdot = transpose(XDOTnew);
     model.sym.x0 = transpose(X0new);
-    model.sym.u = transpose(Unew);
+    model.sym.g = transpose(Gnew);
     model.sym.y = transpose(Ynew);
     genssiStructToSource(model,modelNameOut);
 end

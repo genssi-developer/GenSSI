@@ -9,7 +9,7 @@ function model = PharmacokineticsPoly()
 	syms x1 x2 x3 x4 xi1
 	syms a1 a2 b1 b2 ka kc vm c0 g
 	model.sym.x = [x1,x2,x3,x4,xi1];
-	model.sym.u = [];
+	model.sym.g = [];
 	model.sym.p = [a1,a2,b1,b2,ka,kc,vm,c0,g];
 	model.sym.x0 = [c0,...
                     0,...

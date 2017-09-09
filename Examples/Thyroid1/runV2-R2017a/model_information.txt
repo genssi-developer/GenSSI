@@ -13,7 +13,8 @@ Computer=PCWIN64
 options:
                 verbose: 1
                  noRank: 0
-    problem_folder_path: 'D:\data\Tom\Research\GenSSI\Results\Thyroid1\run2'
+            closeFigure: 1
+    problem_folder_path: 'D:\data\Tom\Research\GenSSI\Examples\Thyroid1\run1'
 
 STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: Thyroid1 Model
  
@@ -31,7 +32,7 @@ STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: Thyroid1 Model
 	A3=k31*x1 - x3*(k03 + k13)
  
 -----> Control variables:
-	G1=1
+	G1=[ 1, 0, 0]
  
 -----> Observables:
 	H1=x1/V1
@@ -45,7 +46,7 @@ STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: Thyroid1 Model
 
 
 
-Report inputs elapsed time: 0.08797
+Report inputs elapsed time: 0.097573
 *******************************
 -> COMPUTE LIE DERIVATIVES
 *******************************
@@ -92,7 +93,7 @@ COMPUTING LIE DERIVATIVES OF ORDER 7
    ->The rank of the next Jacobian is expected to be maximum 7.
 .................................................................
   
-Compute Lie derivatives elapsed time: 3.4161
+Compute Lie derivatives elapsed time: 1.8034
 
 
 ***************************************
@@ -102,7 +103,7 @@ Compute Lie derivatives elapsed time: 3.4161
  ----->The rank of the full Jacobian matrix is 6 
 
  ----->THE FULL JACOBIAN IS RANK DEFICIENT, YOU MAY CONSIDER ADDING NEW DERIVATIVES, 8 
-Compute tableau elapsed time: 1.1874
+Compute tableau elapsed time: 0.72506
 
 
 ************************************************
@@ -121,7 +122,7 @@ Compute tableau elapsed time: 1.1874
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                k21*((k02 + k12)*((k12*(k02 + k12))/V1 + (k12*(k21 + k31))/V1) + k12*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1)) - c5 + k31*((k03 + k13)*((k13*(k03 + k13))/V1 + (k13*(k21 + k31))/V1) + k13*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1)) + (k21 + k31)*((k21 + k31)*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1) + k21*((k12*(k02 + k12))/V1 + (k12*(k21 + k31))/V1) + k31*((k13*(k03 + k13))/V1 + (k13*(k21 + k31))/V1))
  - c6 - (k21 + k31)*(k21*((k02 + k12)*((k12*(k02 + k12))/V1 + (k12*(k21 + k31))/V1) + k12*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1)) + k31*((k03 + k13)*((k13*(k03 + k13))/V1 + (k13*(k21 + k31))/V1) + k13*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1)) + (k21 + k31)*((k21 + k31)*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1) + k21*((k12*(k02 + k12))/V1 + (k12*(k21 + k31))/V1) + k31*((k13*(k03 + k13))/V1 + (k13*(k21 + k31))/V1))) - k21*(k12*((k21 + k31)*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1) + k21*((k12*(k02 + k12))/V1 + (k12*(k21 + k31))/V1) + k31*((k13*(k03 + k13))/V1 + (k13*(k21 + k31))/V1)) + (k02 + k12)*((k02 + k12)*((k12*(k02 + k12))/V1 + (k12*(k21 + k31))/V1) + k12*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1))) - k31*(k13*((k21 + k31)*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1) + k21*((k12*(k02 + k12))/V1 + (k12*(k21 + k31))/V1) + k31*((k13*(k03 + k13))/V1 + (k13*(k21 + k31))/V1)) + (k03 + k13)*((k03 + k13)*((k13*(k03 + k13))/V1 + (k13*(k21 + k31))/V1\\\r\n) + k13*((k21 + k31)^2/V1 + (k12*k21)/V1 + (k13*k31)/V1)))
  
-Compute reduced tableau  elapsed time: 1.3612
+Compute reduced tableau  elapsed time: 1.1465
 
 
 ******************************************************************************************
@@ -156,6 +157,6 @@ Compute reduced tableau  elapsed time: 1.3612
                  An explicit solution cannot be given for this subset of parameters. 
                  PLEASE CONSIDER AN EXTRA DERIVATIVE! 
 
-Order tableau elapsed time: 1.0137
-Report results elapsed time: 0.0012475
-Total elapsed time: 7.0685
+Order tableau elapsed time: 0.81821
+Report results elapsed time: 0.0012388
+Total elapsed time: 4.5932

@@ -17,7 +17,7 @@ function model = Bilirubin1()
     model.sym.x = [x1,x2,x3,x4];
 
     % Control vectors
-    model.sym.G = [1]; error('dimensions of the control vector are incorrect.')
+    model.sym.g = [1,0,0,0];
     
     % Autonomous dynamics (F)
 	model.sym.xdot = [-k31*x1+k13*x3,...

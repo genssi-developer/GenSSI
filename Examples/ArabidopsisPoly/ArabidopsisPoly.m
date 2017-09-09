@@ -9,7 +9,7 @@ function model = ArabidopsisPoly()
 	syms x1 x2 x3 x4 x5 x6 x7 xi1 xi2 xi3 xi4 xi5 xi6 xi7 xi8 xi9
 	syms p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19 p20 p21 p22 p23 p24 p25 p26 p27
 	model.sym.x = [x1,x2,x3,x4,x5,x6,x7,xi1,xi2,xi3,xi4,xi5,xi6,xi7,xi8,xi9];
-	model.sym.u = [];
+	model.sym.g = [];
 	model.sym.p = [p1,p2,p5,p8,p10,p11,p12,p15,p18,p27,p26];
 	model.sym.x0 = [0,0,0,0,0,0,0,1/p4^2,1/p3,1/p12,1/p13,1/p14,1/p15,1/p16,1/p17,1/p18];
 	model.sym.y = [x1,x4];

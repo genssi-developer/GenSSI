@@ -9,7 +9,7 @@ function model = Degradation()
 	syms x
 	syms k1 k2 k3
 	model.sym.x = [x];
-	model.sym.u = [];
+	model.sym.g = [];
 	model.sym.p = [k1 k2 k3];
 	model.sym.x0 = [0];
 	model.sym.y = [x];

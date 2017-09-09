@@ -29,7 +29,7 @@ function model = Goodwin()
                      p7*x2-p8*x3];
 
     % controls
-    model.sym.u = [];
+    model.sym.g = [];
 
     % Observables
     model.sym.y = [x1,x2,x3];

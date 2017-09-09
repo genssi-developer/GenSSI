@@ -75,13 +75,13 @@ function amiciStructToSource(model)
     strMat = [strMat '];\n'];
     fprintf(fileID,strMat);
     
-    strMat = '\tmodel.sym.u = [';
-    if ~isempty(model.sym.u)
-        strMat = [strMat char(model.sym.u(1))];
+    strMat = '\tmodel.sym.g = [';
+    if ~isempty(model.sym.g)
+        strMat = [strMat char(model.sym.g(1,:))];
     end
-    if length(model.sym.u)>1
-        for iStr = 2:length(model.sym.u)
-            strMat = [strMat ',' char(model.sym.u(iStr))];
+    if size(model.sym.g,1)>1
+        for iStr = 2:size(model.sym.g,1)
+            strMat = [strMat ',' char(model.sym.g(iStr,:))];
         end
     end
     strMat = [strMat '];\n'];

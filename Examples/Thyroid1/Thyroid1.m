@@ -12,7 +12,7 @@ function model = Thyroid1()
 	syms x1 x2 x3
 	syms k02 k03 k12 k13 k21 k31 V1
 	model.sym.x = [x1 x2 x3];
-	model.sym.u = [1];
+	model.sym.g = [1,0,0];
 	model.sym.p = [k02,k03,k12,k13,k21,k31,V1];
 	model.sym.x0 = [0 0 0];
 	model.sym.y = [x1/V1];

@@ -14,7 +14,7 @@ options:
                 verbose: 1
                  noRank: 0
             closeFigure: 1
-    problem_folder_path: 'D:\data\Tom\Research\GenSSI\Results\Transfection1\run5'
+    problem_folder_path: 'D:\data\Tom\Research\GenSSI\Examples\Transfection1\run1'
 
 STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: Transfection1 Model
  
@@ -42,7 +42,7 @@ STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: Transfection1 Model
 
 
 
-Report inputs elapsed time: 0.060137
+Report inputs elapsed time: 0.061123
 *******************************
 -> COMPUTE LIE DERIVATIVES
 *******************************
@@ -95,7 +95,7 @@ COMPUTING LIE DERIVATIVES OF ORDER 7
    ->The rank of the next Jacobian is expected to be maximum 4.
 .................................................................
   
-Compute Lie derivatives elapsed time: 0.1868
+Compute Lie derivatives elapsed time: 0.19203
 
 
 ***************************************
@@ -105,7 +105,7 @@ Compute Lie derivatives elapsed time: 0.1868
  ----->The rank of the full Jacobian matrix is 3 
 
  ----->THE FULL JACOBIAN IS RANK DEFICIENT, YOU MAY CONSIDER ADDING NEW DERIVATIVES, 8 
-Compute tableau elapsed time: 0.28668
+Compute tableau elapsed time: 0.44267
 
 
 ************************************************
@@ -121,7 +121,7 @@ Compute tableau elapsed time: 0.28668
              - c2 - b*kTL*m0 - d*kTL*m0
  d*m0*(b*kTL + d*kTL) - c3 + b^2*kTL*m0
  
-Compute reduced tableau  elapsed time: 0.3197
+Compute reduced tableau  elapsed time: 0.50155
 
 
 ******************************************************************************************
@@ -152,6 +152,6 @@ Compute reduced tableau  elapsed time: 0.3197
                  An explicit solution cannot be given for this subset of parameters. 
                  PLEASE CONSIDER AN EXTRA DERIVATIVE! 
 
-Order tableau elapsed time: 0.52362
-Report results elapsed time: 0.0010937
-Total elapsed time: 1.3793
+Order tableau elapsed time: 0.53206
+Report results elapsed time: 0.0012328
+Total elapsed time: 1.7317

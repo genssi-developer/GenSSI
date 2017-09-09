@@ -13,7 +13,8 @@ Computer=PCWIN64
 options:
                 verbose: 1
                  noRank: 0
-    problem_folder_path: 'D:\data\Tom\Research\GenSSI\Results\HIV\run2'
+            closeFigure: 1
+    problem_folder_path: 'D:\data\Tom\Research\GenSSI\Examples\HIV\run1'
 
 STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: HIV Model
  
@@ -33,7 +34,7 @@ STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: HIV Model
 	A4=k2*x3 - c*x4
  
 -----> Control variables:
-	G1=1
+	G1=[ 1, 0, 0, 0]
  
 -----> Observables:
 	H1=x1
@@ -49,7 +50,7 @@ STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: HIV Model
 
 
 
-Report inputs elapsed time: 0.11424
+Report inputs elapsed time: 0.11324
 *******************************
 -> COMPUTE LIE DERIVATIVES
 *******************************
@@ -78,7 +79,7 @@ COMPUTING LIE DERIVATIVES OF ORDER 4
    ->The rank of the next Jacobian is expected to be maximum 1.
 .................................................................
   
-Compute Lie derivatives elapsed time: 0.18371
+Compute Lie derivatives elapsed time: 0.17775
 
 
 ***************************************
@@ -88,7 +89,7 @@ Compute Lie derivatives elapsed time: 0.18371
  ----->The rank of the full Jacobian matrix is 1 
 
  ----->THE FULL JACOBIAN IS RANK DEFICIENT, YOU MAY CONSIDER ADDING NEW DERIVATIVES, 5 
-Compute tableau elapsed time: 0.5283
+Compute tableau elapsed time: 0.32063
 
 
 ************************************************
@@ -102,7 +103,7 @@ Compute tableau elapsed time: 0.5283
 
 - c1 - d
  
-Compute reduced tableau  elapsed time: 0.56103
+Compute reduced tableau  elapsed time: 0.36522
 
 
 ******************************************************************************************
@@ -116,7 +117,7 @@ Compute reduced tableau  elapsed time: 0.56103
 
 ----->The parameter d is structurally globally identifiable. It has the solution:
        d= -c1.
-Order tableau elapsed time: 0.32233
+Order tableau elapsed time: 0.095491
 
 
 ***************************************************************
@@ -139,5 +140,5 @@ Order tableau elapsed time: 0.32233
      	[      b	      c	      q1	      q2	      k1	      k2	      w1	      w2	]
 
 
-Report results elapsed time: 0.014294
-Total elapsed time: 1.7248
+Report results elapsed time: 0.01624
+Total elapsed time: 1.0895

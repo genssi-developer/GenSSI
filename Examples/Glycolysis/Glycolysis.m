@@ -37,7 +37,7 @@ function model = Glycolysis()
     model.sym.xdot = [A1 A2 A3 A4 A5];
 
     % The controls
-    model.sym.u = [-(k1*x1)/(kM+x1),(k1*x1)/(kM+x1),0,0,0;
+    model.sym.g = [-(k1*x1)/(kM+x1),(k1*x1)/(kM+x1),0,0,0;
                     0,-(k2*x2)/(kM+x2),(k2*x2)/(kM+x2),(k2*x2)/(kM+x2),0;
                     0,0,-(k3*x3)/(kM+x3),(k3*x3)/(kM+x3),0;
                     0,0,0,-(k4*x4)/(kM+x4),(k4*x4)/(kM+x4)];

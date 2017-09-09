@@ -12,7 +12,7 @@ function model = HIV()
 	syms x1 x2 x3 x4
 	syms b c d q1 q2 k1 k2 w1 w2
 	model.sym.x = [x1 x2 x3 x4];
-	model.sym.u = [1];
+	model.sym.g = [1,0,0,0];
 	model.sym.p = [b,c,d,q1,q2,k1,k2,w1,w2];
 	model.sym.x0 = [0 0 0 0];
 	model.sym.y = [x1 x4];

@@ -9,7 +9,7 @@ function model = GoodwinPoly()
 	syms x1 x2 x3 xi1
 	syms p1 p2 p3 p4 p5 p6 p7 p8
 	model.sym.x = [x1,x2,x3,xi1];
-	model.sym.u = [];
+	model.sym.g = [];
 	model.sym.p = [p1,p2,p4,p5,p6,p7,p8];
 	model.sym.x0 = [3/10,9/10,13/10,1/(p2 + (13/10)^p3)];
 	model.sym.y = [x1,x2,x3];

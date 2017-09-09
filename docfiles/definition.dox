@@ -52,8 +52,10 @@
  g1=0;
  g2=0;
  g3=0;
- model.sym.u=[g1 g2 Ag3];
+ model.sym.g=[g1 g2 Ag3];
  @endcode
+
+ Note that the matrix of controls can by empty ([]) or contain one or more controls. Each row must have the same length as the number of states (model.sym.x), and there must be one row for each control.
 
  @subsection obserables Observables
 
@@ -182,7 +184,7 @@ more a matter of analysis than of model definition.
      A1=-d*m;
      A2=0;
      model.sym.xdot=[A1 A2];
-     model.sym.u=[0,kTL*m;...
+     model.sym.g=[0,kTL*m;...
                   0,-b*G];
      h1=G;
      model.sym.y=[h1];
@@ -191,7 +193,7 @@ more a matter of analysis than of model definition.
  end
  @endcode
 
- The states (model.sym.x) are m (mRNA) and G (GFP, green fluorescent protein), of which only GFP is observed (model.sym.y).  The differential equations (model.sym.xdot) define degradation of mRNA (-d*m), degradation of GFP (-b*G) and translation of mRNA to GFP (kTL*m).  Note that translation and GFP degradation have been defined as controls (model.sym.u).
+ The states (model.sym.x) are m (mRNA) and G (GFP, green fluorescent protein), of which only GFP is observed (model.sym.y).  The differential equations (model.sym.xdot) define degradation of mRNA (-d*m), degradation of GFP (-b*G) and translation of mRNA to GFP (kTL*m).  Note that translation and GFP degradation have been defined as controls (model.sym.g).
 
  Based on this model, we define a total of 4 experiments, in the experiment definition function.  The expriments are defined by modifying the controls and the initial conditions. The expriments are:
 
@@ -209,7 +211,7 @@ The experiment definition is:
  function multiExp = M1_1_eDef4()
      syms d b kTL m0Exp1
      multiExp.sym.Nexp=4;
-     multiExp.sym.u = [1,1;...
+     multiExp.sym.g = [1,1;...
                        1,1;...
                        .5,1;...
                        1,.75];
@@ -223,7 +225,7 @@ The experiment definition is:
 
  The number of expriments is coded in multiExp.Nexp=4.
 
- The variable multiExp.sym.u defines the changes in the controls and the variable multiExp.sym.x0 defines the changes in the initial conditions.  Both of these variables contain one row for each experiment and one column for each state variable. In the first experiment (original configuration), the controls are 1 and the initial mRNA concentration is m0Exp1.  In the second expriment (change in transfection), the initial concentration of mRNA is changed.  In the third experiment (change in translation), the rate of translation is changed by changing the value of the first control.  In the fourth experiment (change in GFP degradation), the rate of GFP degradation is changed by changing the value of the second control.
+ The variable multiExp.sym.g defines the changes in the controls and the variable multiExp.sym.x0 defines the changes in the initial conditions.  Both of these variables contain one row for each experiment and one column for each state variable. In the first experiment (original configuration), the controls are 1 and the initial mRNA concentration is m0Exp1.  In the second expriment (change in transfection), the initial concentration of mRNA is changed.  In the third experiment (change in translation), the rate of translation is changed by changing the value of the first control.  In the fourth experiment (change in GFP degradation), the rate of GFP degradation is changed by changing the value of the second control.
 
  The original model is converted to the multi-experiment model by means of this line of code:
 
@@ -236,7 +238,7 @@ The experiment definition is:
      syms mExp1 GExp1 mExp2 GExp2 mExp3 GExp3 mExp4 GExp4
      syms d b kTL m0Exp1
      model.sym.x = [mExp1,GExp1,mExp2,GExp2,mExp3,GExp3,mExp4,GExp4];
-     model.sym.u = [];
+     model.sym.g = [];
      model.sym.p = [d,b,kTL,m0Exp1];
      model.sym.x0 = [m0Exp1,0,m0Exp1/2,0,m0Exp1,0,m0Exp1,0];
      model.sym.y = [GExp1,GExp2,GExp3,GExp4];
@@ -278,7 +280,7 @@ The experiment definition is:
      A3=+d3*mE-d2*m*E1;
      A4=-d3*mE+d2*m*E1;
      model.sym.xdot=[A1 A2 A3 A4];
-     model.sym.u=[];
+     model.sym.g=[];
      h1=G;
      model.sym.y=[h1];
      model.sym.x0=[m0 0 E0 0];    
@@ -322,7 +324,7 @@ The experiment definition is:
      syms mnew Gnew E1new
      syms d1 d2tm0 d3 b kTLtm0 E0dm0
      model.sym.x = [mnew,Gnew,E1new];
-     model.sym.u = [];
+     model.sym.g = [];
      model.sym.p = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
      model.sym.x0 = [1,0,E0dm0];
      model.sym.y = [Gnew];

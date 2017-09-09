@@ -2,7 +2,7 @@ function model = M2_2()
 	syms mnew Gnew E1new
 	syms d1 d2tm0 d3 b kTLtm0 E0dm0
 	model.sym.x = [mnew,Gnew,E1new];
-	model.sym.u = [];
+	model.sym.g = [];
 	model.sym.p = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
 	model.sym.x0 = [1,0,E0dm0];
 	model.sym.y = [Gnew];
