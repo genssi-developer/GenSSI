@@ -6,6 +6,7 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     %  modelName: the name of the model to be analyzed (a string)
     %  Nder: number of Lie derivatives
     %  Par: vector of parameters to be considered
+    %  optionsIn: struct of options for analysis
     %
     % Return values:
     %  options: struct containing options
