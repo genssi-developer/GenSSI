@@ -1,4 +1,4 @@
-function options = genssiMain(modelName,Nder,Par)
+function options = genssiMain(modelName,Nder,Par,optionsIn)
     % genssiMain is the main function of GenSSI. It reads a model and 
     %  calls all other functions necessary for analyzing the model.
     %
@@ -16,9 +16,21 @@ function options = genssiMain(modelName,Nder,Par)
     runModel = str2func(modelName);
     model = runModel();
     model.sym.Name = modelName; % needed for genssiReportInputs
-    options.verbose=true; % maximum (verbose) information in results file
+    % set default options
+    options.verbose=true; % maximum (verbose) information in results file 
     options.noRank=false; % no rank calculation (for speed with loss)
     options.closeFigure=true; % closes figures
+    if exist ('optionsIn','var')
+        if isfield(optionsIn,'verbose')
+            options.verbose = optionsIn.verbose;   
+        end
+        if isfield(optionsIn,'noRank')
+            options.noRank = optionsIn.noRank;   
+        end
+        if isfield(optionsIn,'closeFigure')
+            options.closeFigure = optionsIn.closeFigure;   
+        end        
+    end
     GenSSIDir=fileparts(mfilename('fullpath'));
     resultsDir=fullfile(GenSSIDir,'Examples');
     runNumber=1;

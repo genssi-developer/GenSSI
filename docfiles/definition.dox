@@ -77,9 +77,17 @@
  @section analysis Model Analysis
  
  The model can then be analyzed by calling genssiMain. The first parameter is the name of the model, the second parameter (Nder) is the number of derivatives to be calculated, and the third parameter (Par) is the list of parameters to be considered for identifiability. If the second parameter is absent a default number of derivatives is used. If the third parameter is absent, the full list of parameters will be used.
+
+ The fourth parameter is a struct containing options for the analysis run. If absent, defaults will be used. The options are:
+
+ @code
+ options.verbose (default=true); maximum (verbose) information in results file 
+ options.noRank (default=false); no rank calculation (for speed with loss)
+ options.closeFigure (default=true); closes figures after storing it
+ @endcode
  
  @code
- genssiMain('modelName',Nder,Par);
+ genssiMain('modelName',Nder,Par,options);
  @endcode
  
  The function genssiMain will call the model function, which puts the model struct in memory. After that, it will call all other GenSSI functions required to annalyze the model. 
@@ -88,7 +96,8 @@
 
  @code
  syms p1 p2 p4 p5 p6 p7 p8;
- genssiMain('Goodwin',7,[p1 p2 p4 p5 p6 p7 p8]);
+ options.closeFigure = false;
+ genssiMain('Goodwin',7,[p1 p2 p4 p5 p6 p7 p8],options);
  @endcode
 
  @section conversion Conversion Utilities
