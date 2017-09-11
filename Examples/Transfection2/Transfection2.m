@@ -1,21 +1,34 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                            TRANSFECTION 2                                  %%%
-%%%  Bibliography: Leonhardt, C., et al. (2013) Single-cell mRNA transfection  %%%
-%%%                studies: delivery, kinetics and statistics by numbers,      %%%
-%%%                Nanomedicine: Nanotechnology, Biology and Medicine.         %%%
-%%%                                                                            %%%
-%%%  Variant 2: translation rate and inital mRNA concentration combined.       %%%          
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function model = Transfection2()
-	syms x1 x2
+    % Transfection2 provides the GenSSI implementation of the model for 
+    % mRNA transfection described by
+    % 
+    %    Leonhardt et al. (2013). Single-cell mRNA transfection studies:
+    %    delivery, kinetics and statistics by numbers, Nanomedicine: 
+    %    Nanotechnology, Biology and Medicine, 10(4), 679-688.
+    %
+    % The translation rate and the initial mRNA concentration are combined,
+    % to ensure structural identifability.
+
+    % Symbolic variables
+    syms x1 x2
 	syms d kTLm0 b
-	model.sym.x = [x1 x2];
-	model.sym.g = [];
-	model.sym.p = [d,kTLm0,b];
-	model.sym.x0 = [1 0];
-	model.sym.y = [x2];
-	model.sym.xdot = [-d*x1,...
+	
+    % Parameters
+    model.sym.p = [d,kTLm0,b];
+	
+    % State variables
+    model.sym.x = [x1,x2];
+	
+    % Control vectors (g)
+    model.sym.g = [];
+	
+    % Autonomous dynamics (f)
+    model.sym.xdot = [-d*x1,...
                       kTLm0*x1-b*x2];
+    
+    % Initial conditions
+    model.sym.x0 = [1,0];
+	
+    % Observables
+    model.sym.y = [x2];
 end
