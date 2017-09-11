@@ -11,22 +11,22 @@ function model = Bilirubin2()
 	syms k01 k12 k13 k14 k21 k31 k41 
 
     % Parameters
-	model.sym.p = [k01 k12 k13 k14 k21 k31 k41];
+	model.sym.p = [k01,k12,k13,k14,k21,k31,k41];
     
     % State variables
-    model.sym.x = [x1 x2 x3 x4];
+    model.sym.x = [x1,x2,x3,x4];
 
-    % Control vectors
-    model.sym.G = [1]; error('dimensions of the control vector are incorrect.')
+    % Control vectors (g)
+    model.sym.g = [1]; error('dimensions of the control vector are incorrect.')
 
-    % Autonomous dynamics
+    % Autonomous dynamics (f)
 	model.sym.xdot = [-(k21+k31+k41+k01)*x1+k12*x2+k13*x3+k14*x4,...
                        k21*x1-k12*x2,...
                        k31*x1-k13*x3,...
                        k41*x1-k14*x4];
 
     % Initial conditions
-	model.sym.x0 = [1 1 1 1];
+	model.sym.x0 = [1,1,1,1];
 
     % Observables
 	model.sym.y = [x1];

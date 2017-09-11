@@ -1,11 +1,22 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                     GLYCOLYSIS METABOLIC PATHWAY                           %%%
+%%%  Bibliography: Bartl, M., Kotzing, M., Kaleta, C., Schuster, S., Li, P.    %%%
+%%%                Just-in-time activation of a glycolysis inspired metabolic  %%%
+%%%                network - solution with a dynamic optimization approach.    %%%
+%%%                Proc. 55nd International Scientific Colloquium. 2010.       %%%
+%%%                Ilmenau, Germany.                                           %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function model = Glycolysis()
     % Glycolysis provides the GenSSI implementation of the model
-    % of the glycolysis metabolic pathway as introduced by
+    % of the metabol as introduced by
     % 
     %    Bartl et al. (2010). Just-in-time activation of a glycolysis
     %              inspired metabolic network - solution with a dynamic 
     %              optimization approach. Proc. 55nd International 
     %              Scientific Colloquium. Ilmenau, Germany.
+
 
     % Symbolic variables
     syms k1 k2 k3 k4 kM x10 x20 x30 x40 x50

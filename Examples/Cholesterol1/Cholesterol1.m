@@ -16,10 +16,11 @@ function model = Cholesterol1()
     % State variables
 	model.sym.x = [x1,x2];
 
-    % Control vectors
-	model.sym.G = [1,0];
+    % Control vectors (g)
+	model.sym.g = [1,...
+                   0];
     
-    % Autonomous dynamics (F)
+    % Autonomous dynamics (f)
 	model.sym.xdot = [k12*x2-(k01+k21)*x1,...
                       k21*x1-(k02+k12)*x2];
 
