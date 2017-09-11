@@ -23,10 +23,7 @@ function model = NFkB()
                 k1 k2 k3 kprod kdeg kv i1 e2a i1a e1a c1c c2c c3c x01...
                 x06 x07 x08 x09 x010 x011 x012 x014 x015 NF];
 
-    model.sym.u=[-k1*x1,...
-                 (k1*x1-k2*x2*x8),...
-                 k2*x2*x8];
-%     model.Noc=1;
+    model.sym.g=[-k1*x1,(k1*x1-k2*x2*x8),k2*x2*x8,0,0,0,0,0,0,0,0,0,0,0,0];
 
     model.sym.y=[x7,x10+x13,x9,x1+x2+x3,x2,x12];
 

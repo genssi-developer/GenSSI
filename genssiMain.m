@@ -1,4 +1,4 @@
-function options = genssiMain(modelName,Nder,Par)
+function options = genssiMain(modelName,Nder,Par,optionsIn)
     % genssiMain is the main function of GenSSI. It reads a model and 
     %  calls all other functions necessary for analyzing the model.
     %
@@ -6,6 +6,7 @@ function options = genssiMain(modelName,Nder,Par)
     %  modelName: the name of the model to be analyzed (a string)
     %  Nder: number of Lie derivatives
     %  Par: vector of parameters to be considered
+    %  optionsIn: struct of options for analysis
     %
     % Return values:
     %  options: struct containing options
@@ -15,12 +16,24 @@ function options = genssiMain(modelName,Nder,Par)
     end
     runModel = str2func(modelName);
     model = runModel();
-    model.sym.Name = modelName;
-    options.verbose=true; % maximum (verbose) information in results file
+    model.sym.Name = modelName; % needed for genssiReportInputs
+    % set default options
+    options.verbose=true; % maximum (verbose) information in results file 
     options.noRank=false; % no rank calculation (for speed with loss)
     options.closeFigure=true; % closes figures
+    if exist ('optionsIn','var')
+        if isfield(optionsIn,'verbose')
+            options.verbose = optionsIn.verbose;   
+        end
+        if isfield(optionsIn,'noRank')
+            options.noRank = optionsIn.noRank;   
+        end
+        if isfield(optionsIn,'closeFigure')
+            options.closeFigure = optionsIn.closeFigure;   
+        end        
+    end
     GenSSIDir=fileparts(mfilename('fullpath'));
-    resultsDir=fullfile(GenSSIDir,'Results');
+    resultsDir=fullfile(GenSSIDir,'Examples');
     runNumber=1;
     subfolder=strcat('run',num2str(runNumber));
     options.problem_folder_path=fullfile(resultsDir,modelName,subfolder);
@@ -29,7 +42,7 @@ function options = genssiMain(modelName,Nder,Par)
         if exist(options.problem_folder_path,'dir')
             runNumber=runNumber+1;
             subfolder=strcat('run',num2str(runNumber));
-            options.problem_folder_path=fullfile(resultsDir,model.sym.Name,subfolder);
+            options.problem_folder_path=fullfile(resultsDir,modelName,subfolder);
         else
             runSearch=false;
         end
@@ -65,27 +78,13 @@ function options = genssiMain(modelName,Nder,Par)
     if iscolumn(model.sym.x)
         model.sym.x = transpose(model.sym.x);
     end
-    if ~isfield(model.sym,'u')
-        model.sym.u = [];
-    end
-    model.sym.G=sym(zeros(max(size(model.sym.u,1),1),length(model.sym.x)));
-    if isfield(model.sym,'u')
-%         for iC = 1:length(model.sym.u)
-%             model.sym.G(iC) = model.sym.u(iC);
-%         end
-%         model.sym.Noc=length(model.sym.u);
-        for iCrow = 1:size(model.sym.u,1)
-%             model.sym.G(iC,:) = model.sym.u(iC,:);
-            for iCcol = 1:size(model.sym.u,2)
-                model.sym.G(iCrow,iCcol) = model.sym.u(iCrow,iCcol);
-            end
+    if isfield(model.sym,'g')
+        if (size(model.sym.g,1) > 0) &&...
+           (size(model.sym.g,2) ~= size(model.sym.x,2))
+            error('length of rows in control matrix must equal number of states');
         end
-        model.sym.Noc=size(model.sym.u,2);
     else
-        model.sym.Noc=0;
-    end
-    if iscolumn(model.sym.G)
-        model.sym.G = transpose(model.sym.G);
+        model.sym.g = [];
     end
     if iscolumn(model.sym.y)
         model.sym.y = transpose(model.sym.y);

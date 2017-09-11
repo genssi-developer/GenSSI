@@ -1,7 +1,8 @@
 % Model name
 modelName = 'BIOMD03';
+fileName = [modelName,'.xml'];
 % Import of SBML model
-ODE = SBMLode(modelName);
+ODE = SBMLode(fileName);
 % Definition of observable
 ODE.observable = ODE.state;
 % Writing of model to AMICI format

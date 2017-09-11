@@ -10,8 +10,9 @@ function genssiStructToSource(model,modelName)
     % Return values:
     %  void
     %
-    GenSSIDir = fileparts(mfilename('fullpath'));
-    fileName = fullfile(GenSSIDir,'Examples',[modelName,'.m']);
+%     GenSSIDir = fileparts(mfilename('fullpath'));
+%     fileName = fullfile(GenSSIDir,'..','Examples',[modelName,'.m']);
+    fileName = [modelName, '.m'];
     if exist(fileName,'file')
         delete(fileName);
     end
@@ -38,20 +39,20 @@ function genssiStructToSource(model,modelName)
     end
     strMat = [strMat '];\n'];
     fprintf(fileID,strMat);  
-    if isnumeric(model.sym.u)
-        strMat = ['\tmodel.sym.u = [' num2str(model.sym.u) '];\n'];
+    if isnumeric(model.sym.g)
+        strMat = ['\tmodel.sym.g = [' num2str(model.sym.g) '];\n'];
     else
-        strMat = '\tmodel.sym.u = [';
-        if ~isempty(model.sym.u)
-            for iRow = 1:size(model.sym.u,1)
+        strMat = '\tmodel.sym.g = [';
+        if ~isempty(model.sym.g)
+            for iRow = 1:size(model.sym.g,1)
                 if iRow>1
                     strMat = [strMat ';'];
                 end
-                for iCol = 1:size(model.sym.u,2)
+                for iCol = 1:size(model.sym.g,2)
                     if iCol>1
                         strMat = [strMat ','];
                     end
-                    strMat = [strMat char(model.sym.u(iRow,iCol))];
+                    strMat = [strMat char(model.sym.g(iRow,iCol))];
                 end
             end
         end

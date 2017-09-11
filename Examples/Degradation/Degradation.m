@@ -3,11 +3,11 @@ function model = Degradation()
     % for protein synthesis and enzymatic degradation.
     
     % Symbolic variables
-    syms k1 k2 k3
+    syms k_syn k_deg_max K_deg
 	syms x
 	
     % Parameters
-	model.sym.p = [k_syn,k_deg_max,K];
+	model.sym.p = [k_syn,k_deg_max,K_deg];
 
     % State variables
     model.sym.x = [x];
@@ -16,7 +16,7 @@ function model = Degradation()
 	model.sym.u = [];
 
     % Autonomous dynamics (f)
-	model.sym.xdot = [k_syn-k_deg_max*x/(K+x)];
+	model.sym.xdot = [k_syn-k_deg_max*x/(K_deg+x)];
     
     % Initial conditions
 	model.sym.x0 = [0];

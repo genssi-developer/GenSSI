@@ -12,7 +12,7 @@ function model = NGF_Erk()
     syms k_3__TrkA_NGF k_6__RasGTP k_8__pRaf k_10__pMek s__pErk
     syms k_3__TrkA_0 k_6__Ras_0 k_8__Raf_0 k_10__Mek_0 s__Erk_0 s_K n NGF_0
 	model.sym.x = [k_3__TrkA_NGF,k_6__RasGTP,k_8__pRaf,k_10__pMek,s__pErk];
-	model.sym.u = [];
+	model.sym.g = [];
 	model.sym.p = [k_1,k_2,k_4,k_5,k_7,k_9,k_11,...
                    k_3__TrkA_0,k_6__Ras_0,k_8__Raf_0,k_10__Mek_0,...
                    s__Erk_0,s_K,n,NGF_0];

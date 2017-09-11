@@ -2,7 +2,7 @@ function [options,VectorLieDerivatives]=genssiComputeLieDerivatives(model,option
     % genssiComputeLieDerivatives computes Lie derivatives of the
     %  output functions (model.sym.y), the state vectors (model.sym.x), and the
     %  initial conditions (model.sym.x0) with respect to the equations
-    %  (model.sym.xdot) and controls (model.sym.u)
+    %  (model.sym.xdot) and controls (model.sym.g)
     %
     % Parameters:
     %  model: model definition (struct)
@@ -24,7 +24,11 @@ function [options,VectorLieDerivatives]=genssiComputeLieDerivatives(model,option
     jacTemp = transpose(jacobian(model.sym.y,model.sym.x));
     JacF = model.sym.xdot*jacTemp;
     vF=subs(JacF,model.sym.x,model.sym.x0);
-    JacG = model.sym.G*jacTemp;
+    if (size(model.sym.g,1)>0)
+        JacG = model.sym.g*jacTemp;
+    else
+        JacG = [];
+    end
     vG=subs(JacG,model.sym.x,model.sym.x0);
     LDer = [vH;vF;vG];
     [rankFull,rankVector] = jacRank(LDer,rankVector,order,model,options);
@@ -34,7 +38,8 @@ function [options,VectorLieDerivatives]=genssiComputeLieDerivatives(model,option
         VectorLieDerivatives=genssiRemoveZeroElementsR(VectorLieDerivatives);
     else
         %%% CASE WITHOUT CONTROL
-        if model.sym.Noc<1 
+%         if model.sym.Noc<1 
+        if size(model.sym.g,1)<1 % # of controls, model.sym.Noc
             Jac=JacF;
             for order = 2:model.sym.Nder
                 disp(['COMPUTING LIE DERIVATIVES OF ORDER', ' ', num2str(order)])
@@ -59,20 +64,11 @@ function [options,VectorLieDerivatives]=genssiComputeLieDerivatives(model,option
             for order = 2:model.sym.Nder
                 disp(['COMPUTING LIE DERIVATIVES OF ORDER', ' ', num2str(order)])
                 fprintf(1,'.................................................................\n');
-%                 JacTemp = transpose(jacobian(reshape(Jac,[numel(Jac),1]),model.sym.x));
-%                 JacF = reshape(model.sym.xdot*JacTemp,size(Jac));
-%                 Jac=[Jac;JacF];
-                for iNoc=1:model.sym.Noc
-                    if ~isequal(model.sym.G(iNoc),sym(0))
-                        JacTemp = transpose(jacobian(reshape(Jac,[numel(Jac),1]),model.sym.x));
-                        JacG = reshape(model.sym.G(iNoc)*JacTemp(iNoc,:),size(Jac));
-                        if iNoc==1
-                            JacF = reshape(model.sym.xdot*JacTemp,size(Jac));
-                            Jac=[Jac;JacF;JacG];
-                        else
-                            Jac=[Jac;JacG];
-                        end
-                    end
+                for iNoc=1:size(model.sym.g,1) % # of controls, model.sym.Noc
+                    JacTemp = transpose(jacobian(reshape(Jac,[numel(Jac),1]),model.sym.x));
+                    JacG = reshape(model.sym.g(iNoc,:)*JacTemp,size(Jac));
+                    JacF = reshape(model.sym.xdot*JacTemp,size(Jac)); %!!
+                    Jac=[Jac;JacF;JacG];
                 end
                 LDer=subs([model.sym.y;vF;vG;Jac],model.sym.x,model.sym.x0);
                 [rankFull,rankVector] = jacRank(LDer,rankVector,order,model,options);

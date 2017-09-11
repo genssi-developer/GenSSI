@@ -38,7 +38,6 @@ function varargout = genssiMultiExperiment(varargin)
     nState = length(modelIn.sym.x);
     nExp = multiExp.sym.Nexp;
     nObs = length(modelIn.sym.y);
-    nOc = length(modelIn.sym.u);
     
     X = modelIn.sym.x;
     XState = sym(zeros(1,nState));
@@ -51,7 +50,7 @@ function varargout = genssiMultiExperiment(varargin)
         end
         XMulti(:,iExp) = XState; % z.B. mExp1,GExp1
         FMulti(:,iExp) = subs(modelIn.sym.xdot,X,XState)+...
-                         subs((multiExp.sym.u(iExp,:))*(modelIn.sym.u),X,XState);
+                         subs((multiExp.sym.g(iExp,:))*(modelIn.sym.g),X,XState);
         HMulti(:,iExp) = subs(modelIn.sym.y,X,XState);
     end
     XMulti = reshape(XMulti,[1,nState*nExp]);
@@ -59,8 +58,7 @@ function varargout = genssiMultiExperiment(varargin)
     HMulti = reshape(HMulti,[1,nObs*nExp]);
     model.sym.x = XMulti;
     model.sym.xdot = FMulti;
-%     model.sym.u=sym(zeros(1,nState*nExp));
-    model.sym.u = [];
+    model.sym.g = [];
     model.sym.y = HMulti;
     model.sym.x0 = multiExp.sym.x0;
     model.sym.p = multiExp.sym.p;

@@ -34,7 +34,7 @@ function model = HighDimNonLin()
     model.sym.p=[vm km p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19 p20];
 
     %%% Controls %%%
-    model.sym.u=[1];
+    model.sym.g=[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
     %%% Observables %%%
     model.sym.y=[x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 x16 x17 x18 x19 x20];

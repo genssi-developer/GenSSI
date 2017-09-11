@@ -12,7 +12,7 @@ function model = Transfection2()
 	syms x1 x2
 	syms d kTLm0 b
 	model.sym.x = [x1 x2];
-	model.sym.u = [];
+	model.sym.g = [];
 	model.sym.p = [d,kTLm0,b];
 	model.sym.x0 = [1 0];
 	model.sym.y = [x2];
