@@ -25,7 +25,7 @@ function model = Cholesterol1()
                       k21*x1-(k02+k12)*x2];
 
     % Initial conditions
-	model.sym.x0 = [0,0];
+    model.sym.x0 = [0,0];
 
     % Observables
     model.sym.y = [x1/V1];
