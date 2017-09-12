@@ -38,7 +38,7 @@ function model = genssiCheckModel(model)
     
     % Check existance and dimensionality of control vector matrix (g)
     if isfield(model.sym,'g')
-        if ~isempty(model.sym.g,1)
+        if ~isempty(model.sym.g)
             if size(model.sym.g,2) ~= size(model.sym.x,2)
                 error('number of columns in control vector matrix must equal number of state variables');
             end

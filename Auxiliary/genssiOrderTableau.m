@@ -1,4 +1,4 @@
-function [options,results]=genssiOrderTableau(model,results,...
+function [options,results] = genssiOrderTableau(model,results,...
     RJacParam01,ECC,rParam,options)
     % genssiOrderTableau orders tableaus, searches for new opportunities to
     %  eliminate rows or columns be solving equations, and creates new
@@ -95,7 +95,7 @@ function [options,results]=genssiOrderTableau(model,results,...
         rParam(index_elimin_param(i))=0;
     end
     sum_glob_id=sum(rParam);
-    %eliminate non-zero rows from RJacParam01 and the corresponding relations ECC
+    % eliminate non-zero rows from RJacParam01 and the corresponding relations ECC
     keepRows=any(RJacParam01~=0,2);
     RJacParam01_nonzero_rows=RJacParam01(keepRows,:);
     ECC=ECC(keepRows);
@@ -316,11 +316,10 @@ function [Param_local,Param_remaining,global_ident_par,...
 %                 ECC_reduced_it = ECC_reduced_it(keepB,:);
                 if ECC_reduced_it==0
                      ECC_reduced_it=[];
-                     disp('Test warning: Does this ever happen?');
                 end
                 ECC_remaining=ECC_reduced_it;
-                display_RJacparam_new(:,Non_zero_elem_index)=0; % ??!!
-                display_RJacparam_new(:,Non_zero_elem_index)=[]; % ??!!
+                display_RJacparam_new(:,Non_zero_elem_index)=0;
+                display_RJacparam_new(:,Non_zero_elem_index)=[];
                 compute_reduced_par(Non_zero_elem_index)=[];
                 display_tableau_RJacparam_new=display_RJacparam_new;
                 Param_zero=Param;
@@ -341,7 +340,7 @@ function [Param_local,Param_remaining,global_ident_par,...
                 [rem_par,keepB,tilde] = genssiRemoveZeroElementsR(rem_par);
                 display_tableau_RJacparam_new = display_tableau_RJacparam_new(:,keepB);
                 ECC_new=[];
-                % the remaining indexfrom Mat_index. In Arabidopsis 2 5.
+                % the remaining index from Mat_index. In Arabidopsis 2 5.
                 % call the function you constructed to generate the figures of the tableaus.
                 Param_remaining=Param_display;
                 number_fig=03+indX;
