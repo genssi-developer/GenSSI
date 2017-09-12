@@ -28,5 +28,5 @@ ODE.writeAMICI(modelName);
 movefile([modelName '_syms.m'],[modelName '.m']);
 
 % Structural identifiability analysis (for a subset of the model parameters)
-genssiMain(modelName,8,ODE.parameter([4,6,9,13]));
+genssiMain(modelName,4,ODE.parameter([4,6,9,13]));
 
