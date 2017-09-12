@@ -1,5 +1,7 @@
 Docu/output
 *.DS_Store
+*.m~
 *.fig
+*.m~
 Examples/BIOMD0000000003/BIOMD0000000003.m
 Examples/BIOMD0000000010/BIOMD0000000010.m
