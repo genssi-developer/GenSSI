@@ -31,8 +31,8 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     % Set and assign default options
     options.verbose = true; % maximum (verbose) information in results file 
     options.noRank  = false; % rank calculation (increases computational time)
-    options.closeFigure = false; % closes figures
-    options.store = false; % write results to file
+    options.closeFigure = true; % closes figures
+    options.store = true; % write results to file
     if exist ('optionsIn','var')
         if isfield(optionsIn,'verbose')
             options.verbose = optionsIn.verbose;   
@@ -42,6 +42,9 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
         end
         if isfield(optionsIn,'closeFigure')
             options.closeFigure = optionsIn.closeFigure;   
+        end        
+        if isfield(optionsIn,'store')
+            options.store = optionsIn.store;   
         end        
     end
     
