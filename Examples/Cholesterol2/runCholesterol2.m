@@ -3,6 +3,6 @@
 % 
 %    Meshkat et al. (2014). On finding and using identifiable parameter
 %    combinations in nonlinear dynamic Systems Biology models and
-%    COMBOS: a novel Web implementation, PLoS ONE, 9, e110261
+%    COMBOS: a novel Web implementation, PLoS ONE, 9, e110261.
 
 genssiMain('Cholesterol2',5);

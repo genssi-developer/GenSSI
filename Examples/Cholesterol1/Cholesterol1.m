@@ -4,28 +4,29 @@ function model = Cholesterol1()
     % 
     %    Meshkat et al. (2014). On finding and using identifiable parameter
     %    combinations in nonlinear dynamic Systems Biology models and
-    %    COMBOS: a novel Web implementation, PLoS ONE, 9, e110261
+    %    COMBOS: a novel Web implementation, PLoS ONE, 9, e110261.
 
     % Symbolic variables
-	syms k01 k02 k12 k21 V1
-	syms x1 x2
+    syms k01 k02 k12 k21 V1
+    syms x1 x2
     
     % Parameters
-	model.sym.p = [k01,k02,k12,k21,V1];
+    model.sym.p = [k01,k02,k12,k21,V1];
 
     % State variables
-	model.sym.x = [x1,x2];
+    model.sym.x = [x1,x2];
 
-    % Control vectors
-	model.sym.g = [1,0];
+    % Control vectors (g)
+    model.sym.g = [1,...
+                   0];
     
-    % Autonomous dynamics (F)
-	model.sym.xdot = [k12*x2-(k01+k21)*x1,...
+    % Autonomous dynamics (f)
+    model.sym.xdot = [k12*x2-(k01+k21)*x1,...
                       k21*x1-(k02+k12)*x2];
 
     % Initial conditions
-	model.sym.x0 = [0,0];
+    model.sym.x0 = [0,0];
 
     % Observables
-	model.sym.y = [x1/V1];
+    model.sym.y = [x1/V1];
 end

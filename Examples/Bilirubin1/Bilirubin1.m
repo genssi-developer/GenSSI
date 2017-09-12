@@ -16,18 +16,21 @@ function model = Bilirubin1()
     % State variables
     model.sym.x = [x1,x2,x3,x4];
 
-    % Control vectors
-    model.sym.g = [1,0,0,0];
+    % Control vectors (g)
+    model.sym.g = [1,...
+                   0,...
+                   0,...
+                   0];
     
-    % Autonomous dynamics (F)
+    % Autonomous dynamics (f)
 	model.sym.xdot = [-k31*x1+k13*x3,...
                       -k42*x2+k24*x4,...
                        k31*x1-(k03+k13+k43)*x3,...
                        k42*x2+k43*x3-(k04+k24)*x4];
 
     % Initial conditions
-    model.sym.x0 = [0 0 0 0];
+    model.sym.x0 = [0,0,0,0];
     
     % Observables
-	model.sym.y = [x1 x2];
+	model.sym.y = [x1,x2];
 end

@@ -5,4 +5,4 @@
 %    combinations in nonlinear dynamic Systems Biology models and
 %    COMBOS: a novel Web implementation, PLoS ONE, 9, e110261
 
-genssiMain('Bilirubin1',7);
+genssiMain('Bilirubin1',6);

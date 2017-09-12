@@ -10,50 +10,61 @@ function genssiTableauImage(figNum,tabMat,paramDisplay,options)
     % Return values:
     %  void
     %
+    
+    % Check if tabMat is non-empty
     if isempty(tabMat)
         return;
     end
-    fh=figure(figNum);
-    [tabX,tabY]=size(tabMat);
-    if tabX~=1
-        tabMat=-tabMat;
+    
+    % Open figure
+    fh = figure(figNum);
+    
+    % Plot tabMat entries 
+    [tabX,tabY] = size(tabMat);
+    if tabX ~= 1
+        tabMat = -tabMat;
     end
     imagesc(double(tabMat));
-    if tabX==1||tabY==1
+
+    % Assign colormap
+    if tabX==1 || tabY==1
         colormap(gray(1));
     else
         colormap(gray(2));
     end
+    
+    % Assign tick labels
     if verLessThan('matlab','8.6')
-        % The next 4 lines are for Matlab R2008a.
-        ticklabels=char(paramDisplay(1));
-        for iParam=2:size(paramDisplay,2)
-            ticklabels= char(ticklabels, char(paramDisplay(iParam)));
+        % Code for Matlab R2008a:
+        ticklabels = char(paramDisplay(1));
+        for iParam = 2:size(paramDisplay,2)
+            ticklabels = char(ticklabels, char(paramDisplay(iParam)));
         end
     else
-        % The next 1 line is for Matlab 20015b.
-        ticklabels=arrayfun(@char,paramDisplay,'UniformOutput',false);
+        % Code for Matlab 20015b and newer:
+        ticklabels = arrayfun(@char,paramDisplay,'UniformOutput',false);
     end
-    numIter=figNum-1;
     set(gca,'XTick',1:1:size(paramDisplay,2),'XTickLabel',ticklabels);
     if tabX < 6
         set(gca,'YTick',1:1:tabX);
     end
+    
+    % Assign figure title
     switch figNum
         case 1
             title('Identifiability tableau');
-        case 2
-            title('First order reduced Identifiability tableau');
-        case 3
-            title('Second order reduced identifiability tableau');
-        case 4
-            title(['The reduced identifiability tableau of order ',num2str(numIter)]);
         otherwise
-            title(['The reduced identifiability tableau of order ',num2str(numIter)]);
+            title(['Reduced identifiability tableau of order ',num2str(figNum-1)]);
     end
-    figName = ['Figure' num2str(figNum) '.fig'];
-    fileName=fullfile(options.problem_folder_path,figName);
-    saveas(figure(figNum),fileName);
+    
+    % Store figures in subfolder
+    if options.store
+        figName  = ['Figure' num2str(figNum) '.fig'];
+        fileName = fullfile(options.problem_folder_path,figName);
+        saveas(figure(figNum),fileName);
+    end
+    
+    % Close figures
     if options.closeFigure
         close(fh);
         clear('fh')

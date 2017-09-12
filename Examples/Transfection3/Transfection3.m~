@@ -1,0 +1,39 @@
+function model = Transfection3()
+    % Transfection3 a provides the GenSSI implementation of the model for 
+    % mRNA transfaction described by
+    % 
+    %    Leonhardt et al. (2013). Single-cell mRNA transfection studies:
+    %    delivery, kinetics and statistics by numbers, Nanomedicine: 
+    %    Nanotechnology, Biology and Medicine, 10(4), 679-688.
+    %
+    % This implementation allows for the analysis of strutural
+    % identifiability assuming that experimental dat
+
+    % Symbolic variables
+	syms d b kTL m0Exp1 m0Exp2 G0Exp2
+    syms mExp1 GExp1 mExp2 GExp2
+
+    % Parameters
+	model.sym.p = [d,b,kTL,m0Exp1,m0Exp2,G0Exp2];
+
+    % State variables
+	model.sym.x = [mExp1,GExp1,mExp2,GExp2];
+
+    % Control vectors (g)
+	model.sym.g = [0,...
+                   0,...
+                   0,...
+                   1];
+
+    % Autonomous dynamics (f)
+	model.sym.xdot = [-d*mExp1,...
+                      kTL*mExp1 - GExp1*b,...
+                      -d*mExp2,...
+                      -GExp2*b];
+
+    % Initial conditions
+	model.sym.x0 = [m0Exp1,0,m0Exp2,G0Exp2];
+
+    % Observables
+	model.sym.y = [GExp1,GExp2];
+end

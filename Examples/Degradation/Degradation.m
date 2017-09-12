@@ -1,17 +1,26 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                             DEGRADATION                                    %%%
-%%%  Bibliography: cf. Bioinformatics Note SI and reference manual             %%%
-%%%                                                                            %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function model = Degradation()
+    % Degradation provides the GenSSI implementation of a simple model
+    % for protein synthesis and enzymatic degradation.
+    
+    % Symbolic variables
+    syms k_syn k_deg_max K_deg
 	syms x
-	syms k1 k2 k3
-	model.sym.x = [x];
-	model.sym.g = [];
-	model.sym.p = [k1 k2 k3];
+	
+    % Parameters
+	model.sym.p = [k_syn,k_deg_max,K_deg];
+
+    % State variables
+    model.sym.x = [x];
+
+    % Control vectors (g)
+	model.sym.u = [];
+
+    % Autonomous dynamics (f)
+	model.sym.xdot = [k_syn-k_deg_max*x/(K_deg+x)];
+    
+    % Initial conditions
 	model.sym.x0 = [0];
+
+    % Observables
 	model.sym.y = [x];
-	model.sym.xdot = [k1-k2*x/(k3+x)];
 end
