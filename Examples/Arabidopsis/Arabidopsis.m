@@ -1,5 +1,4 @@
 function model = Arabidopsis()
-    % test line
     % Arabidopsis provides the GenSSI implementation of the model
     % of the circadian clock in Arabidopsis Thaliana as introduced by
     % 
