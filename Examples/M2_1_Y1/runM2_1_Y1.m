@@ -1,1 +1,0 @@
-genssiMain('M2_1_Y1',7);
