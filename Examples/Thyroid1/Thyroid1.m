@@ -7,7 +7,7 @@ function model = Thyroid1()
     %    COMBOS: a novel Web implementation, PLoS ONE, 9, e110261.
 
     % Symbolic variables
-	syms k02 k03 k12 k13 k21 k31 V1
+    syms k02 k03 k12 k13 k21 k31 V1
     syms x1 x2 x3
 	
     % Parameters
@@ -22,13 +22,13 @@ function model = Thyroid1()
                    0];
 	
     % Autonomous dynamics (f)
-	model.sym.xdot = [k13*x3+k12*x2-(k21+k31)*x1,...
+    model.sym.xdot = [k13*x3+k12*x2-(k21+k31)*x1,...
                       k21*x1-(k12+k02)*x2,...
                       k31*x1-(k13+k03)*x3];
 
     % Initial conditions
-	model.sym.x0 = [0,0,0];
+    model.sym.x0 = [0,0,0];
 
     % Observables
-	model.sym.y = [x1/V1];
+    model.sym.y = [x1/V1];
 end
