@@ -11,11 +11,13 @@ function model = genssiCheckModel(model)
     %
 
     % Correct dimensionality of parameter vectors
-    if ~isrow(model.sym.Par)
-        model.sym.Par = transpose(model.sym.Par);
-    end
     if ~isrow(model.sym.p)
         model.sym.p = transpose(model.sym.p);
+    end
+    if isfield(model.sym,'Par')
+        if ~isrow(model.sym.Par)
+            model.sym.Par = transpose(model.sym.Par);
+        end
     end
     
     % Correct dimensionality of state vector
