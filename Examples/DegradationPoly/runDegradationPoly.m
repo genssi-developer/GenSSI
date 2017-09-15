@@ -5,7 +5,7 @@
 % dynamics (f) and the control vector (g) are polynomial. To achieve this,
 % the dimensionality of the model is increased.
 
-% Copy Arabidopsis.m to this folder
+% Copy Degradation.m to this folder
 copyfile(fullfile('..','Degradation','Degradation.m'),'Degradation.m');
 
 % Transform model to polynomial
