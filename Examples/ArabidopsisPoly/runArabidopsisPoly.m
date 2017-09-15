@@ -1,5 +1,5 @@
 % runArabidopsisPoly runs the structural identifiability analysis for the 
-% modelof the circadian clock in Arabidopsis Thaliana as introduced by
+% model of the circadian clock in Arabidopsis Thaliana as introduced by
 % 
 %    Locke et al. (2005). Modeling genetic networks with noisy and 
 %    varied experimental data: the circadian clock in Arabidopsis 
