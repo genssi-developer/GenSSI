@@ -22,7 +22,7 @@ function model = NGF_Erk()
                    s__Erk_0,s_K,n,NGF_0];
 	
     % State variables
-	model.sym.x = [k_3__TrkA_NGF,k_6__RasGTP,k_8__pRaf,k_10__pMek,s__pErk];
+    model.sym.x = [k_3__TrkA_NGF,k_6__RasGTP,k_8__pRaf,k_10__pMek,s__pErk];
 
     % Control vectors (g)
     model.sym.g = [];
