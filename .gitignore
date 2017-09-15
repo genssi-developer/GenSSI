@@ -4,4 +4,9 @@ Docu/output
 *.fig
 Examples/BIOMD0000000003/BIOMD0000000003.m
 Examples/BIOMD0000000010/BIOMD0000000010.m
-*.fig
+Examples/DegradationPoly/Degradation.m
+Examples/DegradationPoly/DegradationPoly.m
+Examples/GoodwinPoly/Goodwin.m
+Examples/GoodwinPoly/GoodwinPoly.m
+Examples/ArabidopsisPoly/Arabidopsis.m
+Examples/ArabidopsisPoly/ArabidopsisPoly.m
