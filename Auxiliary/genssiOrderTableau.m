@@ -290,7 +290,7 @@ function [Param_local,Param_remaining,global_ident_par,...
                     (ECC_new,reduced_param,Param_local,global_ident_par);  
                 ECC_reduced_it=ECC;
                 for j=Mat_index_y:-1:1   
-                    % equals to 0 the 1s corresponding to the already computind parameters
+                    % equals to 0 the 1s corresponding to the already computed parameters
                     RJacparam_new(Mat_index(indX,j),:)=0;
                     % remaining relations after computing the first group, equaling to 0 the ones we have used. 
                     ECC_reduced_it(Mat_index(indX,j),:)=0;
