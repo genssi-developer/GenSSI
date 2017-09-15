@@ -1,4 +1,4 @@
-function [z,fz,gz,z0,yz] = genssiPolySys(x,f,g,x0,y)
+function [z,fz,gz,z0,yz,xi,inv_xi] = genssiPolySys(x,f,g,x0,y)
     % genssiPolySys converts a model to polynomial form.
     %  [X,F,X0] = genssiPolySys(X,F,X0)
     %
