@@ -58,12 +58,20 @@ function [z,fz,gz,z0,yz,xi,inv_xi] = genssiPolySys(x,f,g,x0,y)
     % Determine transformed vector field and control matrix for x as well as
     % transformed output
     f_tf = subs(f,inv_xi,1./xi);
-    g_tf = subs(g,inv_xi,1./xi);
+    if ~isempty(g)
+        g_tf = subs(g,inv_xi,1./xi);
+    else
+        g_tf = [];
+    end
     y_tf = subs(y,inv_xi,1./xi);
     
     % Determine vector field, control matrix and initial conditions for xi
     fxi = subs(jacobian(1./expand(inv_xi),x),expand(inv_xi),1./xi)*f_tf;
-    gxi = subs(jacobian(1./expand(inv_xi),x),expand(inv_xi),1./xi)*g_tf;
+    if ~isempty(g)
+        gxi = subs(jacobian(1./expand(inv_xi),x),expand(inv_xi),1./xi)*g_tf;
+    else
+        gxi = [];
+    end
     xi0 = subs(1./inv_xi,x,x0);
 
     % Assemble polynomial system
@@ -76,7 +84,11 @@ function [z,fz,gz,z0,yz,xi,inv_xi] = genssiPolySys(x,f,g,x0,y)
 
     % Check success of symbolic representation
     [~,Df] = numden(fz);
-    [~,Dg] = numden(gz);
+    if ~isempty(g)
+        [~,Dg] = numden(gz);
+    else
+        Dg = 1;
+    end
     if min([isinf(1./(Df-1));isinf(1./(Dg(:)-1))]) == 0
         warning('Transformation to polynomial systems seems to have failed. Please check the results.');
     end
