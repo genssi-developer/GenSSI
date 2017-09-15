@@ -32,8 +32,10 @@ function genssiToPolynomial (modelNameIn,modelNameOut)
     model.sym.g = transpose(g);
     model.sym.x0 = transpose(x0);
     model.sym.y = transpose(y);
-    model.sym.xi_name = transpose(xi);
-    model.sym.xi = transpose(1./inv_xi);
+    if length(xi) >= 1
+        model.sym.xi_name = transpose(xi);
+        model.sym.xi = transpose(1./inv_xi);
+    end
     
     % Writing transformed model to file
     genssiStructToSource(model,modelNameOut);
