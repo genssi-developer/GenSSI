@@ -1,0 +1,21 @@
+function default = genssiUserSpecificDefaults(optionName)
+    % genssiUserSpecificDefaults defines ths user-specific defaults. This 
+    % file can be altered by the user to personalize the settings.
+    %
+    % Parameters:
+    %  optionName: name of option
+    %
+    % Return values:
+    %  default: defualt values of option
+
+    switch optionName
+        case 'verbose'
+            default = true;
+        case 'noRank'
+            default = false;
+        case 'closeFigure'
+            default = false;
+        case 'store'
+            default = false;
+    end
+end

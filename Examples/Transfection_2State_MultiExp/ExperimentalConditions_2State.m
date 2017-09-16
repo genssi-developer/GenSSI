@@ -1,4 +1,4 @@
-function ExpCond = ExperimentalConditions_2State()
+function expCond = ExperimentalConditions_2State()
     % ExperimentalConditions_2State defines four different experimental  
     % conditions for the model for mRNA transfection introduced by
     % 
@@ -17,11 +17,11 @@ function ExpCond = ExperimentalConditions_2State()
     
     % Input values
     %     Condition  (1)  (2)  (3)  (4)
-    ExpCond.sym.u = [1.0, 1.0, 0.5, 1.0   % uSyn
+    expCond.sym.u = [1.0, 1.0, 0.5, 1.0   % uSyn
                      1.0, 1.0, 1.0, .75]; % uDeg
     
     % Initial conditions
     %     Condition     (1)      (2)      (3)    (4)
-    ExpCond.sym.x0 = [ mRNA0, 0.5*mRNA0, mRNA0, mRNA0   % [mRNA](0)
+    expCond.sym.x0 = [ mRNA0, 0.5*mRNA0, mRNA0, mRNA0   % [mRNA](0)
                            0,         0,     0,     0]; % [GFP](0)
 end
