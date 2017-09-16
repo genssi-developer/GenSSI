@@ -27,7 +27,7 @@ function model = Thyroid1()
                       k31*x1-(k13+k03)*x3];
 
     % Initial conditions
-    model.sym.x0 = [0,0,0];
+    model.sym.x0 = [x10,x20,x30];
 
     % Observables
     model.sym.y = [x1/V1];
