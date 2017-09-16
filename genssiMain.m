@@ -10,7 +10,7 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     %
     % Return values:
     %  options: struct containing options
-    %
+
     if ~exist('modelName','var')
         error('please supply the name of a model in the first parameter');
     end
@@ -29,10 +29,10 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     end
 
     % Set and assign default options
-    options.verbose = true; % maximum (verbose) information in results file 
-    options.noRank  = false; % rank calculation (increases computational time)
-    options.closeFigure = false; % closes figures
-    options.store = false; % write results to file
+    options.verbose = genssiUserSpecificDefaults('verbose'); % maximum (verbose) information in results file 
+    options.noRank  = genssiUserSpecificDefaults('noRank'); % rank calculation (increases computational time)
+    options.closeFigure = genssiUserSpecificDefaults('closeFigure'); % closes figures
+    options.store = genssiUserSpecificDefaults('store'); % write results to file
     if exist ('optionsIn','var')
         if isfield(optionsIn,'verbose')
             options.verbose = optionsIn.verbose;   
@@ -91,7 +91,7 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     end
     
     % Check consistency of model
-    model = genssiCheckModel(model);
+    model = genssiTransposeModel(genssiCheckModel(genssiTransposeModel(model)));
 
     % Report inputs
     options = genssiReportInputs(model,options);
