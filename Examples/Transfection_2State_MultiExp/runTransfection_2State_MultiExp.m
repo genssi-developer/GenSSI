@@ -1,5 +1,5 @@
-% runTransfection_2State performs the structural identifiability analysis
-% for the model for mRNA transfection introduced by
+% runExperimentalConditions_2State performs the structural identifiability 
+% analysis for the model for mRNA transfection introduced by
 % 
 %    Leonhardt et al. (2013). Single-cell mRNA transfection 
 %    studies: delivery, kinetics and statistics by numbers, 
