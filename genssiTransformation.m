@@ -35,10 +35,6 @@ function varargout = genssiTransformation(varargin)
     
     % Check model
     modelIn = genssiCheckModel(modelIn);
-
-%     
-%     GenSSIDir = fileparts(mfilename('fullpath'));
-%     addpath(fullfile(GenSSIDir,'Examples'));
     
     % Assigne model properties
     X = transpose(modelIn.sym.x);
