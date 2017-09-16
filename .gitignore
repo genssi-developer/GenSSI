@@ -2,6 +2,15 @@ Docu/output
 *.DS_Store
 *.m~
 *.fig
-*.m~
 Examples/BIOMD0000000003/BIOMD0000000003.m
 Examples/BIOMD0000000010/BIOMD0000000010.m
+Examples/DegradationPoly/Degradation.m
+Examples/DegradationPoly/DegradationPoly.m
+Examples/GoodwinPoly/Goodwin.m
+Examples/GoodwinPoly/GoodwinPoly.m
+Examples/ArabidopsisPoly/Arabidopsis.m
+Examples/ArabidopsisPoly/ArabidopsisPoly.m
+Examples/Transfection_4State_Transformation/Transfection_4State.m
+Examples/Transfection_4State_Transformation/transformedTransfection_4State.m
+Examples/Transfection_2State_MultiExp/Transfection_2State.m
+Examples/Transfection_2State_MultiExp/Transfection_2State_MultiExp.m

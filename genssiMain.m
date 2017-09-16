@@ -31,8 +31,8 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     % Set and assign default options
     options.verbose = true; % maximum (verbose) information in results file 
     options.noRank  = false; % rank calculation (increases computational time)
-    options.closeFigure = true; % closes figures
-    options.store = true; % write results to file
+    options.closeFigure = false; % closes figures
+    options.store = false; % write results to file
     if exist ('optionsIn','var')
         if isfield(optionsIn,'verbose')
             options.verbose = optionsIn.verbose;   
@@ -86,7 +86,7 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
         model.sym.Par = model.sym.p;
     else
         error(['please supply a vector of paramaters to be ',...
-               'considered in the third parameter ',...
+               'considered in the third input ',...
                '(or a full list of parameters in model.sym.p)']);
     end
     
