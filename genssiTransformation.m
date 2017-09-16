@@ -154,7 +154,7 @@ function varargout = genssiTransformation(varargin)
             
             % Substitude parameters
             % (Note: We use here different variants to achieve a high
-            % probability for a correct sub
+            % probability for a correct substitution.)
             Fnew  = subs(         Fnew  ,transDef.sym.parameter.formula,Pnew);
             Fnew  = subs(  expand(Fnew ),transDef.sym.parameter.formula,Pnew);
             Fnew  = subs(simplify(Fnew ),transDef.sym.parameter.formula,Pnew);
