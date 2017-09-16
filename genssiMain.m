@@ -28,6 +28,11 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
         model.sym.Nder = 4;
     end
 
+    % Check that installation was performed
+    if ~exist('genssiUserSpecificDefaults.m')
+        error('Please run genssiInstall.m before performing your first analysis.');
+    end
+    
     % Set and assign default options
     options.verbose = genssiUserSpecificDefaults('verbose'); % maximum (verbose) information in results file 
     options.noRank  = genssiUserSpecificDefaults('noRank'); % rank calculation (increases computational time)

@@ -17,5 +17,7 @@ function default = genssiUserSpecificDefaults(optionName)
             default = false;
         case 'store'
             default = false;
+        case 'feedbackRequired'
+            default = true;
     end
 end
