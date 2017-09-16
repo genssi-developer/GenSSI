@@ -7,55 +7,50 @@ function options = genssiReportInputs(model,options)
     %
     % Return values:
     %  options: options (struct)
-    %  
-    fprintf(1,'**********************************************************************************\n');
-    fprintf(1,'*                                                                                                      \n');
-    fprintf(1,'* GENERATING SERIES approach for Structural Identifiability Analysis   \n');
-    fprintf(1,'*                                                                                                      \n');
-    fprintf(1,'* Oana Chis, Julio R. Banga and Eva Balsa-Canto                                \n');
-    fprintf(1,'*  BioProcess Engineering Group, IIM-CSIC, Vigo-Spain                        \n');
-    fprintf(1,'*  contact: [chisoana,julio,ebalsa]@iim.csic.es                                     \n');
-    fprintf(1,'*                                                                                                        \n');
-    fprintf(1,'**********************************************************************************\n\n');
+
+    % General information
+    fprintf(1,'**********************************************************************\n');
+    fprintf(1,'* GENERATING SERIES Approach for Structural Identifiability Analysis *\n');
+    fprintf(1,'**********************************************************************\n\n');
     if options.verbose
-        strDisp=['Matlab version=',version];
-        disp(strDisp);
-        strDisp=['Computer=',computer];
-        disp(strDisp);
-        disp('options:');
-        disp(options);
+        disp(['Model name:     ' model.sym.Name]);
+        disp(['Matlab version: ' version]);
+        disp(['Computer:       ' computer]);
+        disp('Options:'); disp(options);
     end
-    fprintf(1,'STRUCTURAL IDENTIFIABILITY ANALYSIS FOR: %s Model\n ', model.sym.Name);
-    fprintf(1,'\n\n');
-    fprintf(1,'***************\n');
-    fprintf(1,'* INPUT DATA \n');
-    fprintf(1,'***************\n\n');
-
-    fprintf(1,'-----> Maximum number of derivatives for the analysis: %u\n',model.sym.Nder);
-    fprintf(1,'-----> Dynamic model:\n');
-    for i=1:length(model.sym.x)
-        fprintf(1,'\tA%u=',i);
-        disp(model.sym.xdot(i));
-    end
-
-    fprintf(1,'-----> Control variables:\n');
-    for i=1:size(model.sym.g,1)% # controls, model.sym.Noc
-        fprintf(1,'\tG%u=',i);
-        disp(sym(model.sym.g(i,:)));
-    end
-
-    fprintf(1,'-----> Observables:\n');
-    for i=1:length(model.sym.y)
-        fprintf(1,'\tH%u=',i);
-        disp(model.sym.y(i));
-    end
-
-    fprintf(1,'-----> Initial conditions:\n\tIC=');
-    disp(sym(model.sym.x0));
     
-    fprintf(1,'-----> Parameters to be considered in the analysis:\n\tPar=');
+    % Model properties
+    fprintf(1,'**************\n');
+    fprintf(1,'* INPUT DATA *\n');
+    fprintf(1,'**************\n\n');
+    
+    fprintf(1,'Maximum number of derivatives for the analysis: %u\n\n',model.sym.Nder);
+    
+    fprintf(1,'State variables (x):\n');
+    disp(model.sym.x);
+    
+    fprintf(1,'Vector field for autonomous dynamics (f):\n');
+    if isempty(model.sym.xdot)
+        fprintf(1,' []\n\n')
+    else
+        disp(model.sym.xdot);
+    end
+
+    fprintf(1,'Control vector (g):\n');
+    if isempty(model.sym.g)
+        fprintf(1,' []\n\n')
+    else
+        disp(model.sym.g);
+    end
+
+    fprintf(1,'Initial conditions (x0):\n');
+    disp(model.sym.x0);
+    
+    fprintf(1,'Observables (y):\n');
+    disp(model.sym.y);
+
+    fprintf(1,'Parameters considered for structural identifiability analysis:\n');
     disp(model.sym.Par);
-    fprintf(1,'\n\n\n');
 end
 
 

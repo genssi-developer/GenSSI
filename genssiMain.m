@@ -14,7 +14,7 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     if ~exist('modelName','var')
         error('please supply the name of a model in the first parameter');
     end
-    model = eval(modelName);
+    model = genssiTransposeModel(eval(modelName));
     model.sym.Name = modelName; % needed for genssiReportInputs
 
     % Set default number of derivatives
@@ -35,7 +35,8 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     
     % Set and assign default options
     options.verbose = genssiUserSpecificDefaults('verbose'); % maximum (verbose) information in results file 
-    options.noRank  = genssiUserSpecificDefaults('noRank'); % rank calculation (increases computational time)
+    options.reportCompTime = genssiUserSpecificDefaults('reportCompTime');
+    options.noRank = genssiUserSpecificDefaults('noRank'); % rank calculation (increases computational time)
     options.closeFigure = genssiUserSpecificDefaults('closeFigure'); % closes figures
     options.store = genssiUserSpecificDefaults('store'); % write results to file
     if exist ('optionsIn','var')
@@ -50,6 +51,9 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
         end        
         if isfield(optionsIn,'store')
             options.store = optionsIn.store;   
+        end        
+        if isfield(optionsIn,'reportCompTime')
+            options.reportCompTime = optionsIn.reportCompTime;   
         end        
     end
     
@@ -96,27 +100,27 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     end
     
     % Check consistency of model
-    model = genssiTransposeModel(genssiCheckModel(genssiTransposeModel(model)));
-
+    model = genssiCheckModel(model);
+    
     % Report inputs
     options = genssiReportInputs(model,options);
-    if options.verbose
-        disp(['Report inputs elapsed time: ' num2str(toc)]);
+    if options.verbose && options.reportCompTime
+        disp(['Report inputs elapsed time: ' num2str(toc)]); disp(' ');
         tocTotal = tocTotal + toc; tic;
     end
     
     % Compute Lie derivatives
     [options,VectorLieDerivatives] = genssiComputeLieDerivatives(model,options);
     if options.verbose
-        disp(['Compute Lie derivatives elapsed time: ' num2str(toc)]);
+        disp(['Compute Lie derivatives elapsed time: ' num2str(toc)]); disp(' ');
         tocTotal = tocTotal + toc; tic;
     end
     
     % Compute identifiability tableau
     [options,results,JacParam] = ...
         genssiComputeTableau(model,VectorLieDerivatives,options);
-    if options.verbose
-        disp(['Compute tableau elapsed time: ' num2str(toc)]);
+    if options.verbose && options.reportCompTime
+        disp(['Compute tableau elapsed time: ' num2str(toc)]); disp(' ');
         tocTotal = tocTotal + toc; tic;
     end
     
@@ -124,24 +128,24 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     [options,results,RJacParam01,ECC,rParam] = ...
         genssiComputeReducedTableau(model,results,VectorLieDerivatives,JacParam,options);
     clear('VectorLieDerivatives','JacParam');
-    if options.verbose
-        disp(['Compute reduced tableau  elapsed time: ' num2str(toc)]);
+    if options.verbose && options.reportCompTime
+        disp(['Compute reduced tableau  elapsed time: ' num2str(toc)]); disp(' ');
         tocTotal = tocTotal+toc; tic;
     end
     
     % Compute (reduced) identifiability tableau
     [options,results] = genssiOrderTableau(model,results,RJacParam01,ECC,rParam,options);
     clear('JacParam01','RJacParam01','ECC');
-    if options.verbose
-        disp(['Order tableau elapsed time: ' num2str(toc)]);
+    if options.verbose && options.reportCompTime
+        disp(['Order tableau elapsed time: ' num2str(toc)]); disp(' ');
         tocTotal=tocTotal+toc;
         tic;
     end
     
     % Report results
     options = genssiReportResults(model,results,options);
-    if options.verbose
-        disp(['Report results elapsed time: ' num2str(toc)]);
+    if options.verbose && options.reportCompTime
+        disp(['Report results elapsed time: ' num2str(toc)]); disp(' ');
         tocTotal=tocTotal+toc;
         disp(['Total elapsed time: ' num2str(tocTotal)]);
     end

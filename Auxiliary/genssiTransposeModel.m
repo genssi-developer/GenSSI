@@ -12,13 +12,22 @@ function model = genssiTransposeModel(model)
 
     model.sym.p = transpose(model.sym.p);
     model.sym.x = transpose(model.sym.x);
-    model.sym.xdot = transpose(model.sym.xdot);
     model.sym.x0 = transpose(model.sym.x0);
-    model.sym.g = transpose(model.sym.g);
     model.sym.y = transpose(model.sym.y);
-    
+    if isfield(model.sym,'xdot')
+        model.sym.xdot = transpose(model.sym.xdot);
+    end
+    if isfield(model.sym,'g')
+        model.sym.g = transpose(model.sym.g);
+    end
     if isfield(model.sym,'Par')
         model.sym.Par = transpose(model.sym.Par);
+    end
+    if isfield(model.sym,'xi_name')
+        model.sym.xi_name = transpose(model.sym.xi_name);
+    end
+    if isfield(model.sym,'xi')
+        model.sym.xi = transpose(model.sym.xi);
     end
 
 end

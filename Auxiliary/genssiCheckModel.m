@@ -24,6 +24,11 @@ function model = genssiCheckModel(model)
         model.sym.x = transpose(model.sym.x);
     end
     
+    % Correct dimensionality of initial condition vector
+    if isrow(model.sym.x0)
+        model.sym.x0 = transpose(model.sym.x0);
+    end
+    
     % Correct dimensionality of output vector
     if isrow(model.sym.y)
         model.sym.y = transpose(model.sym.y);

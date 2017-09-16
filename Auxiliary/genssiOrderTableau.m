@@ -16,32 +16,27 @@ function [options,results] = genssiOrderTableau(model,results,...
     % Return values:
     %  options: options (struct)
     %  results: results of previous steps (struct)
-    %  
-    fprintf(1,'\n\n******************************************************************************************\n');
-    fprintf(1,'-> DETECT (DIRECT) STRUCTURALLY GLOBALLY IDENTIFIABLE PARAMETERS AND REORGANIZES TABLEAU\n');
-    fprintf(1,'*******************************************************************************************\n\n');
 
-% set of parameters for which identifiability is done (came from GenSSI_compute_reduced_tableau)
-    Param_local=[];	% initialize the vector of locally identifiable parameters
-    global_ident_par=[];  % initialize the vector of globally identifiable parameters
-    [RJacParam01x,RJacParam01y]=size(RJacParam01);  
+    fprintf(1,'*****************************************************************************************************\n');
+    fprintf(1,'* DETECTION OF (DIRECT) STRUCTURALLY GLOBALLY IDENTIFIABLE PARAMETERS AND REORGANIZATION OF TABLEAU *\n');
+    fprintf(1,'*****************************************************************************************************\n\n');
+
+    % Set parameters for which identifiability is established (came from GenSSI_compute_reduced_tableau)
+    Param_local = [];	% initialize the vector of locally identifiable parameters
+    global_ident_par = [];  % initialize the vector of globally identifiable parameters
+    [RJacParam01x,RJacParam01y] = size(RJacParam01);  
 
     % DETECT GLOBALLY IDENTIFIABLE PARAMETERS 
-    RJacParam01_1elem=[]; % the matrix containing only the rows having just 1 non-zero element
-    [tilde,Parametery]=size(rParam);
-    fprintf(1,'\n\n');
-    fprintf(1,' -> STRUCTURALLY GLOBALLY IDENTIFIABLE PARAMETERS DETERMINED DIRECTLY \n');
-    fprintf(1,'   (parameters corresponding to one non-zero element in the reduced identifiability tableau)\n\n');
+    RJacParam01_1elem = []; % the matrix containing only the rows having just 1 non-zero element
+    Parametery = length(rParam);
     % solution vector of solutions of Par(j) after solving the equation ECC(i,:) 
 	% stores the position of globally identifiable parameters that appear in Par minus 
     % those parameters that cannot be identified (corresponding to a null column in the 
-    % Identifiability tableau). For example in the Arabidopsis
-    % example the parameters are p1 p2 p5 p8 p11 p12 p15 p18 p26 p27. p10 is not identifiable, and p1,
-    % p2 p26 and p27 are globally identifiable. So, in global_ident_par_index1 stores the positions 2 9 10 1.
-    global_ident_par_index1=[];
-    length_sol=[];
-    local_ident_par_index_j=[];		% index for parameters
-    local_ident_par_index_i=[];		% index for relations
+    % Identifiability tableau).
+    global_ident_par_index1 = [];
+    length_sol = [];
+    local_ident_par_index_j = []; % index for parameters
+    local_ident_par_index_i = []; % index for relations
 
     for kk=1:Parametery
         for i=1:RJacParam01x
@@ -53,15 +48,19 @@ function [options,results] = genssiOrderTableau(model,results,...
                         RJacParam01(:,j)=zeros(RJacParam01x,1);
                         solution_ident_par=solve(ECC(i,:),rParam(j));
                         % if the solution is unique, then the parameter is globally identifiable, otherwise it is locally identifiable
-                        if length(solution_ident_par)==1   
-                            global_ident_par=[global_ident_par rParam(j)];
+                        if length(solution_ident_par)==1 
+                            if isempty(global_ident_par_index1)
+                                fprintf(1,'=> STRUCTURALLY GLOBALLY IDENTIFIABLE PARAMETERS DETERMINED DIRECTLY\n');
+                                fprintf(1,'   (parameters corresponding to one non-zero element in the reduced identifiability tableau)\n');
+                            end
+                            global_ident_par=[global_ident_par;rParam(j)];
                             length_sol=[length_sol length(solution_ident_par)];
-                            disp(['----->The parameter', ' ', char(rParam(j)),' ','is structurally globally identifiable. It has the solution:' ])
-                            disp([' ', ' ',  ' ', ' ', ' ', ' ', ' ',char(rParam(j)),'= ', char(solution_ident_par),'.' ])
+                            disp(['--> The parameter', ' ', char(rParam(j)),' ','is structurally globally identifiable. It has the solution:' ])
+                            disp([' ', ' ',  ' ', ' ', ' ', ' ', ' ',char(rParam(j)),' = ', char(solution_ident_par),'.' ])
                             global_ident_par_index1=[global_ident_par_index1 j];
                         else
                             % if the parameter has multiple solutions, then it will be stored as a locally identifiable
-							Param_local=[Param_local rParam(j)];
+							Param_local=[Param_local;rParam(j)];
                             local_ident_par_index_j=[local_ident_par_index_j j]; % index for parameters
                             local_ident_par_index_i=[local_ident_par_index_i i]; % index for relations
                         end
@@ -73,21 +72,25 @@ function [options,results] = genssiOrderTableau(model,results,...
 				RJacParam01(i,:)=zeros(1,RJacParam01y);	
             end
         end
-     
     end
+    if isempty(global_ident_par_index1)
+        fprintf(1,'=> NO STRUCTURALLY GLOBALLY IDENTIFIABLE PARAMETER COULD BE DETERMINED DIRECTLY\n');
+    end
+
     Param_local_l=Param_local;
     % DETECT LOCALLY IDENTIFIABLE PARAMETERS 
     if ~isempty(Param_local_l)
-        fprintf(1,'\n\n');
-        fprintf(1,' -> STRUCTURALLY LOCALLY IDENTIFIABLE PARAMETERS DETERMINED DIRECTLY \n\n');
+        fprintf(1,'=> STRUCTURALLY LOCALLY IDENTIFIABLE PARAMETERS DETERMINED DIRECTLY\n');
         % computation for those parameters condidered 'globally identifiable' but with multiple solutions
         for il=1:length(local_ident_par_index_i)
             for jl=1:length(local_ident_par_index_j)
                 solution_ident_local_par=solve(ECC(local_ident_par_index_i(il),:),rParam(local_ident_par_index_j(jl)));
-                disp(['----->The parameter', ' ', char(rParam(local_ident_par_index_j(jl))),' ','is structurally locally identifiable. It has the solution:' ])
+                disp(['--> The parameter', ' ', char(rParam(local_ident_par_index_j(jl))),' ','is structurally locally identifiable. It has the solution:' ])
                 disp([' ', ' ', solution_ident_local_par])
             end
         end
+    else
+        fprintf(1,'=> NO STRUCTURALLY LOCALLY IDENTIFIABLE PARAMETER COULD BE DETERMINED DIRECTLY\n');
     end
 	% equals to zero those columns corresponding to the globally and 'globally' parameters 
     index_elimin_param=[global_ident_par_index1 local_ident_par_index_j];
@@ -107,7 +110,7 @@ function [options,results] = genssiOrderTableau(model,results,...
     if isempty(RJacParam01_nonzero_rows)==0    % eliminates the 0s. 
 	% Param=[  p5,  p8, p11, p12, p15, p18]
         RJacParam01_nonzero_rows=genssiRemoveZeroColumns(RJacParam01_nonzero_rows);
-        Param=genssiRemoveZeroElementsR(Param);
+        Param=genssiRemoveZeroRows(Param);
     end
     %Compute the solution
 	% if all the parameters are globally identified the set of parameters is empty
@@ -117,12 +120,13 @@ function [options,results] = genssiOrderTableau(model,results,...
     if (~isempty(Param))&&(sum_glob_id~=0)	 
 		% computes the remaining parameters, apart of the globally already computed.
         % A function can be constructed, as it repeats later on (until line 739 may be an option, but maybe can be split).
-        fprintf(1,'\n\n************************************************************************************************************\n');
-        fprintf(1,'->THE REMAINING PARAMETERS (APART FROM IDENTIFIABLE OR NON-IDENTIFIABLE), AND THE CORRESPONDING RELATIONS  \n');
-        fprintf(1,'************************************************************************************************************\n\n');
-        fprintf(1,'-----> Parameters: \n');
+        fprintf(1,'\n');
+        fprintf(1,'*******************************************************************************************************\n');
+        fprintf(1,'* REMAINING PARAMETERS (APART FROM IDENTIFIABLE OR NON-IDENTIFIABLE), AND THE CORRESPONDING RELATIONS * \n');
+        fprintf(1,'*******************************************************************************************************\n\n');
+        fprintf(1,'--> Parameters: \n');
         disp(Param);
-        fprintf(1,'-----> Relations: \n');
+        fprintf(1,'--> Relations: \n');
         disp(ECC);
         % the second order tableau is RJacParam01_nonzero_rows from above
 		tableau_for_second_reduced_tableau=RJacParam01_nonzero_rows;
@@ -147,7 +151,7 @@ function [options,results] = genssiOrderTableau(model,results,...
             
             for j=1:Mat_index_y
                 aa=Mat_index(1,j);
-%                 row_index_1=RJacParam01_nonzero_rows(Mat_index(j),:)
+                % row_index_1=RJacParam01_nonzero_rows(Mat_index(j),:)
                 % from reduced tableau RJacParam01_nonzero_rows row_index_1 collects the rows 
                 % needed to compute the group of parameters. For Arabidopsis row_index_1 =     0     1     0     0     1     0
                 if aa~=0
@@ -169,12 +173,12 @@ function [options,results] = genssiOrderTableau(model,results,...
             sum_row_index_1=sum(row_index_1);
 			% calculate the group of parameters from the group of relations
             if (length(ECC_bb)==sum_row_index_1)&&(~isempty(ECC_index_row))
-                fprintf(1,'**********************************************************************************\n');
-                fprintf(1,'-> COMPUTE HIGHER ORDER REDUCED IDENTIFIABILITY TABLEAU(S) \n\n');
-                fprintf(1,'   (display the group of 2/more depending parameters,\n');
-                fprintf(1,'            the associated algebraic relations,  \n');
-                fprintf(1,'            the corresponding solution (solutions))\n\n');
-                fprintf(1,'**********************************************************************************\n\n');
+                fprintf(1,'******************************************************************\n');
+                fprintf(1,'* COMPUTATION OF HIGHER ORDER REDUCED IDENTIFIABILITY TABLEAU(S) *\n');
+                fprintf(1,'*  (display the group of 2/more depending parameters,            *\n');
+                fprintf(1,'*           the associated algebraic relations,                  *\n');
+                fprintf(1,'*           the corresponding solution (solutions))              *\n');
+                fprintf(1,'******************************************************************\n\n');
             end    
             RJacparam_new=RJacParam01_nonzero_rows;
             if (length(ECC_bb)==sum_row_index_1)&&(~isempty(ECC_index_row))   
@@ -201,9 +205,8 @@ function [options,results] = genssiOrderTableau(model,results,...
                         displayReducedTableau...
                         (ECC_remaining,Param_local,Param_display,global_ident_par,...
                         display_tableau_RJacparam_new,number_fig,options);
-                    %%%%%%%%%%% line 739 %%%%%%%%%%%%%%%%
                 end
-                % continue the calculus for the remaining group of parameters and relations
+                % continue the calculation for the remaining group of parameters and relations
                 if ~isempty(Param_remaining)
                     [Param_local,global_ident_par]=...
                         displayRemainingParameters...
@@ -213,15 +216,13 @@ function [options,results] = genssiOrderTableau(model,results,...
                 end
             else
                 [Param_local,global_ident_par]=...
-                solveRemPar...
-                    (ECC,Param,Param_local,global_ident_par);
+                    solveRemPar(ECC,Param,Param_local,global_ident_par);
                 genssiTableauImage(03,tableau_for_second_reduced_tableau,...
                     parameters_for_second_reduced_tableau,options);
             end
         else
             [Param_local,global_ident_par]=...
-                solveRemPar...
-                (ECC,Param,Param_local,global_ident_par);
+                solveRemPar(ECC,Param,Param_local,global_ident_par);
         end
         genssiTableauImage(03,tableau_for_second_reduced_tableau,...
             parameters_for_second_reduced_tableau,options);
@@ -229,6 +230,7 @@ function [options,results] = genssiOrderTableau(model,results,...
     results.length_sol=length_sol;
     results.global_ident_par=global_ident_par;
     results.Param_local=Param_local;
+    disp(' ')
 end
 
 function [Param_local,Param_remaining,global_ident_par,...
@@ -275,19 +277,14 @@ function [Param_local,Param_remaining,global_ident_par,...
             ECC_new=[ECC_new; ECC(Mat_index_row)]; 
             % this part of computing the parameters are repeated many times, it can be
             % put in a function (until line 545).
-            fprintf(1,'-----> The group of parameters to be considered in the calculus and the corresponding relations:\n\n');
-            fprintf(1,'-> Parameters: \n');
-            fprintf(1,'   \t[');
-            for i2=1:size(reduced_param,2)
-                 fprintf(1,'%s\t',char(reduced_param(i2)));
-            end
-            fprintf(1,']\n\n\n');
-            fprintf(1,'-> Relations: \n');
+            fprintf(1,'The group of parameters to be considered in the calculus and the corresponding relations:\n\n');
+            fprintf(1,'--> Parameters: \n');
+            disp(reduced_param);
+            fprintf(1,'--> Relations: \n');
             disp(ECC_new);
             if length(reduced_param)==length(ECC_new)      % compute the solution for each pair of parameters   
                 [Param_local,global_ident_par]=...
-                    solveRemPar...
-                    (ECC_new,reduced_param,Param_local,global_ident_par);  
+                    solveRemPar(ECC_new,reduced_param,Param_local,global_ident_par);  
                 ECC_reduced_it=ECC;
                 for j=Mat_index_y:-1:1   
                     % equals to 0 the 1s corresponding to the already computed parameters
@@ -334,10 +331,10 @@ function [Param_local,Param_remaining,global_ident_par,...
                 % eliminates the 0 parameters from Param_zero and generates Param_display. 
                 % In Arabidopsis is [p5, p11, p12, p18]
                 Param_display=Param_zero;
-                Param_display=genssiRemoveZeroElementsR(Param_display);
+                Param_display=genssiRemoveZeroRows(Param_display);
                 rem_par=compute_reduced_par;
                 % if in the parameters I still have 0 elements, elliminate them.
-                [rem_par,keepB,tilde] = genssiRemoveZeroElementsR(rem_par);
+                [rem_par,keepB,tilde] = genssiRemoveZeroRows(rem_par);
                 display_tableau_RJacparam_new = display_tableau_RJacparam_new(:,keepB);
                 ECC_new=[];
                 % the remaining index from Mat_index. In Arabidopsis 2 5.
@@ -396,8 +393,7 @@ function [ECC_remaining,...
         end
     end
     [Param_local,global_ident_par]=...
-        solveRemPar...
-        (ECC_remaining_1el,Par_1el,Param_local,global_ident_par);        
+        solveRemPar(ECC_remaining_1el,Par_1el,Param_local,global_ident_par);        
     for i=length(index_in):-1:1
         display_tableau_RJacparam_new(index_in(i),:)=[];
     end
@@ -421,15 +417,11 @@ function [Param_local,global_ident_par]=...
     %
     % Return values:
     %  
-    fprintf(1,'-----> The remaining group of parameters, relations and the corresponding solutions:\n\n');
-    fprintf(1,'-> Parameters: \n');
-    fprintf(1,'   \t[');
-    for ir=1:size(Param_remaining,2)
-        fprintf(1,'%s\t',char(Param_remaining(ir)));
-    end
-    fprintf(1,']\n\n\n');
+    fprintf(1,'The remaining group of parameters, relations and the corresponding solutions:\n\n');
+    fprintf(1,'--> Parameters: \n');
+    disp(Param_remaining);
     [ECC_remaining,tilde,tilde] = genssiRemoveZeroElementsC(ECC_remaining);
-    fprintf(1,'-> Relations: \n');
+    fprintf(1,'--> Relations: \n');
     disp(ECC_remaining);
     genssiTableauImage(03,tableau_for_second_reduced_tableau,...
         parameters_for_second_reduced_tableau,options);
@@ -460,8 +452,7 @@ function [Param_local,global_ident_par]=...
     sum_row_index_1=sum(row_index_1);
     if Mat_index_x==0
         [Param_local,global_ident_par]=...
-            solveRemPar...
-            (ECC,Param,Param_local,global_ident_par);        
+            solveRemPar(ECC,Param,Param_local,global_ident_par);        
     end
     if Mat_index_x>=1
         ECC_new=[];
@@ -481,10 +472,10 @@ function [Param_local,global_ident_par]=...
         if (length(ECC_bb)==sum_row_index_1)&&(~isempty(ECC_index_row))
             for i=1:Mat_index_x
                 %if (length(ECC_index_row)==sum_row_index)&&(length(ECC_index_row)~=0)
-                fprintf(1,'**********************************************************************************\n');
-                fprintf(1,'-> THE REDUCED TABLEAUS OF THE REDUCED TABLEAU  \n\n');
-                fprintf(1,'   (for the remaining set of parameters and relations)  \n');
-                fprintf(1,'**********************************************************************************\n\n');
+                fprintf(1,'*******************************************************\n');
+                fprintf(1,'* THE REDUCED TABLEAUS OF THE REDUCED TABLEAU         *\n');
+                fprintf(1,'* (for the remaining set of parameters and relations) *\n');
+                fprintf(1,'*******************************************************\n\n');
                 %end
                 RJacparam_new=RJacParam01_nonzero_rows;
                 Mat_index_row=Mat_index(i,:);
@@ -507,19 +498,14 @@ function [Param_local,global_ident_par]=...
                     Non_zero_elem_index=find(RJacParam01_nonzero_rows(Mat_index_row(i),:));
                     reduced_param=Param(Non_zero_elem_index);
                     ECC_new=[ECC_new; ECC(Mat_index_row)];        
-                    fprintf(1,'-----> The group of parameters to be considered in the calculus and the corresponding relations:\n\n');
-                    fprintf(1,'-> Parameters: \n');
-                    fprintf(1,'   \t[');
-                    for i2=1:size(reduced_param,2)
-                         fprintf(1,'%s\t',char(reduced_param(i2)));
-                    end
-                    fprintf(1,']\n\n\n');
-                    fprintf(1,'-> Relations: \n');
+                    fprintf(1,'The group of parameters to be considered in the calculus and the corresponding relations:\n\n');
+                    fprintf(1,'--> Parameters: \n');
+                    disp(reduced_param);
+                    fprintf(1,'--> Relations: \n');
                     disp(ECC_new);
                     if length(reduced_param)==length(ECC_new)           %   compute the solution for each pair of parameters       
                         [Param_local,global_ident_par]=...
-                            solveRemPar...
-                            (ECC_new,reduced_param,Param_local,global_ident_par);
+                            solveRemPar(ECC_new,reduced_param,Param_local,global_ident_par);
                         ECC_reduced_it=ECC;
 %                                         Param_remaining=[];
                         for j=Mat_index_y:-1:1   
@@ -617,8 +603,7 @@ function [Param_local,global_ident_par]=...
                     end
                 end
                 [Param_local,global_ident_par]=...
-                    solveRemPar...
-                    (ECC_remaining_1el,Par_1el,Param_local,global_ident_par);
+                    solveRemPar(ECC_remaining_1el,Par_1el,Param_local,global_ident_par);
                 for i=length(index_in):-1:1
                     display_tableau_RJacparam_new(index_in(i),:)=[];
                 end
@@ -636,40 +621,34 @@ function [Param_local,global_ident_par]=...
                 ECC_remaining=ECC_remaining_f;
             end
         end
-        fprintf(1,'-----> The remaining group of parameters, relations and the corresponding solutions:\n\n');
-        fprintf(1,'-> Parameters: \n');
-        fprintf(1,'   \t[');
-        for ir=1:size(Param_remaining,2)
-            fprintf(1,'%s\t',char(Param_remaining(ir)));
-        end
-        fprintf(1,']\n\n\n');
+        fprintf(1,'The remaining group of parameters, relations and the corresponding solutions:\n\n');
+        fprintf(1,'--> Parameters: \n');
+        disp(Param_remaining);
         [ECC_remaining_x,tilde]=size(ECC_remaining);
         for i=ECC_remaining_x:-1:1
             if ECC_remaining(i)==0
                   ECC_remaining(i)=[];
             end
         end
-        fprintf(1,'-> Relations: \n');
+        fprintf(1,'--> Relations: \n');
         disp(ECC_remaining);
         [Param_local,global_ident_par]=...
-            solveRemPar...
-            (ECC_remaining,Param_remaining,Param_local,global_ident_par);
+            solveRemPar(ECC_remaining,Param_remaining,Param_local,global_ident_par);
         genssiTableauImage(03,tableau_for_second_reduced_tableau,...
             parameters_for_second_reduced_tableau,options);                     
     end
 end
 
 function [Param_local,global_ident_par]=...
-        solveRemPar...
-        (ECC,Param,Param_local,global_ident_par)
+        solveRemPar(ECC,Param,Param_local,global_ident_par)
     % solveRemPar solves the remaining parameters
     %
     % Parameters:
     %
     % Return values:
     %  
-    fprintf(1,'-----> THE SYMBOLIC SOLUTION OF THE REMAINING PARAMETERS: \n');
-    [tilde,Paramy]=size(Param);
+    fprintf(1,'--> Symbolic solution(s) of the remaining parameters: \n');
+    Paramy=length(Param);
     Param_local_r=Param;
     [ECCx,tilde]=size(ECC);
     length_sol=[];
@@ -677,38 +656,38 @@ function [Param_local,global_ident_par]=...
     Param_local_sol_1=[];
     if Paramy==ECCx
         equation_relations=mat2cell(ECC,ones(1,length(ECC)),1);
-        constants=mat2cell(Param_local_r,1,ones(1,length(Param_local_r)))';
+        constants=mat2cell(transpose(Param_local_r),1,ones(1,length(Param_local_r)))';
         Solution=solve(equation_relations{:}, constants{:});
         sol=fieldnames(Solution);
         [solx,tilde]=size(sol);
         if solx<=1 % because there are no fieldnames in this case
-            disp(['-----> The parameter', ' ', char(Param_local_r),' ','has the solution/solutions:', ' ' ])
+            disp(['--> The parameter', ' ', char(Param_local_r),' ','has the solution/solutions:', ' ' ])
             disp([' ', ' ', char(Solution)])
             length_sol=[length_sol length(Solution)];
             if length_sol==1
-               global_ident_par_sol_1=[global_ident_par_sol_1 Param_local_r];
+               global_ident_par_sol_1=[global_ident_par_sol_1;Param_local_r];
             else 
-               Param_local_sol_1=[Param_local_sol_1 Param_local_r];
+               Param_local_sol_1=[Param_local_sol_1;Param_local_r];
             end
         else
             for i=1:solx
-               disp(['-----> The parameter', ' ', char(Param_local_r(i)),' ','has the solution/solutions:', ' ' ]);
+               disp(['--> The parameter', ' ', char(Param_local_r(i)),' ','has the solution/solutions:', ' ' ]);
                disp([' ', ' ', char(Solution.(sol{i}))]);
                length_sol=[length_sol length(Solution.(sol{i}))];
                if length_sol==1
-                   global_ident_par_sol_1=[global_ident_par_sol_1 Param_local_r(i)];
+                   global_ident_par_sol_1=[global_ident_par_sol_1;Param_local_r(i)];
                else 
-                   Param_local_sol_1=[Param_local_sol_1 Param_local_r(i)];
+                   Param_local_sol_1=[Param_local_sol_1;Param_local_r(i)];
                end
             end
         end
     else 
-        fprintf(1,' -----> WARNING: the number of parameters is higher than the number of relations! \n');
-        fprintf(1,'                 An explicit solution cannot be given for this subset of parameters. \n');
-        fprintf(1,'                 PLEASE CONSIDER AN EXTRA DERIVATIVE! \n\n');
+        fprintf(1,'--> WARNING: The number of parameters is Larger than the number of relations! \n');
+        fprintf(1,'             An explicit solution cannot be given for this subset of parameters. \n');
+        fprintf(1,'             PLEASE CONSIDER AN EXTRA DERIVATIVE! \n\n');
     end
-    Param_local=[Param_local Param_local_sol_1];
-    global_ident_par=[global_ident_par global_ident_par_sol_1];              
+    Param_local=[Param_local;Param_local_sol_1];
+    global_ident_par=[global_ident_par;global_ident_par_sol_1];              
 end
 
 function [ECC_index_row,Mat_index]=...

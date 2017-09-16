@@ -8,81 +8,48 @@ function options=genssiReportResults(model,results,options)
     %
     % Return values:
     %  options: options (struct)
-    %  
-    max_length_sol=max(results.length_sol);
-    global_ident_par=results.global_ident_par;
-    Param_local=results.Param_local;
-    Non_identifiable_param=results.Non_identifiable_param;
-    if (length(model.sym.Par)==length(global_ident_par))&&(size(Param_local,2)==0)&&(size(Non_identifiable_param,2)==0)
-        fprintf(1,'\n\n***************************************************************\n\n');
-        fprintf(1,' -----> THE MODEL IS STRUCTURALLY GLOBALLY IDENTIFIABLE \n\n');
-        fprintf(1,'***************************************************************\n\n');
-        fprintf(1,'        The structurally globally identifiable parameters are: \n\n');
-        %disp(model.sym.Par);
-        fprintf(1,'     \t[');
-        for i=1:size(global_ident_par,2)
-           fprintf(1,'      %s\t',char(global_ident_par(i)));
-        end
-        fprintf(1,']\n\n\n');
+
+    fprintf(1,'***************************************\n');
+    fprintf(1,'* RESULTS OF IDENTIFIABILITY ANALYSIS *\n');
+    fprintf(1,'***************************************\n\n');
+
+    % Assignment of parameter
+    gloIdentPar = results.global_ident_par;
+    locIdentPar = results.Param_local;
+    nonIdentPar = results.Non_identifiable_param;
+
+    % Report identifiability properties of model
+    if (length(model.sym.Par)==length(gloIdentPar))&&(size(locIdentPar,2)==0)&&(length(nonIdentPar)==0)
+        fprintf(1,'=> THE MODEL IS STRUCTURALLY GLOBALLY IDENTIFIABLE \n\n');
     end
-    if (size(Param_local,2)~=0)&&(size(Non_identifiable_param,2)==0)
-        fprintf(1,'\n\n***************************************************************\n\n');
-        fprintf(1,' -----> THE MODEL IS STRUCTURALLY LOCALLY IDENTIFIABLE \n\n');
-        fprintf(1,'***************************************************************\n\n');
-        fprintf(1,'        The structurally globally identifiable parameters are: \n\n');     
-        if size(global_ident_par,2) == 0
-            fprintf(1,'         \tNone\n\n');  
-        else
-            fprintf(1,'     \t[');
-            for i=1:size(global_ident_par,2)
-                fprintf(1,'      %s\t',char(global_ident_par(i)));
-            end
-            fprintf(1,']\n\n\n');  
-        end               
-        fprintf(1,'        The structurally locally identifiable parameters are: \n\n');
-        if size(Param_local,2) == 0
-            fprintf(1,'         \tNone\n\n');    
-        else
-            fprintf(1,'     \t[');
-            for i=1:size(Param_local,2)
-                fprintf(1,'      %s\t',char(Param_local(i)));
-            end
-            fprintf(1,']\n\n\n');    
-        end
+    if (size(locIdentPar,2)~=0)&&(length(nonIdentPar)==0)
+        fprintf(1,'=> THE MODEL IS STRUCTURALLY LOCALLY IDENTIFIABLE \n\n');
     end          
-    if size(Non_identifiable_param,2)~=0       
-        fprintf(1,'\n\n***************************************************************\n\n');
-        fprintf(1,' -----> THE MODEL IS STRUCTURALLY NON-IDENTIFIABLE \n\n');
-        fprintf(1,'***************************************************************\n\n');    
-        fprintf(1,'        The structurally globally identifiable parameters are: \n\n');     
-        if size(global_ident_par,2) == 0
-            fprintf(1,'         \tNone\n\n');  
-        else
-            fprintf(1,'     \t[');
-            for i=1:size(global_ident_par,2)
-                fprintf(1,'      %s\t',char(global_ident_par(i)));
-            end
-            fprintf(1,']\n\n\n');  
-        end         
-        fprintf(1,'        The structurally locally identifiable parameters are: \n\n');
-        if size(Param_local,2) == 0
-            fprintf(1,'         \tNone\n\n');    
-        else
-            fprintf(1,'     \t[');
-            for i=1:size(Param_local,2)
-                fprintf(1,'      %s\t',char(Param_local(i)));
-            end
-            fprintf(1,']\n\n\n');    
-        end  
-        fprintf(1,'        The structurally non-identifiable parameters are: \n\n');
-        if size(Non_identifiable_param,2) == 0
-            fprintf(1,'         \tNone\n\n');   
-        else
-            fprintf(1,'     \t[');
-            for i=1:size(Non_identifiable_param,2)
-                fprintf(1,'      %s\t',char(Non_identifiable_param(i)));
-            end
-            fprintf(1,']\n\n\n');
-        end
+    if length(nonIdentPar)~=0       
+        fprintf(1,'=> THE MODEL IS STRUCTURALLY NON-IDENTIFIABLE \n\n');
+    end
+    
+    % Report of structurally globally identifiable parameters
+    fprintf(1,'Structurally globally identifiable parameters: \n');     
+    if size(gloIdentPar,2) == 0
+        disp(' []'); disp(' ');
+    else
+        disp(gloIdentPar)
+    end
+    
+    % Report of structurally locally identifiable parameters
+    fprintf(1,'Structurally locally identifiable parameters: \n');
+    if length(locIdentPar) == 0
+        disp(' []'); disp(' ');
+    else
+        disp(locIdentPar)
+    end
+    
+    % Report of structurally non-identifiable parameters
+    fprintf(1,'Structurally non-identifiable parameters: \n');
+    if length(nonIdentPar) == 0
+        disp(' []'); disp(' ');
+    else
+        disp(nonIdentPar)
     end
 end

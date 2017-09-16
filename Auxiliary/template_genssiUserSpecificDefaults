@@ -19,5 +19,7 @@ function default = genssiUserSpecificDefaults(optionName)
             default = false;
         case 'feedbackRequired'
             default = true;
+        case 'reportCompTime'
+            default = false;
     end
 end

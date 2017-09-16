@@ -17,15 +17,15 @@ function [options,results,RJacParam01,ECC,rParam]=genssiComputeReducedTableau...
     %  RJacParam01: reduced tableau (binary matrix)
     %  ECC: equations (symbolic matrix)
     %  rParam: reduced list of parameters (symbolic array)
-    %  
-    fprintf(1,'\n\n************************************************\n');
-    fprintf(1,'-> COMPUTE REDUCED IDENTIFIABILITY TABLEAUS\n');
-    fprintf(1,'************************************************\n');
-    rParam=model.sym.Par; % reduced parameter list starts as model parameter list
-    sizeJacParam=size(JacParam);
-    RJacParam=[];
-    keepIndex=[];
-    rankOld=0;
+    
+    fprintf(1,'***************************************************\n');
+    fprintf(1,'* COMPUTATION OF REDUCED IDENTIFIABILITY TABLEAUS *\n');
+    fprintf(1,'***************************************************\n\n');
+    rParam = model.sym.Par; % reduced parameter list starts as model parameter list
+    sizeJacParam = size(JacParam);
+    RJacParam = [];
+    keepIndex = [];
+    rankOld = 0;
     for i=1:sizeJacParam(1)
         if verLessThan('matlab','7.7') || size([RJacParam; JacParam(i,:)],2)==1
             rankNew=double(rank([RJacParam; JacParam(i,:)]));
@@ -55,9 +55,7 @@ function [options,results,RJacParam01,ECC,rParam]=genssiComputeReducedTableau...
         Const(j)=sym(strcat('c',num2str(j)));
     end
 
-    fprintf(1,'\n\n*****************************************************\n');
-    fprintf(1,'-> THE RELATIONS NEEDED FOR COMPUTING THE PARAMETERS\n');
-    fprintf(1,'*****************************************************\n\n');
+    fprintf(1,'Relations needed for computing parameters:\n');
 
     ECC=Equations.'-Const;
     Equ=Equations.';
@@ -72,15 +70,14 @@ function [options,results,RJacParam01,ECC,rParam]=genssiComputeReducedTableau...
     end
     
     if sizeRJacParam(1)==1
-        [RJacParam01,keepB,tilde]=genssiRemoveZeroElementsR(RJacParam01);
+        [RJacParam01,keepB,tilde] = genssiRemoveZeroElementsR(RJacParam01);
     else
-        [RJacParam01,keepB,tilde]=genssiRemoveZeroColumns(RJacParam01);
+        [RJacParam01,keepB,tilde] = genssiRemoveZeroColumns(RJacParam01);
     end
     Non_identifiable_param = rParam(~keepB);
-    index_non_id = find(~keepB);
     rParam = rParam(keepB);
     
-    %Represents graphically the 0-1 reduced identifiability tableau
+    % Represents graphically the 0-1 reduced identifiability tableau
     genssiTableauImage(02,RJacParam01,rParam,options);
-    results.Non_identifiable_param=Non_identifiable_param;
+    results.Non_identifiable_param = Non_identifiable_param;
 end
