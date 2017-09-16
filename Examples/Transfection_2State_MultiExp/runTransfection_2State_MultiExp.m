@@ -18,4 +18,4 @@ genssiMultiExperiment('Transfection_2State',...           % Initial model (singl
                       'Transfection_2State_MultiExp');    % Name of transformed model
 
 % Structural identifiability analysis for transformed model
-genssiMain('Transfection_2State_MultiExp',5);
+genssiMain('Transfection_2State_MultiExp',3);
