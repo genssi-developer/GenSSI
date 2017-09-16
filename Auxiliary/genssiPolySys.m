@@ -1,6 +1,6 @@
 function [z,fz,gz,z0,yz,xi,inv_xi] = genssiPolySys(x,f,g,x0,y)
     % genssiPolySys converts a model to polynomial form.
-    %  [X,F,X0] = genssiPolySys(X,F,X0)
+    %  [Z,FZ,GZ,X0,YZ,XI,INV_XI] = genssiPolySys(X,F,G,X0,Y)
     %
     % Parameters:
     %  X: the state variables of the input model (a vector, nx x 1)
@@ -46,7 +46,6 @@ function [z,fz,gz,z0,yz,xi,inv_xi] = genssiPolySys(x,f,g,x0,y)
                     inv_xi(end+1:end+length(D),1) = transpose(D);
                 end
             end
-
         end
         inv_xi = unique(inv_xi(~double(floor(inv_xi)-inv_xi == 0)));
     end

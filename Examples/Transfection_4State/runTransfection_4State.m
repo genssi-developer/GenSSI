@@ -11,6 +11,12 @@
 % Structural identifiability analysis for all parameters
 genssiMain('Transfection_4State',7);
 
-% Structural identifiability analysis for reduced set of unknown parameters
-syms d1 d2 d3 b kTL mRNA0 enz0
-genssiMain('Transfection_4State',7,[d1,d2,d3,kTL]);
+% Transformation of the model
+genssiTransformation('Transfection_4State',...          % Initial model
+                     'TransformationRules_4State',...   % Definition of transformation
+                     'transformedTransfection_4State'); % Name of transformed model
+
+% Structural identifiability analysis for transformed model
+genssiMain('transformedTransfection_4State',7);
+
+

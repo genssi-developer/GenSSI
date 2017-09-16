@@ -11,151 +11,203 @@ function varargout = genssiTransformation(varargin)
     % Return values:
     %  varargout: generic output arguments    
     %  
+    
+    % Check inputs
     if nargin >= 1
         modelNameIn = varargin{1};
     else
-        error('please supply the name of an input model in the first parameter');
+        error('Please supply the name of an input model in the first parameter.');
     end
     if nargin >= 2
         transDefName = varargin{2};
     else
-        error('please supply the name of a transformation definition in the second parameter');
+        error('Please supply the name of a transformation definition in the second parameter.');
     end
     if nargin >= 3
         modelNameOut = varargin{3};
     else
-        error('please supply the name of an output model in the third parameter');
+        error('Please supply the name of an output model in the third parameter.');
     end
     
-    runModel = str2func(modelNameIn);
-    modelIn = runModel();
-    runTransDef = str2func(transDefName);
-    transDef = runTransDef();
-     
-    GenSSIDir = fileparts(mfilename('fullpath'));
-    addpath(fullfile(GenSSIDir,'Examples'));
-
-    model = modelIn;
-    model.sym.p = transDef.sym.p;
+    % Load model and transformation
+    modelIn = eval(modelNameIn);
+    transDef = eval(transDefName);
     
+    % Check model
+    modelIn = genssiCheckModel(modelIn);
+
+%     
+%     GenSSIDir = fileparts(mfilename('fullpath'));
+%     addpath(fullfile(GenSSIDir,'Examples'));
+    
+    % Assigne model properties
     X = transpose(modelIn.sym.x);
-    XDOT = transpose(modelIn.sym.xdot);
+    F = transpose(modelIn.sym.xdot);
     X0 = transpose(modelIn.sym.x0);
     G = transpose(modelIn.sym.g);
     Y = transpose(modelIn.sym.y);
     P = transpose(modelIn.sym.p);
-    if isfield(transDef.sym,'stateSubs')
-        stateSubs = transDef.sym.stateSubs;
+    
+    % Assign and check state transformation
+    if isfield(transDef.sym,'state')
+        if ~isfield(transDef.sym.state,'formula')
+            transDef.sym.state.formula = X;
+        end
+        if ~isfield(transDef.sym.state,'name')
+            for i = 1:length(transDef.sym.state.formula)
+                transDef.sym.state.name{i,1} = genssiGetSymChar(char(transDef.sym.state.formula(i)));
+            end
+        else
+            if isrow(transDef.sym.state.name)
+                transDef.sym.state.name = transpose(transDef.sym.state.name);
+            end
+        end
     else
-        stateSubs = [];
+        transDef.sym.state.formula = X;
+        for i = 1:length(X)
+            transDef.sym.state.name{i} = char(X(i));
+        end
     end
-    if isfield(transDef.sym,'parSubs')
-        parSubs = transDef.sym.parSubs;
+    if length(transDef.sym.state.formula) ~= length(transDef.sym.state.name)
+        error(['Please ensure that for the state variables the ' ...
+               'number of formulas is equal to the number of names.'])
+    end
+    T = transDef.sym.state.formula;
+    
+    % Assign and check state constraints
+    if isfield(transDef.sym,'constraint')
+        C = transDef.sym.constraint;
     else
-        parSubs = [];
+        C = [];
     end
-    T = transDef.sym.Transformation;
-    C = transDef.sym.Constraint;
-%     symsDefTest = symsDef(X);
-%     syms m G E1 mE
-%     eval(symsDefTest);
-%     eval(symsDef(X));
-
-    Xnew = sym(zeros(size(T)));
+    if length(transDef.sym.constraint)+length(transDef.sym.state.formula) ...
+            ~= length(modelIn.sym.x)
+        error(['Please ensure that the number of constraints plus the ' ...
+               'number of new state is at least equal to the number of ' ...
+               'state in the input model. If this is not the case, the ' ...
+               'inverse of the transformation does not exist.'])
+    end
+    
+    % Assign and check of parameter substitution
+    if isfield(transDef.sym,'parameter')
+        if isfield(transDef.sym.parameter,'formula')
+            if isrow(transDef.sym.state.name)
+                transDef.sym.state.name = transpose(transDef.sym.state.name);
+            end
+            if ~isfield(transDef.sym.parameter,'name')
+                for i = 1:length(transDef.sym.parameter.formula)
+                    transDef.sym.parameter.name{i,1} = genssiGetSymChar(char(transDef.sym.parameter.formula(i)));
+                end
+            end
+        end
+        if length(transDef.sym.parameter.formula) ~= length(transDef.sym.parameter.name)
+            error(['Please ensure that for the parameters the ' ...
+                   'number of formulas is equal to the number of names.'])
+        end
+    end
+    
+    % Definition of new state vector
+    % (Note: We include 'Xnew_' to avoid that state variables in the input
+    % model have the same names as state variables in the output model.
+    % This is important for the construction of the inverse transformtion
+    % and is removed afterwards.)
+    Xnew = sym(transDef.sym.state.name);
+    Xnew_mod = sym(zeros(size(T)));
     for i = 1:length(T)
-        Xnew(i,1) = sym(['Xnew_' strrep(strrep(char(T(i)),'/','d'),'*','t')]);
+        Xnew_mod(i,1) = sym(['Xnew_' transDef.sym.state.name{i}]);
     end
-% with Xnew = T(X)
 
+    % Construct inverse transformation based on definition of new states
+    % and constraints
     zeroC = sym(zeros(size(C)));
-    sol = solve([Xnew;zeroC] == [T;C],X);
+    sol = solve([Xnew_mod;zeroC] == [T;C],X);
     Tinv = sym(zeros(size(X)));
     for i = 1:length(X)
         Tinv(i,1) = eval(['sol.' char(X(i))]);
     end
     
-    XDOTnew = simplify(jacobian(T,X)*subs(XDOT,X,Tinv));
+    % Construction of transformed model
+    Fnew = simplify(jacobian(T,X)*subs(F,X,Tinv));
     Ynew = simplify(subs(Y,X,Tinv));
     Gnew = simplify(subs(G,X,Tinv));
     X0new = simplify(subs(T,X,X0));
     
-% Support of character vectors that are not valid variable names or define
-% a number will be removed in a future release
-    Xnew = sym(strrep(char(Xnew),'Xnew_',''));
-    XDOTnew = sym(strrep(char(XDOTnew),'Xnew_',''));
-    Ynew = sym(strrep(char(Ynew),'Xnew_',''));
-    Gnew = sym(strrep(char(Gnew),'Xnew_',''));
-    X0new = sym(strrep(char(X0new),'Xnew_',''));
-%     for ind = 1:length(Xnew)
-%         Xnew(ind) = sym(strrep(char(Xnew(ind)),'Xnew_',''));
-%     end
-%     for ind = 1:length(XDOTnew)
-%         XDOTnew(ind) = sym(strrep(char(XDOTnew(ind)),'Xnew_',''));
-%     end
-%     for ind = 1:length(Ynew)
-%         Ynew(ind) = sym(strrep(char(Ynew(ind)),'Xnew_',''));
-%     end
-%     for ind = 1:length(Gnew)
-%         Gnew(ind) = sym(strrep(char(Gnew(ind)),'Xnew_',''));
-%     end
-%     for ind = 1:length(X0new)
-%         X0new(ind) = sym(strrep(char(X0new(ind)),'Xnew_',''));
-%     end
-    
-    if isempty(stateSubs)
+    % Check state transformation
+    if isempty(intersect(symvar([Fnew(:),Ynew(:),Gnew(:),X0new(:)]),modelIn.sym.x))
+        disp('State transformation appears to work properly.');
     else
-        Xnew = subs(Xnew,stateSubs(:,1),stateSubs(:,2));
-        XDOTnew = subs(XDOTnew,stateSubs(:,1),stateSubs(:,2));
-        Ynew = subs(Ynew,stateSubs(:,1),stateSubs(:,2));
-        Gnew = subs(Gnew,stateSubs(:,1),stateSubs(:,2));
-        X0new= subs(X0new,stateSubs(:,1),stateSubs(:,2));        
+        error(['The state transformation failed. Possible reasons are: '...
+               '(i) The definition of the transformed state does not allow ' ...
+               'for a correct transformation; or (2) The symbolic inversion ' ...
+               'of the transformation failed (because it is to complex).']);
     end
     
-    if isempty(parSubs)
-        XDOTnew = expand(XDOTnew);
-        for i = 1:length(P)
-            for j = 1:length(P)
-                XDOTnew = subs(XDOTnew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                XDOTnew = subs(XDOTnew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
+    % Substitute new parameter
+    Tinv = subs(Tinv,Xnew_mod,Xnew);
+    Fnew = subs(Fnew,Xnew_mod,Xnew);
+    Ynew = subs(Ynew,Xnew_mod,Xnew);
+    Gnew = subs(Gnew,Xnew_mod,Xnew);
+    X0new = subs(X0new,Xnew_mod,Xnew);
+
+    % Substitution of parameters
+    Pnew = P;
+    if isfield(transDef.sym,'parameter')
+        if isfield(transDef.sym.parameter,'formula')
+            % Define symbolic variables for new parameters
+            Pnew  = sym(transDef.sym.parameter.name);
+            
+            % Substitude parameters
+            % (Note: We use here different variants to achieve a high
+            % probability for a correct sub
+            Fnew  = subs(         Fnew  ,transDef.sym.parameter.formula,Pnew);
+            Fnew  = subs(  expand(Fnew ),transDef.sym.parameter.formula,Pnew);
+            Fnew  = subs(simplify(Fnew ),transDef.sym.parameter.formula,Pnew);
+            Ynew  = subs(         Ynew  ,transDef.sym.parameter.formula,Pnew);
+            Ynew  = subs(  expand(Ynew ),transDef.sym.parameter.formula,Pnew);
+            Ynew  = subs(simplify(Ynew ),transDef.sym.parameter.formula,Pnew);
+            Gnew  = subs(         Gnew  ,transDef.sym.parameter.formula,Pnew);
+            Gnew  = subs(  expand(Gnew ),transDef.sym.parameter.formula,Pnew);
+            Gnew  = subs(simplify(Gnew ),transDef.sym.parameter.formula,Pnew);
+            X0new = subs(         X0new ,transDef.sym.parameter.formula,Pnew);
+            X0new = subs(  expand(X0new),transDef.sym.parameter.formula,Pnew);
+            X0new = subs(simplify(X0new),transDef.sym.parameter.formula,Pnew);
+            
+            % Check whether parameter vector is sufficient
+            % (1) Determine symbolic variables in the input model which are
+            % not part of x or p. These could for instance be constants. We
+            % would expect that also after the transformatio, these
+            % parameters do not have to be contained in xnew and pnew.
+            unexpVar = setdiff(symvar([F(:),Y(:),G(:),X0(:)]),symvar([X(:),P(:)]));
+            % (2) Determine symbolic variables in the transformed model 
+            % which are not part of xnew or pnew.
+            unexpVarNew = setdiff(symvar([Fnew(:),Ynew(:),Gnew(:),X0new(:)]),symvar([Xnew(:),Pnew(:)]));
+            % (3) Check whether whether unexpVarNew is contained in 
+            % unexpVar, if not, complete pnew
+            unexpVarDiff = setdiff(unexpVarNew,unexpVar);
+            if isempty(unexpVarDiff)
+                disp('Parameter substitution appears to work properly.');
+            else
+                warning(['The provided parameter substitution rules do not '...
+                         'seem to be sufficient and are extended. Please '...
+                         'check the results.'])
+                Pnew = [Pnew;transpose(unexpVarDiff)];
             end
         end
-        XDOTnew = simplify(XDOTnew);   
-        Ynew = expand(Ynew);
-        for i = 1:length(P)
-            for j = 1:length(P)
-                Ynew = subs(Ynew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                Ynew = subs(Ynew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
-            end
-        end
-        Ynew = simplify(Ynew);
-        Gnew = expand(Gnew);
-        for i = 1:length(P)
-            for j = 1:length(P)
-                Gnew = subs(Gnew,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                Gnew = subs(Gnew,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
-            end
-        end
-        Gnew = simplify(Gnew);
-        X0new = expand(X0new);
-        for i = 1:length(P)
-            for j = 1:length(P)
-                X0new = subs(X0new,P(i)*P(j),sym([char(P(i)),'t',char(P(j))]));
-                X0new = subs(X0new,P(i)/P(j),sym([char(P(i)),'d',char(P(j))]));
-            end
-        end
-        X0new = simplify(X0new);     
-    else
-        XDOTnew = expand(simplify(subs(XDOTnew,parSubs(:,1),parSubs(:,2))));
-        Ynew = expand(simplify(subs(Ynew,parSubs(:,1),parSubs(:,2))));
-        Gnew = expand(simplify(subs(Gnew,parSubs(:,1),parSubs(:,2))));
-        X0new= expand(simplify(subs(X0new,parSubs(:,1),parSubs(:,2))));
     end
     
+    % Assemble transformed model
+    model.sym.p = transpose(Pnew);
     model.sym.x = transpose(Xnew);
-    model.sym.xdot = transpose(XDOTnew);
+    model.sym.xdot = transpose(Fnew);
     model.sym.x0 = transpose(X0new);
     model.sym.g = transpose(Gnew);
     model.sym.y = transpose(Ynew);
+    
+    % Generate candidates for parameterisation
+    disp('Candidates for a potential reparameterization:');
+    cand = genssiGetCandForTransformation(model)
+    
+    % Write to model to file
     genssiStructToSource(model,modelNameOut);
 end
 
