@@ -1,4 +1,4 @@
-function varargout = genssiTransformation(varargin)
+function genssiTransformation(varargin)
     % genssiTransformation converts a GenSSI model to a new GenSSI model
     % based on a transformation definition.
     %
@@ -9,8 +9,7 @@ function varargout = genssiTransformation(varargin)
     %  modelNameOut: the name of the output model (a string)
     %
     % Return values:
-    %  varargout: generic output arguments    
-    %  
+    %  void    
     
     % Check inputs
     if nargin >= 1
@@ -30,19 +29,19 @@ function varargout = genssiTransformation(varargin)
     end
     
     % Load model and transformation
-    modelIn = eval(modelNameIn);
+    modelIn = genssiTransposeModel(eval(modelNameIn));
     transDef = eval(transDefName);
     
     % Check model
     modelIn = genssiCheckModel(modelIn);
     
     % Assigne model properties
-    X = transpose(modelIn.sym.x);
-    F = transpose(modelIn.sym.xdot);
-    X0 = transpose(modelIn.sym.x0);
-    G = transpose(modelIn.sym.g);
-    Y = transpose(modelIn.sym.y);
-    P = transpose(modelIn.sym.p);
+    X = modelIn.sym.x;
+    F = modelIn.sym.xdot;
+    X0 = modelIn.sym.x0;
+    G = modelIn.sym.g;
+    Y = modelIn.sym.y;
+    P = modelIn.sym.p;
     
     % Assign and check state transformation
     if isfield(transDef.sym,'state')
@@ -139,7 +138,6 @@ function varargout = genssiTransformation(varargin)
     end
     
     % Substitute new parameter
-    Tinv = subs(Tinv,Xnew_mod,Xnew);
     Fnew = subs(Fnew,Xnew_mod,Xnew);
     Ynew = subs(Ynew,Xnew_mod,Xnew);
     Gnew = subs(Gnew,Xnew_mod,Xnew);
@@ -192,12 +190,15 @@ function varargout = genssiTransformation(varargin)
     end
     
     % Assemble transformed model
-    model.sym.p = transpose(Pnew);
-    model.sym.x = transpose(Xnew);
-    model.sym.xdot = transpose(Fnew);
-    model.sym.x0 = transpose(X0new);
-    model.sym.g = transpose(Gnew);
-    model.sym.y = transpose(Ynew);
+    model.sym.p = Pnew;
+    model.sym.x = Xnew;
+    model.sym.xdot = Fnew;
+    model.sym.x0 = X0new;
+    model.sym.g = Gnew;
+    model.sym.y = Ynew;
+    
+    % Transpose model
+    model = genssiTransposeModel(model);
     
     % Generate candidates for parameterisation
     disp('Candidates for a potential reparameterization:');
