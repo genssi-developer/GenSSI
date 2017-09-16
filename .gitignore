@@ -10,3 +10,5 @@ Examples/GoodwinPoly/Goodwin.m
 Examples/GoodwinPoly/GoodwinPoly.m
 Examples/ArabidopsisPoly/Arabidopsis.m
 Examples/ArabidopsisPoly/ArabidopsisPoly.m
+Examples/Transfection_4State_Transformation/Transfection_4State.m
+Examples/Transfection_4State_Transformation/transformedTransfection_4State.m
