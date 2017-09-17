@@ -25,22 +25,22 @@ function model = Transfection_4State()
     syms d1 d2 d3 b kTL mRNA0 enz0
     
     % Parameters
-    model.sym.p = [d1,d2,d3,b,kTL,mRNA0,enz0];
+    model.sym.p = [d1;d2;d3;b;kTL;mRNA0;enz0];
 
     % State variables
-    model.sym.x = [mRNA,GFP,enz,mRNAenz];
+    model.sym.x = [mRNA;GFP;enz;mRNAenz];
 
     % Control vectors (g)
     model.sym.g = [];
 
     % Autonomous dynamics (f)
-    model.sym.xdot = [-d1*mRNA-d2*mRNA*enz,...
-                     +kTL*mRNA-b*GFP,...
-                     +d3*mRNAenz-d2*mRNA*enz,...
+    model.sym.xdot = [-d1*mRNA-d2*mRNA*enz
+                     +kTL*mRNA-b*GFP
+                     +d3*mRNAenz-d2*mRNA*enz
                      -d3*mRNAenz+d2*mRNA*enz];
 
     % Initial conditions
-    model.sym.x0 = [mRNA0,0,enz0,0];       
+    model.sym.x0 = [mRNA0;0;enz0;0];       
 
     % Observables
     model.sym.y = [GFP];

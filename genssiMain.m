@@ -14,7 +14,7 @@ function options = genssiMain(modelName,Nder,Par,optionsIn)
     if ~exist('modelName','var')
         error('please supply the name of a model in the first parameter');
     end
-    model = genssiTransposeModel(eval(modelName));
+    model = eval(modelName);
     model.sym.Name = modelName; % needed for genssiReportInputs
 
     % Set default number of derivatives

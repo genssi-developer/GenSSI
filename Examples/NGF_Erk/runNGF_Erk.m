@@ -8,4 +8,4 @@
 % The analysis of performed for a subset of the parameters.
 
 syms k_1 k_2 k_9 k_11
-genssiMain('NGF_Erk',7,[k_1,k_2,k_9,k_11]);
+genssiMain('NGF_Erk',7,[k_1;k_2;k_9;k_11]);

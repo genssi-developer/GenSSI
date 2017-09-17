@@ -29,7 +29,7 @@ function genssiMultiExperiment(varargin)
     end
     
     % Load model and definition of experimental conditions
-    modelIn = genssiTransposeModel(eval(modelNameIn));
+    modelIn = eval(modelNameIn);
     expCond = eval(ExpCondName);
     
     % Check model and expeimental condition
@@ -47,9 +47,9 @@ function genssiMultiExperiment(varargin)
     FMulti = sym(zeros(nState,nExp));
     HMulti = sym(zeros(nObs,nExp));
     if isempty(expCond.sym.u) || isempty(modelIn.sym.g)
-        GMulti = [];
-    else
         GMulti = sym(zeros(nState,nCont,nExp));
+    else
+        GMulti = [];
     end
     
     % Construct integrated model for all experimental conditions
@@ -74,9 +74,6 @@ function genssiMultiExperiment(varargin)
     model.sym.y = HMulti(:);
     model.sym.x0 = expCond.sym.x0(:);
     
-    % Transpose model
-    model = genssiTransposeModel(model);
-
     % Write to model to file
     genssiStructToSource(model,modelNameOut);
 end

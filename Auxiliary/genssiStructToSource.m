@@ -39,7 +39,7 @@ function genssiStructToSource(model,modelName)
     end
     if length(model.sym.p)>1
         for iStr = 2:length(model.sym.p)
-            strMat = [strMat ',' char(model.sym.p(iStr))];
+            strMat = [strMat ';' char(model.sym.p(iStr))];
         end
     end
     strMat = [strMat '];\n'];
@@ -51,7 +51,7 @@ function genssiStructToSource(model,modelName)
     strMat = [strMat char(model.sym.x(1))];
     if length(model.sym.x)>1
         for iStr = 2:length(model.sym.x)
-            strMat = [strMat ',' char(model.sym.x(iStr))];
+            strMat = [strMat ';' char(model.sym.x(iStr))];
         end
     end
     strMat = [strMat '];\n'];
@@ -59,36 +59,32 @@ function genssiStructToSource(model,modelName)
     
     % Write control vectors (g)
     strMat = '\n\t%% Control vectors (g)\n';    
-    if isnumeric(model.sym.g)
-        strMat = [strMat '\tmodel.sym.g = [' num2str(model.sym.g) '];\n'];
-    else
-        strMat = [strMat '\tmodel.sym.g = ['];
-        if ~isempty(model.sym.g)
-            for iRow = 1:size(model.sym.g,1)
-                if iRow>1
-                    strMat = [strMat ';'];
+    strMat = [strMat '\tmodel.sym.g = ['];
+    if ~isempty(model.sym.g)
+        for iRow = 1:size(model.sym.g,1)
+            if iRow>1
+                strMat = [strMat '\n                   '];
+            end
+            for iCol = 1:size(model.sym.g,2)
+                if iCol>1
+                    strMat = [strMat ','];
                 end
-                for iCol = 1:size(model.sym.g,2)
-                    if iCol>1
-                        strMat = [strMat ','];
-                    end
-                    strMat = [strMat char(model.sym.g(iRow,iCol))];
-                end
+                strMat = [strMat char(model.sym.g(iRow,iCol))];
             end
         end
-        strMat = [strMat '];\n'];
     end
+    strMat = [strMat '];\n'];
     fprintf(fileID,strMat);
     
     % Write autonomous dynamics (f)
     strMat = '\n\t%% Autonomous dynamics (f)\n';    
     strMat = [strMat '\tmodel.sym.xdot = ['];
     if ~isempty(model.sym.xdot)
-        strMat = [strMat char(model.sym.xdot(1))];
-    end
-    if length(model.sym.xdot)>1
-        for iStr = 2:length(model.sym.xdot)
-            strMat = [strMat ',' char(model.sym.xdot(iStr))];
+        for i = 1:length(model.sym.xdot)
+            if i>1
+                strMat = [strMat '\n                      '];
+            end
+            strMat = [strMat char(model.sym.xdot(i))];
         end
     end
     strMat = [strMat '];\n'];
@@ -102,7 +98,7 @@ function genssiStructToSource(model,modelName)
     end
     if length(model.sym.x0)>1
         for iStr = 2:length(model.sym.x0)
-            strMat = [strMat ',' char(sym(model.sym.x0(iStr)))];
+            strMat = [strMat ';' char(sym(model.sym.x0(iStr)))];
         end
     end
     strMat = [strMat '];\n'];
@@ -116,7 +112,7 @@ function genssiStructToSource(model,modelName)
     end
     if length(model.sym.y)>1
         for iStr = 2:length(model.sym.y)
-            strMat = [strMat ',' char(model.sym.y(iStr))];
+            strMat = [strMat ';' char(model.sym.y(iStr))];
         end
     end
     strMat = [strMat '];\n'];

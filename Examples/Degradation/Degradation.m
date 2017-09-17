@@ -7,7 +7,7 @@ function model = Degradation()
 	syms x
 	
     % Parameters
-	model.sym.p = [k_syn,k_deg_max,K_deg];
+	model.sym.p = [k_syn;k_deg_max;K_deg];
 
     % State variables
     model.sym.x = [x];

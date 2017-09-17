@@ -11,21 +11,21 @@ function model = Cholesterol2()
     syms x1 x2
     
     % Parameters
-    model.sym.p = [k02,k12,k21,V1];
+    model.sym.p = [k02;k12;k21;V1];
 
     % State variables
-    model.sym.x = [x1,x2];
+    model.sym.x = [x1;x2];
 
     % Control vectors (g)
-    model.sym.g = [1,...
+    model.sym.g = [1
                    0];
 
     % Autonomous dynamics (f)
-    model.sym.xdot = [k12*x2-(1+k21)*x1,...
+    model.sym.xdot = [k12*x2-(1+k21)*x1
                       k21*x1-(k02+k12)*x2];
 
     % Initial conditions
-    model.sym.x0 = [0,0];
+    model.sym.x0 = [0;0];
 
     % Observables
     model.sym.y = [x1/V1];

@@ -12,29 +12,30 @@ function model = Glycolysis()
     syms x1 x2 x3 x4 x5
 
     % Parameters
-    model.sym.p = [k1,k2,k3,k4,kM,x10,x20,x30,x40,x50];
+    model.sym.p = [k1;k2;k3;k4;kM;x10;x20;x30;x40;x50];
 
     % State variables
-    model.sym.x = [x1,x2,x3,x4,x5];
+    model.sym.x = [x1;x2;x3;x4;x5];
     
     % Control vectors (g)
-    model.sym.g = [-(k1*x1)/(kM+x1), (k1*x1)/(kM+x1),               0,               0,              0;
-                    0              ,-(k2*x2)/(kM+x2), (k2*x2)/(kM+x2), (k2*x2)/(kM+x2),              0;
-                    0              ,               0,-(k3*x3)/(kM+x3), (k3*x3)/(kM+x3),              0;
-                    0              ,               0,               0,-(k4*x4)/(kM+x4),(k4*x4)/(kM+x4)];
+    model.sym.g = [-(k1*x1)/(kM+x1),               0,               0,               0
+                    (k1*x1)/(kM+x1),-(k2*x2)/(kM+x2),               0,               0
+                                  0, (k2*x2)/(kM+x2),-(k3*x3)/(kM+x3),               0
+                                  0, (k2*x2)/(kM+x2), (k3*x3)/(kM+x3),-(k4*x4)/(kM+x4)
+                                  0,               0,               0, (k4*x4)/(kM+x4)];
 
     % Autonomous dynamics (f)
-    model.sym.xdot = [0,...
-                      0,...
-                      0,...
-                      0,...
+    model.sym.xdot = [0
+                      0
+                      0
+                      0
                       0];
 
     % Initial conditions
-    model.sym.x0 = [x10,x20,x30,x40,x50];
+    model.sym.x0 = [x10;x20;x30;x40;x50];
     
     % Observables
-    model.sym.y = [x1,x2,x3,x4,x5];
+    model.sym.y = [x1;x2;x3;x4;x5];
 end
 
 

@@ -13,32 +13,15 @@ function genssiToPolynomial (modelNameIn,modelNameOut)
     %  
     GenSSIDir=fileparts(mfilename('fullpath'));
     addpath(fullfile(GenSSIDir,'Examples'));
-    modelIn = genssiTransposeModel(eval(modelNameIn));
+    model = eval(modelNameIn);
     
     % Check consistency of model
-    modelIn = genssiCheckModel(modelIn);
+    model = genssiCheckModel(model);
     
     % Transform to polynomial system
-    [x,f,g,x0,y,xi,inv_xi] = genssiPolySys(modelIn.sym.x,...
-                                           modelIn.sym.xdot,...
-                                           modelIn.sym.g,...
-                                           modelIn.sym.x0,...
-                                           modelIn.sym.y);
-                  
-    % Transpose entries as genssiPolySys uses column vectors
-    model.sym.p = modelIn.sym.p;
-    model.sym.x = x;
-    model.sym.xdot = f;
-    model.sym.g = g;
-    model.sym.x0 = x0;
-    model.sym.y = y;
-    if length(xi) >= 1
-        model.sym.xi_name = transpose(xi);
-        model.sym.xi = transpose(1./inv_xi);
-    end
-    model = genssiTransposeModel(model);
+    [model.sym.x,model.sym.xdot,model.sym.g,model.sym.x0,model.sym.y,model.sym.xi,model.sym.inv_xi]...
+        = genssiPolySys(model.sym.x,model.sym.xdot,model.sym.g,model.sym.x0,model.sym.y);
 
-    
     % Writing transformed model to file
     genssiStructToSource(model,modelNameOut);
 end

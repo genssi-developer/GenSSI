@@ -4,23 +4,21 @@ function model = DegradationPoly()
 	syms k_syn k_deg_max K_deg
 
 	% Parameters
-	model.sym.p = [k_syn,k_deg_max,K_deg];
+	model.sym.p = [k_syn;k_deg_max;K_deg];
 
 	% State variables
-	model.sym.x = [x,xi1];
+	model.sym.x = [x;xi1];
 
 	% Control vectors (g)
 	model.sym.g = [];
 
 	% Autonomous dynamics (f)
-	model.sym.xdot = [k_syn - k_deg_max*x*xi1,-xi1^2*(k_syn - k_deg_max*x*xi1)];
+	model.sym.xdot = [k_syn - k_deg_max*x*xi1
+                      -xi1^2*(k_syn - k_deg_max*x*xi1)];
 
 	% Initial conditions
-	model.sym.x0 = [0,1/K_deg];
+	model.sym.x0 = [0;1/K_deg];
 
 	% Observables
 	model.sym.y = [x];
-
-	% Meaning of state variables of extended model 
-	% xi1 = 1/(K_deg + x)
 end
