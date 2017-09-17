@@ -5,4 +5,4 @@
 %    sugar groups on the pharmacokinetics of glucose-oxidase, 
 %    Drug. Des. Deliv., 1, 333-348.
 
-genssiMain('Pharmacokinetics',7);
+genssiMain('Pharmacokinetics',3);
