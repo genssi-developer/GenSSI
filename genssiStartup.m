@@ -12,6 +12,5 @@ function genssiStartup
     addpath(fullfile(GenSSIDir,'Docu'));
 
     % Generate file encoding user-specific defaults
-%     copyfile([pwd '/Auxiliary/template_genssiUserSpecificDefaults'],'genssiUserSpecificDefaults.m');
-    copyfile(fullfile(GenSSIDir,'Auxiliary','template_genssiUserSpecificDefaults'),fullfile(GenSSIDir,'GenssiUserSpecificDefaults.m'));
+    copyfile(fullfile(GenSSIDir,'Auxiliary','template_genssiUserSpecificDefaults'),fullfile(GenSSIDir,'genssiUserSpecificDefaults.m'));
 end
