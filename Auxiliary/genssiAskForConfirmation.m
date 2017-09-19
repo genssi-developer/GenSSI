@@ -18,7 +18,8 @@ function genssiAskForConfirmation(expectedRuntime)
     if genssiUserSpecificDefaults('feedbackRequired')
         prompt = ['\nThe structural identifiability analysis will take roughly ' num2str(expectedRuntime) ' seconds. \n' ...
           'Please confirm that you want to run. (yes/no)  \n\n'];
-        if ~strcmp(input(prompt,'s'),'yes')
+        pIn = input(prompt,'s');
+        if ~(strcmpi(pIn,'yes') || strcmpi(pIn,'y'))            
             error('Calculation discontinued by user')
         end
     end

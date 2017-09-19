@@ -5,4 +5,7 @@
 %    analysis of partially observed dynamical models by exploiting 
 %    the profile likelihood. Bioinformatics 25(15): 1923-1929.
 
+% Confirm execution
+genssiAskForConfirmation(5);
+
 genssiMain('JAK_STAT',7);

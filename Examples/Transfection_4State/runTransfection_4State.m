@@ -8,5 +8,8 @@
 % In contrast to the 2-state transfection model, the 4-state transfection
 % model accounts for an enzymatic degration of the mRNA.
 
+% Confirm execution
+genssiAskForConfirmation(3);
+
 % Structural identifiability analysis for all parameters
 genssiMain('Transfection_4State',7);

@@ -17,5 +17,8 @@ genssiMultiExperiment('Transfection_2State',...           % Initial model (singl
                       'ExperimentalConditions_2State',... % Definition of experimental conditions
                       'Transfection_2State_MultiExp');    % Name of transformed model
 
+% Confirm execution
+genssiAskForConfirmation(3);
+
 % Structural identifiability analysis for transformed model
 genssiMain('Transfection_2State_MultiExp',3);

@@ -11,5 +11,8 @@ copyfile(fullfile('..','Degradation','Degradation.m'),'Degradation.m');
 % Transform model to polynomial
 genssiToPolynomial('Degradation','DegradationPoly');
 
+% Confirm execution
+genssiAskForConfirmation(1);
+
 % Structural identifiability analysis (for all parameters)
 genssiMain('DegradationPoly',4);

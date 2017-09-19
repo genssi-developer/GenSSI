@@ -5,7 +5,7 @@
 %              processes, Adv. Enzyme Regul. (3), 425-428. 
 
 % Confirm execution
-genssiAskForConfirmation(10);
+genssiAskForConfirmation(2);
 
 % Structural identifiability analysis (for a subset of the parameters)
 genssiMain('Goodwin',5);

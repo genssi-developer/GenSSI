@@ -5,4 +5,7 @@
 %    studies: delivery, kinetics and statistics by numbers, 
 %    Nanomedicine: Nanotechnology, Biology and Medicine. 10(4):679-88.
 
+% Confirm execution
+genssiAskForConfirmation(3);
+
 genssiMain('Transfection_2State',3);

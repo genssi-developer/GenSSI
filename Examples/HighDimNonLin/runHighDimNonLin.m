@@ -7,4 +7,7 @@
 %
 % which is denoted as "high-dimensional nonlinear model".
 
+% Confirm execution
+genssiAskForConfirmation(4);
+
 genssiMain('HighDimNonLin',2);

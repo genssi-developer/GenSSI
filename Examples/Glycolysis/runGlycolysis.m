@@ -9,5 +9,8 @@
 % Definition of parameters
 syms k1 k2 k3 k4 kM;
 
+% Confirm execution
+genssiAskForConfirmation(3);
+
 % Structural identifiability analysis for the selected parameters
 genssiMain('Glycolysis',2,[k1,k2,k3,k4,kM]);

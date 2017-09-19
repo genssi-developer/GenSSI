@@ -21,9 +21,12 @@ copyfile(fullfile('..','Transfection_4State','Transfection_4State.m'),'Transfect
 % Transformation of the model
 genssiTransformation('Transfection_4State',...          % Initial model
                      'TransformationRules_4State',...   % Definition of transformation
-                     'transformedTransfection_4State'); % Name of transformed model
+                     'Transfection_4State_Transformation'); % Name of transformed model
+
+% Confirm execution
+genssiAskForConfirmation(3);
 
 % Structural identifiability analysis for transformed model
-genssiMain('transformedTransfection_4State',7);
+genssiMain('Transfection_4State_Transformation',7);
 
 

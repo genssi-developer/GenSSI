@@ -8,5 +8,8 @@
 % Definition of symbolic variables
 syms k02 k03 k12 k13 k21 k31 V1
 
+% Confirm execution
+genssiAskForConfirmation(5);
+
 % Structural identifiability analysis
 genssiMain('Thyroid1',7,[k02,k03,k12,k13,k21,k31,V1]);

@@ -16,6 +16,9 @@ copyfile(fullfile('..','Arabidopsis','Arabidopsis.m'),'Arabidopsis.m');
 % Transform model to polynomial
 genssiToPolynomial('Arabidopsis','ArabidopsisPoly');
 
+% Confirm execution
+genssiAskForConfirmation(80);
+
 % Symbolic parameters for identifiability analysis
 syms p1 p2 p5 p8 p10 p11 p12 p15 p18 p19 p26 p27
 

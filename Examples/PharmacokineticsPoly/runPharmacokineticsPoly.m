@@ -16,5 +16,8 @@ copyfile(fullfile('..','Pharmacokinetics','Pharmacokinetics.m'),'Pharmacokinetic
 % Transform model to polynomial
 genssiToPolynomial('Pharmacokinetics','PharmacokineticsPoly');
 
+% Confirm execution
+genssiAskForConfirmation(13);
+
 % Structural identifiability analysis (for all parameters)
 genssiMain('PharmacokineticsPoly',3);

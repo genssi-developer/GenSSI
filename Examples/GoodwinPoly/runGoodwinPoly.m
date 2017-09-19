@@ -15,5 +15,8 @@ copyfile(fullfile('..','Goodwin','Goodwin.m'),'Goodwin.m');
 % Transform model to polynomial
 genssiToPolynomial('Goodwin','GoodwinPoly');
 
+% Confirm execution
+genssiAskForConfirmation(2);
+
 % Structural identifiability analysis (for all parameters)
 genssiMain('GoodwinPoly',5);
