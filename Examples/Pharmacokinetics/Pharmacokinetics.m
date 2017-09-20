@@ -29,6 +29,6 @@ function model = Pharmacokinetics()
     model.sym.x0 = [c0;0;g*c0;0];
 
     % Observables
-    model.sym.y = [x1;x2;x3];
+    model.sym.y = [x1;x4];
 end
 

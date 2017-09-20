@@ -20,4 +20,4 @@ genssiToPolynomial('Pharmacokinetics','PharmacokineticsPoly');
 genssiAskForConfirmation(13);
 
 % Structural identifiability analysis (for all parameters)
-genssiMain('PharmacokineticsPoly',3);
+genssiMain('PharmacokineticsPoly',4);

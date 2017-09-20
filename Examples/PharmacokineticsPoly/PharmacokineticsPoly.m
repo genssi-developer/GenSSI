@@ -23,5 +23,5 @@ function model = PharmacokineticsPoly()
 	model.sym.x0 = [c0;0;c0*g;0;1/(c0*ka + ka*kc + c0*g*kc)];
 
 	% Observables
-	model.sym.y = [x1;x2;x3];
+	model.sym.y = [x1;x4];
 end

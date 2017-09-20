@@ -8,4 +8,4 @@
 % Confirm execution
 genssiAskForConfirmation(11);
 
-genssiMain('Pharmacokinetics',3);
+genssiMain('Pharmacokinetics',2);

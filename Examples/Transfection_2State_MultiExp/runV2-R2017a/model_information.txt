@@ -3,7 +3,7 @@
 **********************************************************************
 
 Model name:     Transfection_2State_MultiExp
-Matlab version: 9.2.0.538062 (R2017a)
+Matlab version: 9.1.0.441655 (R2016b)
 Computer:       PCWIN64
 Options:
                 verbose: 1
@@ -64,7 +64,7 @@ Parameters considered for structural identifiability analysis:
    kTL
  mRNA0
  
-Report inputs elapsed time: 0.063592
+Report inputs elapsed time: 0.066778
  
 **********************************
 * COMPUTATION OF LIE DERIVATIVES *
@@ -93,7 +93,7 @@ COMPUTING LIE DERIVATIVES OF ORDER 3
 .................................................................
  
  
-Compute Lie derivatives elapsed time: 0.17021
+Compute Lie derivatives elapsed time: 0.22325
  
 ******************************************
 * COMPUTATION OF IDENTIFIABILITY TABLEAU *
@@ -102,7 +102,7 @@ Compute Lie derivatives elapsed time: 0.17021
 Rank of full Jacobian matrix: 3 
 => THE FULL JACOBIAN IS RANK DEFICIENT, YOU MAY CONSIDER ADDING NEW DERIVATIVES, 4 
 
-Compute tableau elapsed time: 6.7964
+Compute tableau elapsed time: 5.476
  
 ***************************************************
 * COMPUTATION OF REDUCED IDENTIFIABILITY TABLEAUS *
@@ -113,7 +113,7 @@ Relations needed for computing parameters:
        - c2 - b*kTL*mRNA0 - d*kTL*mRNA0
  - c3 - (3*b*kTL*mRNA0)/4 - d*kTL*mRNA0
  
-Compute reduced tableau  elapsed time: 6.782
+Compute reduced tableau  elapsed time: 5.5404
  
 *****************************************************************************************************
 * DETECTION OF (DIRECT) STRUCTURALLY GLOBALLY IDENTIFIABLE PARAMETERS AND REORGANIZATION OF TABLEAU *
@@ -143,7 +143,7 @@ Compute reduced tableau  elapsed time: 6.782
              PLEASE CONSIDER AN EXTRA DERIVATIVE! 
 
  
-Order tableau elapsed time: 0.49922
+Order tableau elapsed time: 0.51302
  
 ***************************************
 * RESULTS OF IDENTIFIABILITY ANALYSIS *
@@ -158,6 +158,6 @@ Structurally locally identifiable parameters:
 Structurally non-identifiable parameters: 
  []
  
-Report results elapsed time: 0.0014861
+Report results elapsed time: 0.0013755
  
-Total elapsed time: 14.3145
+Total elapsed time: 11.8223
