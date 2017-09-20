@@ -1,20 +1,22 @@
 function [z,fz,gz,z0,yz,xi,inv_xi] = genssiPolySys(x,f,g,x0,y)
     % genssiPolySys converts a model to polynomial form.
-    %  [Z,FZ,GZ,X0,YZ,XI,INV_XI] = genssiPolySys(X,F,G,X0,Y)
+    %  [z,fz,gz,z0,yz,xi,inv_xi] = genssiPolySys(x,f,g,x0,y)
     %
     % Parameters:
-    %  X: the state variables of the input model (a vector, nx x 1)
-    %  F: the vector field of the autonomous system of the input model (a vector, nx x 1)
-    %  G: the control matrix of the input model (a matrix, nx x nu)
-    %  X0: the initial conditions of the input model (a vector, nx x 1)
-    %  Y: the output variables of the input model (a vector, ny x 1)
+    %  x: the state variables of the input model (a vector, nx x 1)
+    %  f: the vector field of the autonomous system of the input model (a vector, nx x 1)
+    %  g: the control matrix of the input model (a matrix, nx x nu)
+    %  x0: the initial conditions of the input model (a vector, nx x 1)
+    %  y: the output variables of the input model (a vector, ny x 1)
     %
     % Return values:
-    %  Z: the state variables of the transformed model (a vector, nz x 1)
-    %  FZ: the vector field of the autonomous system of the transformed model (a vector, nz x 1)
-    %  GZ: the control matrix of the transformed model (a matrix, nz x nu)
-    %  Z0: the initial conditions of the transformed model (a vector, nz x 1)
-    %  YZ: the output variables of the transformed model (a vector, ny x 1)
+    %  z: the state variables of the transformed model (a vector, nz x 1)
+    %  fz: the vector field of the autonomous system of the transformed model (a vector, nz x 1)
+    %  gz: the control matrix of the transformed model (a matrix, nz x nu)
+    %  z0: the initial conditions of the transformed model (a vector, nz x 1)
+    %  yz: the output variables of the transformed model (a vector, ny x 1)
+    %  xi: the set of denominators
+    %  inv_xi: the set of unique denominators
     
     user_defined = 0;
     if nargin == 6

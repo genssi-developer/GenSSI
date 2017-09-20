@@ -5,7 +5,7 @@
  
  @section definition Model Definition
  
- This manual will guide the user to specify models in Matlab. For example implementations, see the models in the example directory.
+ This manual will guide the user to specify models in MATLAB. For example implementations, see the models in the example directory.
  
  @subsection header Header
  
@@ -21,7 +21,7 @@
  
  Create the state vector containing all states:
  
- @code model.sym.x = [x1 x2 x3]; @endcode
+ @code model.sym.x = [x1;x2;x3]; @endcode
  
  @subsection parameters Parameters
  
@@ -31,17 +31,16 @@
 
  Create the parameter vector:
 
- @code model.sym.p = [p1 p2 p3 p4 p5 p6 p7 p8] @endcode
+ @code model.sym.p = [p1;p2;p3;p4;p5;p6;p7;p8] @endcode
 
- @subsection equtions Equations
+ @subsection equations Equations
 
  Define the equations of the model.
 
  @code
- A1 = -p4*x1+p1/(p2+x3^p3);
- A2 = p5*x1-p6*x2;
- A3 = p7*x2-p8*x3;
- model.sym.xdot=[A1 A2 A3];
+ model.sym.xdot=[-p4*x1+p1/(p2+x3^p3);...
+                 p5*x1-p6*x2;,...
+                 p7*x2-p8*x3];
  @endcode
 
  @subsection controls Controls
@@ -49,10 +48,7 @@
  Define the controls.
 
  @code
- g1=0;
- g2=0;
- g3=0;
- model.sym.g=[g1 g2 Ag3];
+ model.sym.g=[];
  @endcode
 
  Note that the matrix of controls can by empty ([]) or contain one or more controls. Each row must have the same length as the number of states (model.sym.x), and there must be one row for each control.
@@ -62,17 +58,14 @@
  Define the observables.
 
  @code
- h1 = x1;
- h2 = x2;
- h3 = x3;
- model.sym.y = [h1 h2 h3];
+ model.sym.y = [x1;x2;x3];
  @endcode
 
  @subsection ic Initial Conditions
 
  Define the initial conditions.
 
- @code model.sym.x0 = [0.3 0.9 1.3];@endcode
+ @code model.sym.x0 = [0.3;0.9;1.3]; @endcode
   
  @section analysis Model Analysis
  
@@ -83,9 +76,19 @@
  @code
  options.verbose (default=true); maximum (verbose) information in results file 
  options.noRank (default=false); no rank calculation (for speed with loss)
- options.closeFigure (default=true); closes figures after storing it
+ options.closeFigure (default=false); closes figures after storing it
+ options.store (default=false); stores the results of analysis in a file
+ options.reportCompTime (default=false); reports the computation time
  @endcode
  
+ When GenSSI is run for the first time, and genssiStartup is run, a file named
+
+ @code
+ genssiUserSpecificDefaults.m
+ @endcode
+
+ If you have specific default options that you would like to reuse, you can either change the defaults in this file, or supply options to genssiMain.
+
  @code
  genssiMain('modelName',Nder,Par,options);
  @endcode
@@ -95,9 +98,21 @@
  To make this easier to find, we have also provided a simple "run" script, "runGoodwin".
 
  @code
- syms p1 p2 p4 p5 p6 p7 p8;
- options.closeFigure = false;
- genssiMain('Goodwin',7,[p1 p2 p4 p5 p6 p7 p8],options);
+ % runGoodwin runs the structural identifiability analysis for the 
+ % model of the Goodwin oscillator as introduced by
+ % 
+ %    Goodwin, B.C. (1965). Oscillatory behavior in enzymatic control
+ %              processes, Adv. Enzyme Regul. (3), 425-428. 
+ % Confirm execution
+ genssiAskForConfirmation(2);
+ % Structural identifiability analysis (for a subset of the parameters)
+ genssiMain('Goodwin',5);
+ @endcode
+
+ In addition to this, in order to avoid switching to the GenSSI/Examples/Goodwin directory, you can also call runExample from the main directory.
+
+ @code
+ runExample('Goodwin');
  @endcode
 
  @section conversion Conversion Utilities
@@ -111,7 +126,7 @@
  ODE.writeAMICI(modelName);
  @endcode
 
- SBMLode and writeAMICI convert an SBML model to GenSSI/AMICI format.
+ SBMLode and writeAMICI convert an SBML model to the common GenSSI/AMICI format.
 
  modelName: name of the SBML and GenSSI model (string).
 
@@ -129,30 +144,49 @@ more a matter of analysis than of model definition.
 
  Note: There are limitations to this conversion. The SBML model contains a list of all parameters used by the model, but GenSSI needs a list of parameters to be considered for analysis. It may be necessary to manually edit the GenSSI model after conversion. Both GenSSI and AMICI require specification of the observables, but this is not defined in SBML. If SBMLode finds rules that are not used in the model, it will assume that they were intended as observables. In any case, it is advisable to inspect the observables and modify them as needed.
 
- As an example for this conversion, we have chosen to use an SMBL model from the biomodels database. We begin by accessing the web site  http://www.ebi.ac.uk/biomodels-main/ searching for MAPK and dowloading the file BIOMD0000000010.xml. In order to make this easier to write, we renamed the file to BIOMD10.xml, so that our SBML model is now contained in
+ As an example for this conversion, we have chosen to use an SMBL model from the biomodels database. We begin by accessing the web site  http://www.ebi.ac.uk/biomodels-main/ searching for MAPK and dowloading the file BIOMD0000000010.xml. Our SBML model is now contained in
 
- @code BIOMD10.xml @endcode
+ @code BIOMD0000000010.xml @endcode
 
  To convert this SBML model to a GenSSI model with the same name, we execute the script
 
- @code runBIOMD10; @endcode
+ @code runBIOMD0000000010; @endcode
 
- The script file includes several default values. Here, the full list of parameters is contained in ODE.parameter (later model.sym.p) is copied to Par (parameter in genssiMain) and reduced in size the list of parameters Par for which identifiability analysis is performed. Using all 22 parameters is in principle possible, but does not work on a desktop computer with 16GB RAM, because the size of the Jacobian grows exponentially with number of of parameters. In addition to the parameters, we set the observables (ODE.observable and model.sym.y = [MAPK, MAPK_P, and MAPK_PP]), and the number of Lie derivatives (parameter Nder = 6 in genssiMain).
+ The script file includes several default values. Here, the full list of parameters is contained in ODE.parameter (later model.sym.p) is copied to Par (parameter in genssiMain) and reduced in size to the list of parameters Par for which identifiability analysis is performed. Using all 22 parameters is in principle possible, but does not work on a desktop computer with 16GB RAM, because the size of the Jacobian grows exponentially with number of of parameters. In addition to the parameters, we set the observables (ODE.observable and model.sym.y = [MAPK, MAPK_P, and MAPK_PP]), and the number of Lie derivatives (parameter Nder = 6 in genssiMain).
 
  @code
- modelName = 'BIOMD10';
- ODE = SBMLode(modelName);
- % set last 3 states as observable
- ODE.observable = ODE.state(6:8);
+ % runBIOMD0000000010 runs the structural identifiability analysis for the 
+ % model of the MAP kinase cascade described in
+ % 
+ %    Kholodenko BN (2000). Negative feedback and ultrasensitivity can 
+ %    bring about oscillations in the mitogen-activated protein kinase 
+ %    cascades. Eur. J. Biochem., 267(6): 1583-1588.
+ %
+ % The model has been downloaded from the BioModels Database 
+ % (http://biomodels.caltech.edu/BIOMD0000000010) as an SBML file. This SBML
+ % file is converted in the GenSSI format before analysis using the libSBML
+ % see (http://sbml.org/Software/libSBML/Downloading_libSBML). This file is
+ % extended by observables and renamed.
+ % Model name
+ modelName = 'BIOMD0000000010';
+ % Import of SBML model
+ ODE = SBMLode([modelName '.xml']);
+ % Definition of observables
+ ODE.observable = ODE.state([2,5,8]);
+ % Writing of model to AMICI format
+ % (which is consistent with GenSSI)
  ODE.writeAMICI(modelName);
- % check structural identifiability using all Vn_ parameters
- Par = ODE.parameter(logical([1,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0]));
- genssiMain('BIOMD10_syms',6,Par);
+ % Rename file
+ movefile([modelName '_syms.m'],[modelName '.m']);
+ % Confirm execution
+ genssiAskForConfirmation(600);
+ % Structural identifiability analysis (for a subset of the model parameters)
+ genssiMain(modelName,6,ODE.parameter([1,5,11,13,19,21]));
  @endcode
 
  This model can now be analyzed using the fucntionality of GenSSI:
 
- @code genssiMain('BIOMD10_syms',6,Par); @endcode
+ @code genssiMain(modelName,6,ODE.parameter([1,5,11,13,19,21])); @endcode
 
  The results show that 3 of the 6 parameters are locally identifiable and the other 3 are globally identifiable.
 
@@ -165,6 +199,36 @@ more a matter of analysis than of model definition.
  modeNameIn: name of model to be converted (string).
 
  modelNameOut: name of model to be created (string).
+
+ An example of conversion to polynomial format and analysis is contained in
+
+ @code
+ runArabidopsisPoly.m 
+ @endcode
+
+ @code
+ % runArabidopsisPoly runs the structural identifiability analysis for the 
+ % model of the circadian clock in Arabidopsis Thaliana as introduced by
+ % 
+ %    Locke et al. (2005). Modeling genetic networks with noisy and 
+ %    varied experimental data: the circadian clock in Arabidopsis 
+ %    thaliana. Journal of Theoretical Biology 234: 383-393.
+ %
+ % To simplify the symbolic calculations, the model is converted to
+ % polynomial form, meaning that the vector field of the autonomous 
+ % dynamics (f) and the control vector (g) are polynomial. To achieve this,
+ % the dimensionality of the model is increased.
+ % Copy Arabidopsis.m to this folder
+ copyfile(fullfile('..','Arabidopsis','Arabidopsis.m'),'Arabidopsis.m');
+ % Transform model to polynomial
+ genssiToPolynomial('Arabidopsis','ArabidopsisPoly');
+ % Confirm execution
+ genssiAskForConfirmation(80);
+ % Symbolic parameters for identifiability analysis
+ syms p1 p2 p5 p8 p10 p11 p12 p15 p18 p19 p26 p27
+ % Structural identifiability analysis (for a subset of the parameters)
+ genssiMain('ArabidopsisPoly',7,[p1;p2;p5;p8;p10;p11;p12;p15;p18;p26;p27]);
+ @endcode
 
  @subsection multiexp Create Multi-Experiment Model
 
@@ -187,28 +251,50 @@ more a matter of analysis than of model definition.
  We begin with a model for mRNA, including translation and degradation. The model definition is:
 
  @code
- function model = M1_1_U2()
-     syms m G d b kTL m0
-     model.sym.x=[m G];
-     A1=-d*m;
-     A2=0;
-     model.sym.xdot=[A1 A2];
-     model.sym.g=[0,kTL*m;...
-                  0,-b*G];
-     h1=G;
-     model.sym.y=[h1];
-     model.sym.x0=[m0 0];
-     model.sym.p=[d b kTL m0];
- end
+ function model = Transfection_2State()
+     % Transfection_2State provides the GenSSI implementation of the model
+     % for mRNA transfection introduced by
+     % 
+     %    Leonhardt et al. (2013). Single-cell mRNA transfection 
+     %    studies: delivery, kinetics and statistics by numbers, 
+     %    Nanomedicine: Nanotechnology, Biology and Medicine. 10(4):679-88.
+     %
+     % The ODE is given by
+     %
+     %    d[mRNA|/dt = -d*[mRNA],                        [mRNA](0) = mRNA0
+     %    d[GFP]/dt  = kTL*[M]*[uSyn] - b*[GFP]*[uDeg],  [GFP](0)  = 0
+     %
+     % in which [mRNA] and [GFP] denote the concentrations of GFP-mRNA and
+     % GFP-protein, respectively. The controls are the concentation of a 
+     % protein synthesis inhibitor, [uSyn], and the concentation of a 
+     % protein degradation inhibitor, [uDeg].
+     % Symbolic variables
+     syms mRNA GFP
+     syms d b kTL mRNA0
+     % Parameters
+     model.sym.p = [d;b;kTL;mRNA0];
+     % State variables
+     model.sym.x = [mRNA;GFP];
+     % Control vectors (g)
+     %                uSyn    uDeg
+     model.sym.g = [       0,      0  % mRNA
+                    kTL*mRNA,-b*GFP]; % GFP
+     % Autonomous dynamics (f)
+     model.sym.xdot = [-d*mRNA;0];
+     % Initial conditions
+     model.sym.x0 = [mRNA0;0];
+     % Observables
+     model.sym.y = [GFP];
+end
  @endcode
 
- The states (model.sym.x) are m (mRNA) and G (GFP, green fluorescent protein), of which only GFP is observed (model.sym.y).  The differential equations (model.sym.xdot) define degradation of mRNA (-d*m), degradation of GFP (-b*G) and translation of mRNA to GFP (kTL*m).  Note that translation and GFP degradation have been defined as controls (model.sym.g).
+ The states (model.sym.x) are mRNA and GFP (green fluorescent protein), of which only GFP is observed (model.sym.y).  The differential equations (model.sym.xdot) define degradation of mRNA (-d*mRNA), degradation of GFP (-b*GFP) and translation of mRNA to GFP (kTL*mRNA).  Note that translation and GFP degradation have been defined as controls (model.sym.g).
 
  Based on this model, we define a total of 4 experiments, in the experiment definition function.  The expriments are defined by modifying the controls and the initial conditions. The expriments are:
 
  1) original configuration
 
- 2) change in transfection (m0) via x0: The initial concentration of mRNA is changed.
+ 2) change in transfection (mRNA0) via x0: The initial concentration of mRNA is changed.
 
  3) change in translation via control u1 = uInh: The rate of translation is changed, for example by treating the cell with an antibiotic.
 
@@ -217,48 +303,97 @@ more a matter of analysis than of model definition.
 The experiment definition is:
 
  @code
- function multiExp = M1_1_eDef4()
-     syms d b kTL m0Exp1
-     multiExp.sym.Nexp=4;
-     multiExp.sym.g = [1,1;...
-                       1,1;...
-                       .5,1;...
-                       1,.75];
-     multiExp.sym.x0 = [m0Exp1,0,...
-                        0.5*m0Exp1,0,...
-                        m0Exp1,0,...
-                        m0Exp1,0];
-     multiExp.sym.p=[d,b,kTL,m0Exp1];
+ function expCond = ExperimentalConditions_2State()
+     % ExperimentalConditions_2State defines four different experimental  
+     % conditions for the model for mRNA transfection introduced by
+     % 
+     %    Leonhardt et al. (2013). Single-cell mRNA transfection 
+     %    studies: delivery, kinetics and statistics by numbers, 
+     %    Nanomedicine: Nanotechnology, Biology and Medicine. 10(4):679-88.
+     %
+     % Experimental conditions
+     % (1) transfection without perturbations
+     % (2) reduction of amount of transfection (mRNA0)
+     % (3) reduction of translation (uSyn)
+     % (4) reduction of protein degration (uDeg)
+     % Symbolic variables
+     syms mRNA0
+     % Input values
+     %     Condition  (1)  (2)  (3)  (4)
+     expCond.sym.u = [1.0, 1.0, 0.5, 1.0   % uSyn
+                      1.0, 1.0, 1.0, .75]; % uDeg
+     % Initial conditions
+     %     Condition     (1)      (2)      (3)    (4)
+     expCond.sym.x0 = [ mRNA0, 0.5*mRNA0, mRNA0, mRNA0   % [mRNA](0)
+                            0,         0,     0,     0]; % [GFP](0)
  end
  @endcode
 
  The number of expriments is coded in multiExp.Nexp=4.
 
- The variable multiExp.sym.g defines the changes in the controls and the variable multiExp.sym.x0 defines the changes in the initial conditions.  Both of these variables contain one row for each experiment and one column for each state variable. In the first experiment (original configuration), the controls are 1 and the initial mRNA concentration is m0Exp1.  In the second expriment (change in transfection), the initial concentration of mRNA is changed.  In the third experiment (change in translation), the rate of translation is changed by changing the value of the first control.  In the fourth experiment (change in GFP degradation), the rate of GFP degradation is changed by changing the value of the second control.
+ The variable multiExp.sym.u defines the changes in the controls and the variable multiExp.sym.x0 defines the changes in the initial conditions.  Both of these variables contain one row for each experiment and one column for each state variable. In the first experiment (original configuration), the controls are 1 and the initial mRNA concentration is mRNA0.  In the second expriment (change in transfection), the initial concentration of mRNA is changed.  In the third experiment (change in translation), the rate of translation is changed by changing the value of the first control.  In the fourth experiment (change in GFP degradation), the rate of GFP degradation is changed by changing the value of the second control.
 
  The original model is converted to the multi-experiment model by means of this line of code:
 
- @code genssiMultiExperiment('M1_1_U2','M1_1_eDef4','M1_1_ME4'); @endcode
+ @code
+ runTransfection_2State_MultiExp.m
+ @endcode
+
+ and
+
+ @code
+ genssiMultiExperiment('Transfection_2State','ExperimentalConditions_2State','Transfection_2State_MultiExp');  
+ @endcode
+
+ @code
+ % runExperimentalConditions_2State performs the structural identifiability 
+ % analysis for the model for mRNA transfection introduced by
+ % 
+ %    Leonhardt et al. (2013). Single-cell mRNA transfection 
+ %    studies: delivery, kinetics and statistics by numbers, 
+ %    Nanomedicine: Nanotechnology, Biology and Medicine. 10(4):679-88.
+ %
+ % The structural identifiability is performed assuming that data for four 
+ % different experimental conditions are available. These conditions are
+ % defined in ExperimentalConditions_2State.m.
+ % Copy Transfection_2State.m to this folder
+ copyfile(fullfile('..','Transfection_2State','Transfection_2State.m'),'Transfection_2State.m');
+ % Transformation of the model
+ genssiMultiExperiment('Transfection_2State',...           % Initial model (single experiment)
+                       'ExperimentalConditions_2State',... % Definition of experimental conditions
+                       'Transfection_2State_MultiExp');    % Name of transformed model
+ % Confirm execution
+ genssiAskForConfirmation(3);
+ % Structural identifiability analysis for transformed model
+ genssiMain('Transfection_2State_MultiExp',3);
+ @endcode
 
  The result of the conversion is the following (multi-experiment) model:
 
  @code
- function model = M1_1_ME4()
-     syms mExp1 GExp1 mExp2 GExp2 mExp3 GExp3 mExp4 GExp4
-     syms d b kTL m0Exp1
-     model.sym.x = [mExp1,GExp1,mExp2,GExp2,mExp3,GExp3,mExp4,GExp4];
+ function model = Transfection_2State_MultiExp()
+     % Symbolic variables
+     syms mRNAExp1 GFPExp1 mRNAExp2 GFPExp2 mRNAExp3 GFPExp3 mRNAExp4 GFPExp4
+     syms d b kTL mRNA0
+     % Parameters
+     model.sym.p = [d;b;kTL;mRNA0];
+     % State variables
+     model.sym.x = [mRNAExp1;GFPExp1;mRNAExp2;GFPExp2;mRNAExp3;GFPExp3;mRNAExp4;GFPExp4];
+     % Control vectors (g)
      model.sym.g = [];
-     model.sym.p = [d,b,kTL,m0Exp1];
-     model.sym.x0 = [m0Exp1,0,m0Exp1/2,0,m0Exp1,0,m0Exp1,0];
-     model.sym.y = [GExp1,GExp2,GExp3,GExp4];
-     model.sym.xdot = [-d*mExp1,...
-                       kTL*mExp1 - GExp1*b,...
-                       -d*mExp2,...
-                       kTL*mExp2 - GExp2*b,...
-                       -d*mExp3,...
-                       (kTL*mExp3)/2 - GExp3*b,...
-                       -d*mExp4,...
-                       kTL*mExp4 - (3*GExp4*b)/4];
+     % Autonomous dynamics (f)
+     model.sym.xdot = [-d*mRNAExp1
+                       kTL*mRNAExp1 - GFPExp1*b
+                       -d*mRNAExp2
+                       kTL*mRNAExp2 - GFPExp2*b
+                       -d*mRNAExp3
+                       (kTL*mRNAExp3)/2 - GFPExp3*b
+                       -d*mRNAExp4
+                       kTL*mRNAExp4 - (3*GFPExp4*b)/4];
+     % Initial conditions
+     model.sym.x0 = [mRNA0;0;mRNA0/2;0;mRNA0;0;mRNA0;0];
+     % Observables
+     model.sym.y = [GFPExp1;GFPExp2;GFPExp3;GFPExp4];
  end
  @endcode
 
@@ -281,68 +416,145 @@ The experiment definition is:
  We begin with a model for mRNA, including translation and degradation. In contrast with the simpler model used for the multi-experiment conversion (above), this model involves mRNA degradation via the action of an enzyme. The model definition is:
 
  @code
- function model = M2_1_Y1()
-     syms m G E1 mE d1 d2 d3 b kTL m0 E0
-     model.sym.x=[m G E1 mE];
-     A1=-d1*m-d2*m*E1;
-     A2=+kTL*m-b*G;
-     A3=+d3*mE-d2*m*E1;
-     A4=-d3*mE+d2*m*E1;
-     model.sym.xdot=[A1 A2 A3 A4];
-     model.sym.g=[];
-     h1=G;
-     model.sym.y=[h1];
-     model.sym.x0=[m0 0 E0 0];    
-     model.sym.p=[d1 d2 d3 b kTL m0 E0];
+ function model = Transfection_4State()
+     % Transfection_2State provides the GenSSI implementation of the 4-state 
+     % model for mRNA transfection introduced by
+     % 
+     %    Lechtenberg, L. (2015). Model selection in deterministic models of
+     %    mRNA transfection. Master Thesis, Ludwig-Maximilians-Universitaet,
+     %    Munich, Germany.
+     %
+     % In contrast to the 2-state transfection model, the 4-state transfection
+     % model accounts for an enzymatic degration of the mRNA.
+     %
+     % The ODE is given by
+     %
+     %    d[mRNA|/dt     = -d1*[mRNA]-d2*[mRNA]*[enz],      [mRNA](0)     = mRNA0
+     %    d[GFP]/dt      = +kTL*[mRNA]-b*[GFP],             [GFP](0)      = 0
+     %    d[enz|/dt      = +d3*[mRNA:enz]-d2*[mRNA]*[enz],  [enz](0)      = enz0
+     %    d[mRNA:enz]/dt = -d3*[mRNA:enz]+d2*[mRNA]*[enz],  [mRNA:enz](0) = 0
+     %
+     % in which [mRNA], [GFP], [enz] and [mRNA:enz] denote the 
+     % concentrations of GFP-mRNA, GFP-protein, mRNA degrading enzyme and 
+     % mRNA-enzyme-complex, respectively.
+     % Symbolic variables
+     syms mRNA GFP enz mRNAenz
+     syms d1 d2 d3 b kTL mRNA0 enz0  
+     % Parameters
+     model.sym.p = [d1;d2;d3;b;kTL;mRNA0;enz0];
+     % State variables
+     model.sym.x = [mRNA;GFP;enz;mRNAenz];
+     % Control vectors (g)
+     model.sym.g = [];
+     % Autonomous dynamics (f)
+     model.sym.xdot = [-d1*mRNA-d2*mRNA*enz
+                      +kTL*mRNA-b*GFP
+                      +d3*mRNAenz-d2*mRNA*enz
+                      -d3*mRNAenz+d2*mRNA*enz];
+     % Initial conditions
+     model.sym.x0 = [mRNA0;0;enz0;0];       
+     % Observables
+     model.sym.y = [GFP];
  end
  @endcode
 
- The state variables in this model (model.sym.x) are mRNA (m), GFP (G), enzyme (E1), and the mRNA-enzyme complex (mE).  We have used E1 as the name of the enzyme instead of E since there are cases where Matlab will treat the symbolic variable E as e or exp(1).  The differential equations show mRNA (m) decreasing due to degradation (-d1*m) and decreasing due to complexation (-d2*m*E1).  GFP (G) increases due to translation (kTL*m) and decreases due to complexation (-d2*m*E1). The enzyme (E1) decreases due to complexation (-d2*m*E1) and increases due to decomplexation (d3*mE).  The change in the complex (mE) is exactly the opposite of the change in the enzyme.  As a result of this, we know that E1-E1(0)=-(mE-mE(0)) or, since mE(0)=0, E1-E0+mE=0.  In addition, we know that the concentration of GFP always depends on the product of mRNA(0)*kTL, so we will be able to reduce the number of parameters by rescaling (dividing by m0).
+ The state variables in this model (model.sym.x) are mRNA, GFP, enzyme (enz), and the mRNA-enzyme complex (mRNAenz).  The differential equations show mRNA decreasing due to degradation (-d1*mRNA) and decreasing due to complexation (-d2*mRNA*enz).  GFP increases due to translation (kTL*mRNA) and decreases due to complexation (-d2*mRNA*enz). The enzyme (enz) decreases due to complexation (-d2*mRNA*enz) and increases due to decomplexation (d3*mRNAenz).  The change in the complex (mRNAenz) is exactly the opposite of the change in the enzyme.  As a result of this, we know that enz-enz(0)=-(mRNAenz-mRNAenz(0)) or, since mRNAenz(0)=0, enz-enz0+mRNAenz=0.  In addition, we know that the concentration of GFP always depends on the product of mRNA(0)*kTL, so we will be able to reduce the number of parameters by rescaling (dividing by mRNA0).
 
  With these observations, we can create our transformation definition:
 
  @code
- function transDef = M2_1_tDef()
-     syms m G E1 mE m0 E0
-     syms mdm0 E1dm0
-     syms d1 d2 d3 b kTL
-     syms d2tm0 kTLtm0 E0dm0
-     transDef.sym.Transformation = [m/m0;G;E1/m0];
-     transDef.sym.Constraint = [E1-E0+mE];
-     transDef.sym.p = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
-     syms mnew Gnew E1new
-     transDef.sym.stateSubs = [mdm0,mnew;...
-                               G,Gnew;...
-                               E1dm0,E1new];
-     transDef.sym.parSubs = [d2*m0,d2tm0;...
-                             kTL*m0,kTLtm0;...
-                             E0/m0,E0dm0];
+ function transDef = TransformationRules_4State()
+     % TransformationRules_4State defines a state transformation and a 
+     % parameter substitution for the 4-state model for mRNA transfection 
+     % introduced by
+     % 
+     %    Lechtenberg, L. (2015). Model selection in deterministic models of
+     %    mRNA transfection. Master Thesis, Ludwig-Maximilians-Universitaet,
+     %    Munich, Germany.
+     %
+     % The state transformation reduces the number of state variable by
+     % exploiting the conservation relations. The parameter substitution
+     % reduced the number of parameters by on, improving the
+     % identifiability.
+     % Symbolic variables in model
+     syms mRNA GFP enz mRNAenz
+     syms d1 d2 d3 b kTL mRNA0 enz0
+     % Definition of conservation relations
+     % (Note: These constraints are set to zeros and used to reduce the
+     % dimension of the state space.)
+     transDef.sym.constraint = [enz-enz0+mRNAenz];
+     % Definition of new state variables
+     transDef.sym.state.formula = [mRNA/mRNA0 GFP enz/mRNA0]; 
+     % Definition of new state variables
+     transDef.sym.parameter.formula = [d1 d2*mRNA0 d3 b kTL*mRNA0 enz0/mRNA0];
  end
  @endcode
 
- The transformation is defined by two variables. The first, transDef.sym.Transformation, defines the rescaling. It contains one entry for each element of the final state vector. Since we are converting a model with 4 state variables to 3, this contains 3 elements. The second part of the definition is the constraint, transDef.sym.Constraint. This will be equated to zero during the transformation, so it is E1-E0+mE=0, or, equivalently, E1-E1(0)=-(mE-mE(0)). The variable transDef.sym.Constraint can contain multiple constraints, separated by a semicolon. Finally, there are two optional definitions of substitutions. They contain a variable number of rows, each of which is a substitution, or change of names. During the transformation process, new variables are created for the state vector and the parameters, and the names are changed via the rules "*"->"t" (for "times") and "/"->"d" (for "divided by").  These names can be considered as suggestions for the new names, and the user can override them with the stateSubs and parSubs definitions. For example, mdm0 is replaced by mnew in the state vector, and d2*m0 is replaced by d2tm0 in the parameters. It is considered good practice to leave these 2 definitions out the first time the transformation is run, and then add them in later in order to gain more control over the naming.
+ The transformation is defined by two variables. The first, transDef.sym.Transformation, defines the rescaling. It contains one entry for each element of the final state vector. Since we are converting a model with 4 state variables to 3, this contains 3 elements. The second part of the definition is the constraint, transDef.sym.Constraint. This will be equated to zero during the transformation, so it is enz-enz0+mRNAenz=0, or, equivalently, enz-enz(0)=-(mRNAenz-mRNAenz(0)). The variable transDef.sym.Constraint can contain multiple constraints, separated by a semicolon. Finally, there are two optional definitions of substitutions. They contain a variable number of rows, each of which is a substitution, or change of names. During the transformation process, new variables are created for the state vector and the parameters, and the names are changed via the rules "*"->"_times_" (for "times") and "/"->"_div_" (for "divided by").  These names can be considered as suggestions for the new names, and the user can override them with the stateSubs and parSubs definitions. For example, mRNA_div_mRNA0 is replaced by mnew in the state vector, and d2*mRNA0 is replaced by d2_times_mRNA0 in the parameters. It is considered good practice to leave these 2 definitions out the first time the transformation is run, and then add them in later in order to gain more control over the naming.
 
  This transformation is started by running the following line of code:
 
- @code genssiTransformation('M2_1_Y1','M2_1_tDef','M2_2'); @endcode
+ @code
+ runTransfection_4State_Transformation
+ @endcode
+
+ @code
+ genssiTransformation('Transfection_4State','TransformationRules_4State','Transfection_4State_Transformation');
+ @endcode
+
+ @code
+ % runTransfection_4State_Transformation performs the structural 
+ % identifiability analysis for the 4-state model for mRNA transfection
+ % introduced by
+ % 
+ %    Lechtenberg, L. (2015). Model selection in deterministic models of
+ %    mRNA transfection. Master Thesis, Ludwig-Maximilians-Universitaet,
+ %    Munich, Germany.
+ %
+ % In contrast to the 2-state transfection model, the 4-state transfection
+ % model accounts for an enzymatic degration of the mRNA.
+ %
+ % Here the model is transformed using informatin provided in
+ % TransformationRules_4State.m. The state transformation reduces the number
+ % of state variable by exploiting the conservation relations. The parameter
+ % substitution reduced the number of parameters by on, improving the
+ % identifiability.
+ % Copy Transfection_4State.m to this folder
+ copyfile(fullfile('..','Transfection_4State','Transfection_4State.m'),'Transfection_4State.m');
+ % Transformation of the model
+ genssiTransformation('Transfection_4State',...          % Initial model
+                      'TransformationRules_4State',...   % Definition of transformation
+                      'Transfection_4State_Transformation'); % Name of transformed model
+ % Confirm execution
+ genssiAskForConfirmation(3);
+ % Structural identifiability analysis for transformed model
+ genssiMain('Transfection_4State_Transformation',7);
+ @endcode 
 
  The result of the transformation is the following new model:
 
  @code
- function model = M2_2()
-     syms mnew Gnew E1new
-     syms d1 d2tm0 d3 b kTLtm0 E0dm0
-     model.sym.x = [mnew,Gnew,E1new];
+ function model = Transfection_4State_Transformation()
+     % Symbolic variables
+     syms mRNA_div_mRNA0 GFP enz_div_mRNA0
+     syms d1 d2_times_mRNA0 d3 b kTL_times_mRNA0 enz0_div_mRNA0
+     % Parameters
+     model.sym.p = [d1;d2_times_mRNA0;d3;b;kTL_times_mRNA0;enz0_div_mRNA0];
+     % State variables
+     model.sym.x = [mRNA_div_mRNA0;GFP;enz_div_mRNA0];
+     % Control vectors (g)
      model.sym.g = [];
-     model.sym.p = [d1,d2tm0,d3,b,kTLtm0,E0dm0];
-     model.sym.x0 = [1,0,E0dm0];
-     model.sym.y = [Gnew];
-     model.sym.xdot = [- d1*mnew - E1new*d2tm0*mnew,...
-                       kTLtm0*mnew - Gnew*b,...
-                       (E0*d3)/m0 - E1new*d2tm0*mnew - E1new*d3];
+     % Autonomous dynamics (f)
+     model.sym.xdot = [-mRNA_div_mRNA0*(d1 + d2_times_mRNA0*enz_div_mRNA0)
+                       kTL_times_mRNA0*mRNA_div_mRNA0 - GFP*b
+                       d3*enz0_div_mRNA0 - d3*enz_div_mRNA0 - d2_times_mRNA0*enz_div_mRNA0*mRNA_div_mRNA0];
+     % Initial conditions
+     model.sym.x0 = [1;0;enz0_div_mRNA0];
+     % Observables
+     model.sym.y = [GFP];
  end
  @endcode
 
- In this transformed model, the new state variables are mnew, Gnew, and E1new, based on the definition transDef.stateSubs. We could just as well have left the names of mdm0, G, and E1dm0, or used the simpler names of m, G, and E1 for the new state vector. A similar remark is valid for the parameter names. The resulting differential equations (model.sym.xdot) are less readable than in the original model, but we have eliminated one state variable and one parameter.
+ In this transformed model, the new state variables are mnew, Gnew, and E1new, based on the definition transDef.stateSubs. We could just as well have left the names of mRNA_div_mRNA0, GFP, and enz_div_mRNA0, or used the simpler names of mRNA, GFP, and enz for the new state vector. A similar remark is valid for the parameter names. The resulting differential equations (model.sym.xdot) are less readable than in the original model, but we have eliminated one state variable and one parameter.
 
  */
