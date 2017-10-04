@@ -8,10 +8,10 @@ function model = Bilirubin1()
 
     % Symbolic variables
     syms x1 x2 x3 x4
-	syms k03 k04 k13 k24 k31 k42 k43
+    syms k03 k04 k13 k24 k31 k42 k43
     
     % Parameters
-	model.sym.p = [k03;k04;k13;k24;k31;k42;k43];
+    model.sym.p = [k03;k04;k13;k24;k31;k42;k43];
 	
     % State variables
     model.sym.x = [x1;x2;x3;x4];
@@ -23,7 +23,7 @@ function model = Bilirubin1()
                    0];
     
     % Autonomous dynamics (f)
-	model.sym.xdot = [-k31*x1+k13*x3
+    model.sym.xdot = [-k31*x1+k13*x3
                       -k42*x2+k24*x4
                        k31*x1-(k03+k13+k43)*x3
                        k42*x2+k43*x3-(k04+k24)*x4];
@@ -32,5 +32,5 @@ function model = Bilirubin1()
     model.sym.x0 = [0;0;0;0];
     
     % Observables
-	model.sym.y = [x1;x2];
+    model.sym.y = [x1;x2];
 end
