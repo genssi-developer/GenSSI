@@ -65,12 +65,14 @@ function [options,VectorLieDerivatives]=genssiComputeLieDerivatives(model,option
             for order = 2:model.sym.Nder
                 disp(['COMPUTING LIE DERIVATIVES OF ORDER', ' ', num2str(order)])
                 fprintf(1,'.................................................................\n');
+                JacG = [];
+                JacF = [];
+                JacTemp = jacobian(reshape(Jac,[numel(Jac),1]),model.sym.x);
                 for iNoc = 1:size(model.sym.g,2) % # of controls, model.sym.Noc
-                    JacTemp = jacobian(reshape(Jac,[numel(Jac),1]),model.sym.x);
-                    JacG = reshape(transpose(JacTemp*model.sym.g(:,iNoc)),size(Jac));
-                    JacF = reshape(transpose(JacTemp*model.sym.xdot),size(Jac));
-                    Jac  = [Jac;JacF;JacG];
+                    JacG = [JacG; reshape(transpose(JacTemp*model.sym.g(:,iNoc)),size(Jac))];
+                    JacF = [JacF; reshape(transpose(JacTemp*model.sym.xdot)     ,size(Jac))];
                 end
+                Jac  = [Jac;JacF;JacG];
                 LDer = subs([transpose(model.sym.y);vF;vG;Jac],model.sym.x,model.sym.x0);
                 [rankFull,rankVector] = jacRank(LDer,rankVector,order,model,options);
                 if rankFull
