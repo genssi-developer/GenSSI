@@ -9,7 +9,7 @@ function importSBML(this,filename)
 %  void
 
 extension = [];
-if(exist([filename],'file'))
+if(exist([filename],'file')==2)
     extension = '';
 elseif(exist([filename '.sbml'],'file'))
     extension = '.sbml';

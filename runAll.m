@@ -1,3 +1,4 @@
+genssiStartup
 runExample('Arabidopsis');
 runExample('ArabidopsisPoly');
 runExample('Bilirubin1');
