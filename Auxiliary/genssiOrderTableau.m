@@ -651,6 +651,9 @@ function [Param_local,global_ident_par]=...
     Paramy=length(Param);
     Param_local_r=Param;
     [ECCx,tilde]=size(ECC);
+    if ECCx == 0 
+        return; 
+    end
     length_sol=[];
     global_ident_par_sol_1=[];
     Param_local_sol_1=[];
