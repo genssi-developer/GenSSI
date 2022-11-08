@@ -286,11 +286,12 @@ function [Param_local,Param_remaining,global_ident_par,...
                 [Param_local,global_ident_par]=...
                     solveRemPar(ECC_new,reduced_param,Param_local,global_ident_par);  
                 ECC_reduced_it=ECC;
-                for j=Mat_index_y:-1:1   
+                [Mat_index_row_x,Mat_index_row_y]=size(Mat_index_row); % Issue #19
+                for j=Mat_index_row_y:-1:1 % Issue #19
                     % equals to 0 the 1s corresponding to the already computed parameters
-                    RJacparam_new(Mat_index(indX,j),:)=0;
+                    RJacparam_new(Mat_index_row(j),:)=0; % Issue #19
                     % remaining relations after computing the first group, equaling to 0 the ones we have used. 
-                    ECC_reduced_it(Mat_index(indX,j),:)=0;
+                    ECC_reduced_it(Mat_index_row(j),:)=0; % Issue #19
                 end
                 index_global=[];
                 % if the columns in RJacparam_new have no elements, store that column (parameter) in index_global
