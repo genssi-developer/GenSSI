@@ -150,7 +150,8 @@ this.initState = subs(this.initState,species_sym(concentration_idx),sym(initConc
 % set initial amounts
 amount_idx = logical([model.species.isSetInitialAmount]);
 this.initState = subs(this.initState,species_sym(amount_idx),sym(initAmount(amount_idx))./this.volume(amount_idx));
-% this.initState = subs(this.initState,species_sym(amount_idx),sym(initAmount(amount_idx)));
+% this.initState =
+% subs(this.initState,species_sym(amount_idx),sym(initAmount(amount_idx)));
 
 % apply rules
 applyRule(this,model,'initState',rulevars,rulemath)
@@ -250,21 +251,22 @@ if(length({model.reaction.id})>0)
     
     reactants = cellfun(@(x) {x.species},{model.reaction.reactant},'UniformOutput',false);
     % species index of the reactant
-    reactant_sidx = double(subs(cat(2,reactants{:}),species_sym,species_idx));
+    reactant_sidx = double(subs(str2sym(cat(2,reactants{:})),species_sym,species_idx)); % issue #2
     % reaction index
     tmp = cumsum(cell2mat(cellfun(@(x) [ones(1,1),zeros(1,max(length(x)-1,0))],reactants,'UniformOutput',false)));
     wreact = cell2mat(cellfun(@(x) [ones(1,length(x)),zeros(1,isempty(x))],reactants,'UniformOutput',false));
     reactant_ridx = tmp(logical(wreact));
     products = cellfun(@(x) {x.species},{model.reaction.product},'UniformOutput',false);
     % species index of the product
-    product_sidx = double(subs(cat(2,products{:}),species_sym,species_idx));
+    product_sidx = double(subs(str2sym(cat(2,products{:})),species_sym,species_idx)); % issue #2
     % reaction index
     tmp = cumsum(cell2mat(cellfun(@(x) [ones(1,1),zeros(1,max(length(x)-1,0))],products,'UniformOutput',false)));
     wprod = cell2mat(cellfun(@(x) [ones(1,length(x)),zeros(1,isempty(x))],products,'UniformOutput',false));
     product_ridx = tmp(logical(wprod));
     if(model.SBML_level>=3)
         reactant_stochiometry = cellfun(@(x) stoich_initAssign_rule(x,initassignments_sym,initassignments_math,rulevars,rulemath),{model.reaction.reactant},'UniformOutput',false);
-%         reactant_math = cellfun(@(x) sym({x.stoichiometry}),{model.reaction.reactant},'UniformOutput',false);
+%         reactant_math = cellfun(@(x)
+%         sym({x.stoichiometry}),{model.reaction.reactant},'UniformOutput',false);
         reactant_id = cellfun(@getId,{model.reaction.reactant},'UniformOutput',false);
         product_stochiometry = cellfun(@(x) stoich_initAssign_rule(x,initassignments_sym,initassignments_math,rulevars,rulemath),{model.reaction.product},'UniformOutput',false);
 %         product_math = cellfun(@(x) sym({x.stoichiometry}),{model.reaction.product},'UniformOutput',false);
@@ -683,7 +685,7 @@ end
 
 function csym = cleanedsym(str)
 if(nargin>0)
-csym = sym(sanitizeString(strrep(str,'time','__time_internal_amici__')));
+csym = str2sym(sanitizeString(strrep(str,'time','__time_internal_amici__'))); % issue #2
 csym = subs(csym,sym('__time_internal_amici__'),sym('time'));
 else
     csym = sym(0);

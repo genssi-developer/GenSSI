@@ -20,9 +20,12 @@ function [z,fz,gz,z0,yz,xi,inv_xi] = genssiPolySys(x,f,g,x0,y)
     
     user_defined = 0;
     if nargin == 6
-        if ~isempty(varargin{6})
-            inv_xi  = varargin{6};
-            user_defined = 1;
+%        if ~isempty(varargin{6})
+%            inv_xi  = varargin{6};
+%            user_defined = 1;
+        if ~isempty(xi) % issue #19
+            inv_xi  = xi; % issue #19
+            user_defined = 1; % issue #19
         end
     end
 

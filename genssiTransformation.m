@@ -128,7 +128,8 @@ function genssiTransformation(varargin)
     X0new = simplify(subs(T,X,X0));
     
     % Check state transformation
-    if isempty(intersect(symvar([Fnew(:),Ynew(:),Gnew(:),X0new(:)]),modelIn.sym.x))
+    % if isempty(intersect(symvar([Fnew(:),Ynew(:),Gnew(:),X0new(:)]),modelIn.sym.x))
+    if isempty(intersect(symvar([Fnew(:)',Ynew(:)',Gnew(:)',X0new(:)']),modelIn.sym.x')) % issue #19, intersect expects arrays
         disp('State transformation appears to work properly.');
     else
         error(['The state transformation failed. Possible reasons are: '...
@@ -171,10 +172,12 @@ function genssiTransformation(varargin)
             % not part of x or p. These could for instance be constants. We
             % would expect that also after the transformatio, these
             % parameters do not have to be contained in xnew and pnew.
-            unexpVar = setdiff(symvar([F(:),Y(:),G(:),X0(:)]),symvar([X(:),P(:)]));
+            % unexpVar = setdiff(symvar([F(:),Y(:),G(:),X0(:)]),symvar([X(:),P(:)]));
+            unexpVar = setdiff(symvar([F(:)',Y(:)',G(:)',X0(:)']),symvar([X(:)',P(:)']))'; % issue #19, setdiff expects arrays
             % (2) Determine symbolic variables in the transformed model 
             % which are not part of xnew or pnew.
-            unexpVarNew = setdiff(symvar([Fnew(:),Ynew(:),Gnew(:),X0new(:)]),symvar([Xnew(:),Pnew(:)]));
+            % unexpVarNew = setdiff(symvar([Fnew(:),Ynew(:),Gnew(:),X0new(:)]),symvar([Xnew(:),Pnew(:)]));
+            unexpVarNew = setdiff(symvar([Fnew(:)',Ynew(:)',Gnew(:)',X0new(:)']),symvar([Xnew(:)',Pnew(:)']))'; % issue #19, setdiff expects arrays
             % (3) Check whether whether unexpVarNew is contained in 
             % unexpVar, if not, complete pnew
             unexpVarDiff = setdiff(unexpVarNew,unexpVar);
