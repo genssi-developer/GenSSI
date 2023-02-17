@@ -14,12 +14,12 @@ function default = genssiUserSpecificDefaults(optionName)
         case 'noRank'
             default = false;
         case 'closeFigure'
-            default = false;
-        case 'store'
-            default = false;
-        case 'feedbackRequired'
             default = true;
-        case 'reportCompTime'
+        case 'store'
+            default = true;
+        case 'feedbackRequired'
             default = false;
+        case 'reportCompTime'
+            default = true;
     end
 end
