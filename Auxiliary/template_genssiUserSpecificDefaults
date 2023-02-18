@@ -14,15 +14,6 @@ function default = genssiUserSpecificDefaults(optionName)
         case 'noRank'
             default = false;
         case 'closeFigure'
-<<<<<<< Updated upstream
-            default = true;
-        case 'store'
-            default = true;
-        case 'feedbackRequired'
-            default = false;
-        case 'reportCompTime'
-            default = true;
-=======
             default = true; % Tom = true, Jan = false
         case 'store'
             default = true; % Tom = true, Jan = false
@@ -30,6 +21,5 @@ function default = genssiUserSpecificDefaults(optionName)
             default = false; % Tom = false, Jan = true
         case 'reportCompTime'
             default = true; % Tom = true, Jan = false
->>>>>>> Stashed changes
     end
 end
