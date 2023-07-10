@@ -247,9 +247,12 @@ function [Param_local,Param_remaining,global_ident_par,...
     % Return values:
     %  
     [Mat_index_x,Mat_index_y]=size(Mat_index);
-    for indX=1:Mat_index_x
+    [Mat_index_x_row,Mat_index_y_row]=size(sum_RJacParam01_nonzero_rows_t); % issue #20
+    for indX=1:Mat_index_x % issue #20
+    % for indX=1:Mat_index_x_row % issue #20 !!!try removing _row
         Mat_index_row=Mat_index(indX,:);
-        for indY=Mat_index_y:-1:1
+        for indY=Mat_index_y:-1:1 % issue #20
+        % for indY=Mat_index_y:-1:1 % issue #20 !!!try removing _row
             Mat_index_component=Mat_index(indX,indY);
             if Mat_index_component==0
                  Mat_index_row(:,indY)=[];% fa ca aici sa nu imi dispara toata coloana, numai elementuls
@@ -264,7 +267,7 @@ function [Param_local,Param_remaining,global_ident_par,...
             length_Mat_index=[length_Mat_index length(Mat_index_row(iindex,:))];
         end
         length_Mat_index_t=length_Mat_index.';
-        if sum_RJacParam01_nonzero_rows_t(indX,:)==length_Mat_index_t;
+        if sum_RJacParam01_nonzero_rows_t(indX,:)==length_Mat_index_t % removed semicolon
             if Mat_index_row==0
                 Mat_index_row=[];
             end
@@ -614,9 +617,9 @@ function [Param_local,global_ident_par]=...
                 end
                 genssiTableauImage(number_fig,display_tableau_RJacparam_new,...
                     Param_display,options);                                    
-                if display_tableau_RJacparam_new_x~=1 % is this if required??!!
-                    Param_local=[Param_local Param_local_red_1el];
-                    global_ident_par=[global_ident_par global_ident_par_red_1el]; 
+%                if display_tableau_RJacparam_new_x~=1 % is this if required??!! % issue #22
+%                    Param_local=[Param_local Param_local_red_1el]; % issue #22
+%                    global_ident_par=[global_ident_par global_ident_par_red_1el]; % issue #22
                 end
                 Param_remaining=Param_remaining_f;
                 ECC_remaining=ECC_remaining_f;
