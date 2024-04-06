@@ -620,7 +620,7 @@ function [Param_local,global_ident_par]=...
 %                if display_tableau_RJacparam_new_x~=1 % is this if required??!! % issue #22
 %                    Param_local=[Param_local Param_local_red_1el]; % issue #22
 %                    global_ident_par=[global_ident_par global_ident_par_red_1el]; % issue #22
-                end
+%                end % issue #22
                 Param_remaining=Param_remaining_f;
                 ECC_remaining=ECC_remaining_f;
             end
